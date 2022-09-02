@@ -41,6 +41,21 @@ class AppThemes {
       onError: AppColors.textWhite80Color,
     ),
     scaffoldBackgroundColor: AppColors.backgroundColor,
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white,
+      showUnselectedLabels: true,
+      unselectedLabelStyle: TextStyle(
+        color: AppColors.textWhite80Color,
+        fontSize: 14,
+      ),
+      selectedLabelStyle: TextStyle(
+        color: AppColors.textWhite80Color,
+        fontSize: 14,
+      ),
+      backgroundColor: AppColors.backgroundColor,
+    ),
     fontFamily: AppTypography.primary.fontFamily,
     textTheme: AppTypography.primary.textTheme,
     textButtonTheme: TextButtonThemeData(

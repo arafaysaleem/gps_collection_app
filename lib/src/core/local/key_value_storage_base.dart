@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Base class containing a unified API for key-value pairs' storage.
@@ -12,9 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class KeyValueStorageBase {
   /// Instance of shared preferences
   static SharedPreferences? _sharedPrefs;
-
-  /// Instance of flutter secure storage
-  static FlutterSecureStorage? _secureStorage;
 
   /// Singleton instance of KeyValueStorage Helper
   static KeyValueStorageBase? _instance;
@@ -31,7 +26,6 @@ class KeyValueStorageBase {
   /// when possible.
   static Future<void> init() async {
     _sharedPrefs ??= await SharedPreferences.getInstance();
-    _secureStorage ??= const FlutterSecureStorage();
   }
 
   /// Reads the value for the key from common preferences storage
@@ -55,16 +49,6 @@ class KeyValueStorageBase {
     }
   }
 
-  /// Reads the decrypted value for the key from secure storage
-  Future<String?> getEncrypted(String key) {
-    try {
-      return _secureStorage!.read(key: key);
-    } on PlatformException catch (ex) {
-      debugPrint('$ex');
-      return Future<String?>.value();
-    }
-  }
-
   /// Sets the value for the key to common preferences storage
   Future<bool> setCommon<T>(String key, T value) {
     switch (T) {
@@ -81,28 +65,6 @@ class KeyValueStorageBase {
     }
   }
 
-  /// Sets the encrypted value for the key to secure storage
-  Future<bool> setEncrypted(String key, String value) {
-    try {
-      _secureStorage!.write(key: key, value: value);
-      return Future.value(true);
-    } on PlatformException catch (ex) {
-      debugPrint('$ex');
-      return Future.value(false);
-    }
-  }
-
   /// Erases common preferences keys
   Future<bool> clearCommon() => _sharedPrefs!.clear();
-
-  /// Erases encrypted keys
-  Future<bool> clearEncrypted() async {
-    try {
-      await _secureStorage!.deleteAll();
-      return true;
-    } on PlatformException catch (ex) {
-      debugPrint('$ex');
-      return false;
-    }
-  }
 }

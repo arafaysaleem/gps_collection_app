@@ -11,8 +11,6 @@ class KeyValueStorageService {
   /// don't care about their completion which is why we don't use `await` and
   /// let them execute in the background.
   void resetKeys() {
-    _keyValueStorage
-      ..clearCommon()
-      ..clearEncrypted();
+    _keyValueStorage.clearCommon();
   }
 }

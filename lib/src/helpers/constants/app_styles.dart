@@ -68,6 +68,9 @@ class Insets {
 
   /// Returns a [SizedBox] of custom `width`
   static SizedBox gapW(double width) => SizedBox(width: width);
+  
+  /// Returns a [SizedBox] of no size
+  static const SizedBox shrink = SizedBox.shrink();
 
   /// [Spacer] for adding infinite gaps, as much as the constraints
   /// allow.
@@ -112,8 +115,8 @@ class Corners {
   /// [BorderRadius] rounded on all corners by **20**
   static const BorderRadius rounded20 = BorderRadius.all(Radius.circular(20));
 
-  /// [BorderRadius] rounded on all corners by **50**
-  static const BorderRadius rounded50 = BorderRadius.all(Radius.circular(50));
+  /// [BorderRadius] rounded on all corners by `radius`
+  static BorderRadius rounded(double radius) => BorderRadius.all(Radius.circular(radius));
 }
 
 /// A utility class that holds all the shadows used throughout

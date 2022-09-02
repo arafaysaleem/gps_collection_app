@@ -6,18 +6,24 @@ import 'package:flutter/foundation.dart';
 class AppAssets {
   const AppAssets._();
 
-  /// The path for face id image asset
-  static const String faceId = 'assets/images/face_id.png';
-
-  /// The path for male student avatar
-  static const String maleStudent = 'assets/images/male-student.png';
-
-  /// The path for savings poster vector
-  static const String savingsPoster = 'assets/images/savings-poster.svg';
-
-  /// The path for demale student avatar
-  static const String femaleStudent = 'assets/images/female-student.png';
-
-  /// The path for Pakistani flag image asset
-  static const String pkFlag = 'assets/images/pk_flag.png';
+  /// The path for close svg asset
+  static const String closeIcon = 'assets/icons/Close.svg';
+  
+  /// The path for email svg asset
+  static const String emailIcon = 'assets/icons/Email.svg';
+  
+  /// The path for mail svg asset
+  static const String mailIcon = 'assets/icons/Mail.svg';
+  
+  /// The path for note svg asset
+  static const String noteIcon = 'assets/icons/Note.svg';
+  
+  /// The path for tools svg asset
+  static const String toolsIcon = 'assets/icons/Tools.svg';
+  
+  /// The path for add gps point svg asset
+  static const String gpsAddIcon = 'assets/icons/GPS_add_point.svg';
+  
+  /// The path for multiple farm properties svg asset
+  static const String gpsMultiFarmIcon = 'assets/icons/GPS_multiple_properties.svg';
 }

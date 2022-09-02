@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const title = 'Family Expense Tracker';
+    const title = 'GPS Collection App';
     const showDebugBanner = false;
     final navigatorObservers = <NavigatorObserver>[SentryNavigatorObserver()];
     final platformIsIOS = Platform.isIOS;
