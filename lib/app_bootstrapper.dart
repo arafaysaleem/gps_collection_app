@@ -22,7 +22,7 @@ class AppBootstrapper {
   const AppBootstrapper._();
 
   /// Initializer for important and asyncronous app services
-  /// Should be called in main after `WidgetsBinding.FlutterInitialized()`.
+  /// Should be called in main after `WidgetsBinding.ensureInitialized()`.
   ///
   /// [mainAppWidget] is the first widget that loads on app startup.
   /// [runApp] is the main app binding method that launches our [mainAppWidget].

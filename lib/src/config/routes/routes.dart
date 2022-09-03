@@ -2,8 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Helpers
-import '../../features/app_startup/app_startup_screen.dart';
-import '../../features/app_startup/auth_widget_builder.dart';
+import '../../features/app_startup/startup_widget_builder.dart';
 import '../../helpers/typedefs.dart';
 
 /// A utility class that holds screen names for named navigation.
@@ -13,16 +12,13 @@ class Routes {
   const Routes._();
 
   /// The route to be loaded when app launches
-  static const String initialRoute = AppStartupRoute;
+  static const String initialRoute = StartupWidgetBuilderRoute;
 
   /// The route to be loaded in case of unrecognized route name
   static const String fallbackRoute = NotFoundScreenRoute;
 
-  // The name for the app startup screen
-  static const String AppStartupRoute = '/app-startup-screen';
-  
   // The name for the auth widget screen
-  static const String AuthWidgetBuilderRoute = '/auth-widget-builder';
+  static const String StartupWidgetBuilderRoute = '/startup-widget-builder';
 
   /// The name of the route for home dashboard screen
   static const String HomeScreenRoute = '/home-screen';
@@ -34,8 +30,7 @@ class Routes {
   static const String NotFoundScreenRoute = '/route-not-found-screen';
 
   static final Map<String, RouteBuilder> _routesMap = {
-    AppStartupRoute: (_) => const AppStartupScreen(),
-    AuthWidgetBuilderRoute: (_) => const AuthWidgetBuilder(),
+    StartupWidgetBuilderRoute: (_) => const StartupWidgetBuilder(),
     NotFoundScreenRoute: (_) => const SizedBox.shrink(),
   };
 

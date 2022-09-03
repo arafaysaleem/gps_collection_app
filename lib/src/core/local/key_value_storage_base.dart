@@ -34,6 +34,8 @@ class KeyValueStorageBase {
       switch (T) {
         case String:
           return _sharedPrefs!.getString(key) as T?;
+        case List<String>:
+          return _sharedPrefs!.getStringList(key) as T?;
         case int:
           return _sharedPrefs!.getInt(key) as T?;
         case bool:
@@ -54,6 +56,8 @@ class KeyValueStorageBase {
     switch (T) {
       case String:
         return _sharedPrefs!.setString(key, value as String);
+      case List<String>:
+        return _sharedPrefs!.setStringList(key, value as List<String>);
       case int:
         return _sharedPrefs!.setInt(key, value as int);
       case bool:
