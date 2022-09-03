@@ -86,7 +86,7 @@ class _CustomDropdownFieldSheet<T> extends CustomDropdownField<T> {
     this.displayFieldColor = AppColors.fieldFillColor,
     this.hintText = 'Select a value',
     this.initialValue,
-  })  : controller = controller ?? ValueNotifier(initialValue);
+  }) : controller = controller ?? ValueNotifier(initialValue);
 
   Future<void> _pickValue(BuildContext context) async {
     controller.value = await showModalBottomSheet<T?>(
@@ -152,8 +152,11 @@ class _CustomDropdownFieldAnimated<T> extends CustomDropdownField<T> {
   const _CustomDropdownFieldAnimated({
     super.key,
     this.hintText,
-    this.hintStyle,
     this.listItemStyle,
+    this.hintStyle = const TextStyle(
+      fontSize: 16,
+      color: AppColors.textGreyColor,
+    ),
     this.selectedStyle = const TextStyle(
       fontSize: 16,
       color: AppColors.textGreyColor,

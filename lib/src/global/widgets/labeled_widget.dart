@@ -5,6 +5,15 @@ import '../../helpers/constants/app_colors.dart';
 import '../../helpers/constants/app_styles.dart';
 import '../../helpers/constants/app_typography.dart';
 
+enum LabelPosition {
+  start,
+  end;
+
+  VerticalDirection get direction => this == LabelPosition.start
+      ? VerticalDirection.down
+      : VerticalDirection.up;
+}
+
 class LabeledWidget extends StatelessWidget {
   final Widget child;
   final String label;
@@ -13,6 +22,7 @@ class LabeledWidget extends StatelessWidget {
   final TextStyle labelStyle;
   final bool useDarkerLabel;
   final Axis labelDirection;
+  final LabelPosition labelPosition;
   final CrossAxisAlignment? crossAxisAlignment;
   final MainAxisAlignment? mainAxisAlignment;
   final bool expand;
@@ -22,6 +32,7 @@ class LabeledWidget extends StatelessWidget {
     required this.child,
     required this.label,
     this.labelGap = Insets.gapH5,
+    this.labelPosition = LabelPosition.start,
     this.expand = false,
     this.horizontalLabelGap = Insets.gapW10,
     this.crossAxisAlignment,
@@ -50,11 +61,13 @@ class LabeledWidget extends StatelessWidget {
     ];
     return labelDirection == Axis.vertical
         ? Column(
+            verticalDirection: labelPosition.direction,
             crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.start,
             mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
             children: children,
           )
         : Row(
+            verticalDirection: labelPosition.direction,
             mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
             crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.center,
             children: children,
