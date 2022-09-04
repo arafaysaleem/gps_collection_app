@@ -8,6 +8,9 @@ class AppAssets {
 
   /// The path for close svg asset
   static const String closeIcon = 'assets/icons/Close.svg';
+
+  /// The path for delete svg asset
+  static const String deleteIcon = 'assets/icons/Delete.svg';
   
   /// The path for email svg asset
   static const String emailIcon = 'assets/icons/Email.svg';

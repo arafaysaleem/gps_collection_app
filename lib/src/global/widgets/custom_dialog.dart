@@ -18,15 +18,17 @@ enum _CustomDialogType { ALERT, CONFIRM, ABOUT, SIMPLE }
 
 class CustomDialog extends StatelessWidget {
   final String title, body;
+  final Widget? child;
   final String? buttonText, falseButtonText, trueButtonText;
   final _CustomDialogType _type;
   final VoidCallback? falseButtonPressed, trueButtonPressed;
 
   static Future<void> showAlertDialog({
     required BuildContext context,
-    required String reason,
+    String reason = '',
     String? dialogTitle,
     String? buttonText,
+    Widget? child,
     VoidCallback? onButtonPressed,
   }) async {
     await showDialog<bool>(
@@ -37,6 +39,32 @@ class CustomDialog extends StatelessWidget {
         body: reason,
         buttonText: buttonText ?? 'Retry',
         onButtonPressed: onButtonPressed,
+        child: child,
+      ),
+    );
+  }
+
+  static Future<void> showConfirmDialog({
+    required BuildContext context,
+    String reason = '',
+    VoidCallback? onTrueButtonPressed,
+    VoidCallback? onFalseButtonPressed,
+    String? dialogTitle,
+    String? trueButtonText,
+    Widget? child,
+    String? falseButtonText,
+  }) async {
+    await showDialog<bool>(
+      context: context,
+      barrierColor: AppColors.barrierColor.withOpacity(0.75),
+      builder: (ctx) => CustomDialog.confirm(
+        title: dialogTitle ?? 'Confirm Operation',
+        body: reason,
+        trueButtonText: trueButtonText ?? 'Okay',
+        falseButtonText: falseButtonText ?? 'Cancel',
+        trueButtonPressed: onTrueButtonPressed,
+        falseButtonPressed: onFalseButtonPressed,
+        child: child,
       ),
     );
   }
@@ -47,6 +75,7 @@ class CustomDialog extends StatelessWidget {
     this.trueButtonText,
     this.falseButtonPressed,
     this.trueButtonPressed,
+    this.child,
     required this.title,
     required this.body,
     required _CustomDialogType type,
@@ -56,6 +85,7 @@ class CustomDialog extends StatelessWidget {
     required String title,
     required String body,
     required String buttonText,
+    Widget? child,
     VoidCallback? onButtonPressed,
   }) = _CustomDialogWithAlert;
 
@@ -64,6 +94,7 @@ class CustomDialog extends StatelessWidget {
     required String body,
     required String falseButtonText,
     required String trueButtonText,
+    Widget? child,
     VoidCallback? falseButtonPressed,
     VoidCallback? trueButtonPressed,
   }) = _CustomDialogWithConfirm;
@@ -80,7 +111,7 @@ class CustomDialog extends StatelessWidget {
       actionsPadding: const EdgeInsets.fromLTRB(0, 0, 8, 8),
       backgroundColor: AppColors.surfaceColor,
       title: Text(title),
-      content: Text(body),
+      content: child ?? Text(body),
       contentTextStyle: AppTypography.primary.body14.copyWith(
         color: AppColors.textLightGreyColor,
       ),
@@ -155,6 +186,7 @@ class _CustomDialogWithAlert extends CustomDialog {
     required super.body,
     required String super.buttonText,
     VoidCallback? onButtonPressed,
+    super.child,
   }) : super._(
           trueButtonPressed: onButtonPressed,
           type: _CustomDialogType.ALERT,
@@ -169,6 +201,7 @@ class _CustomDialogWithConfirm extends CustomDialog {
     required String super.trueButtonText,
     super.falseButtonPressed,
     super.trueButtonPressed,
+    super.child,
   }) : super._(
           type: _CustomDialogType.CONFIRM,
         );
