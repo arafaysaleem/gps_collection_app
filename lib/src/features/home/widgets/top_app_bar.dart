@@ -50,6 +50,7 @@ class TopAppBar extends HookConsumerWidget {
         nameTextController.text = currentFarmer != null
             ? '${currentFarmer.first} ${currentFarmer.last}'
             : '';
+        noteTextController.text = ref.read(coreNoteProvider);
         return null;
       },
       [currentPaddock],
@@ -108,7 +109,7 @@ class TopAppBar extends HookConsumerWidget {
 
           // Paddock and coords info
           SizedBox(
-            width: 60,
+            width: 70,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -133,7 +134,7 @@ class TopAppBar extends HookConsumerWidget {
                 if (currentPaddock != null)
                   Text(
                     currentPaddock.code,
-                    style: AppTypography.primary.body14.copyWith(
+                    style: AppTypography.primary.subtitle13.copyWith(
                       color: AppColors.textWhite80Color,
                     ),
                   ),
@@ -147,6 +148,13 @@ class TopAppBar extends HookConsumerWidget {
                     // Paddock note
                     NoteIcon(
                       noteTextController: noteTextController,
+                      onSave: () {
+                        ref.read(coreNoteProvider.notifier).state =
+                            noteTextController.text;
+                      },
+                      onCancel: () {
+                        noteTextController.text = ref.read(coreNoteProvider);
+                      },
                     ),
 
                     // Farmer property picker

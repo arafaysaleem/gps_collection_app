@@ -12,8 +12,13 @@ import '../../../helpers/extensions/context_extensions.dart';
 
 class NoteIcon extends ConsumerWidget {
   final TextEditingController noteTextController;
+  final VoidCallback? onCancel;
+  final VoidCallback? onSave;
+
   const NoteIcon({
     super.key,
+    this.onCancel,
+    this.onSave,
     required this.noteTextController,
   });
 
@@ -26,8 +31,8 @@ class NoteIcon extends ConsumerWidget {
           dialogTitle: 'Add note',
           trueButtonText: 'Save',
           falseButtonText: 'Cancel',
-          onTrueButtonPressed: () {},
-          onFalseButtonPressed: () {},
+          onTrueButtonPressed: onSave,
+          onFalseButtonPressed: onCancel,
           child: SizedBox(
             height: context.screenHeight * 0.31,
             child: CustomTextField(

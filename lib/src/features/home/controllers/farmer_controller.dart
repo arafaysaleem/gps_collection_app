@@ -15,6 +15,8 @@ import '../models/farmer_model.codegen.dart';
 
 final currentFarmerProvider = StateProvider<FarmerModel?>((ref) => null);
 
+final coreNoteProvider = StateProvider((ref) => '');
+
 final farmersController =
     StateNotifierProvider<FarmersController, FutureState<bool>>(
   (ref) {
