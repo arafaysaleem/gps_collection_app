@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'future_state.codegen.freezed.dart';
@@ -19,7 +20,8 @@ class FutureState<T> with _$FutureState<T> {
     try {
       final result = await callback.call();
       return FutureState.data(data: result);
-    } on Exception {
+    } on Exception catch (ex) {
+      debugPrint(ex.toString());
       return FutureState.failed(reason: errorMessage ?? 'Future failed');
     }
   }

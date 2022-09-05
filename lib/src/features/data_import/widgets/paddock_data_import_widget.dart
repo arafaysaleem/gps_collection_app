@@ -18,7 +18,6 @@ import '../../../helpers/constants/app_typography.dart';
 // Controllers
 import '../../home/controllers/farmer_controller.dart';
 import '../../home/controllers/paddocks_controller.dart';
-import '../controllers/data_import_controller.dart';
 
 class PaddocksDataImportWidget extends ConsumerWidget {
   const PaddocksDataImportWidget({super.key});
@@ -36,22 +35,15 @@ class PaddocksDataImportWidget extends ConsumerWidget {
       ),
     );
 
-    final farmerLoaded = ref.watch(
-      farmersController.select(
-        (value) => value.maybeWhen(
-          data: (_) => true,
+    final farmerLoaded = ref.watch(farmersController).maybeWhen(
+          data: (isImported) => isImported,
           orElse: () => false,
-        ),
-      ),
-    );
+        );
 
-    final paddocksLoaded = ref.watch(
-      paddocksController.select(
-        (value) => value.maybeWhen(
-          data: (_) => true,
-          orElse: () => false,
-        ),
-      ),
+    final importState = ref.watch(paddocksController);
+    final paddocksLoaded = importState.maybeWhen(
+      data: (isImported) => isImported,
+      orElse: () => false,
     );
 
     final disablePaddockImport = !farmerLoaded || paddocksLoaded;
@@ -67,36 +59,29 @@ class PaddocksDataImportWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       child: CustomTextButton(
         color: AppColors.primaryColor,
-        disabled: !farmerLoaded || paddocksLoaded,
+        disabled: disablePaddockImport,
         width: double.infinity,
-        onPressed: () async {
-          await ref.read(paddocksController.notifier).importPaddocksData();
-          await ref
-              .read(dataImportController.notifier)
-              .saveIsImportedFlagToCache(true);
+        onPressed: () {
+          ref.read(paddocksController.notifier).importPaddocksData();
         },
-        child: Consumer(
-          builder: (context, ref, child) {
-            final futureState = ref.watch(paddocksController);
-            return futureState.maybeWhen(
-              loading: () => const CustomCircularLoader(
-                color: Colors.white,
-              ),
-              data: (_) => const Icon(
-                Icons.check,
-                color: Colors.white,
-              ),
-              orElse: () => child!,
-            );
-          },
-          child: Center(
-            child: Text(
-              'Import',
-              style: AppTypography.secondary.body16.copyWith(
-                color: disablePaddockImport ? Colors.white30 : Colors.white,
-              ),
-            ),
+        child: importState.maybeWhen(
+          loading: () => const CustomCircularLoader(
+            color: Colors.white,
           ),
+          orElse: () => !paddocksLoaded
+              ? Center(
+                  child: Text(
+                    'Import',
+                    style: AppTypography.secondary.body16.copyWith(
+                      color:
+                          disablePaddockImport ? Colors.white30 : Colors.white,
+                    ),
+                  ),
+                )
+              : const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                ),
         ),
       ),
     );

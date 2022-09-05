@@ -33,14 +33,11 @@ class FarmerDataImportWidget extends ConsumerWidget {
         ),
       ),
     );
-    final importComplete = ref.watch(
-          farmersController.select(
-            (value) => value.whenOrNull(
-              data: (_) => true,
-            ),
-          ),
-        ) ??
-        false;
+    final farmerImportState = ref.watch(farmersController);
+    final importComplete = farmerImportState.maybeWhen(
+      data: (isImported) => isImported,
+      orElse: () => false,
+    );
     return LabeledWidget(
       label: 'Import farmer data before proceeding.',
       labelGap: Insets.gapH15,
@@ -57,28 +54,23 @@ class FarmerDataImportWidget extends ConsumerWidget {
         onPressed: () {
           ref.read(farmersController.notifier).importFarmerData();
         },
-        child: Consumer(
-          builder: (context, ref, child) {
-            final futureState = ref.watch(farmersController);
-            return futureState.maybeWhen(
-              loading: () => const CustomCircularLoader(
-                color: Colors.white,
-              ),
-              data: (_) => const Icon(
-                Icons.check,
-                color: Colors.white,
-              ),
-              orElse: () => child!,
-            );
-          },
-          child: Center(
-            child: Text(
-              'Import',
-              style: AppTypography.secondary.body16.copyWith(
-                color: importComplete ? Colors.white30 : Colors.white,
-              ),
-            ),
+        child: farmerImportState.maybeWhen(
+          loading: () => const CustomCircularLoader(
+            color: Colors.white,
           ),
+          orElse: () => !importComplete
+              ? Center(
+                  child: Text(
+                    'Import',
+                    style: AppTypography.secondary.body16.copyWith(
+                      color: importComplete ? Colors.white30 : Colors.white,
+                    ),
+                  ),
+                )
+              : const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                ),
         ),
       ),
     );

@@ -1,5 +1,9 @@
 import 'dart:collection';
+import 'dart:convert';
+import 'dart:io';
 
+import 'package:charset/charset.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -7,7 +11,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/local/key_value_storage_service.dart';
 import '../../../global/all_providers.dart';
 import '../../../global/states/future_state.codegen.dart';
-import '../../../helpers/constants/app_utils.dart';
+import '../../../helpers/typedefs.dart';
+import '../../data_import/controllers/data_import_controller.dart';
 import '../models/paddock_model.codegen.dart';
 import 'properties_controller.dart';
 
@@ -38,43 +43,32 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
 
     state = await FutureState.makeGuardedRequest(
       () async {
-        await Future<void>.delayed(Durations.slower);
+        final result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['json'],
+          lockParentWindow: true,
+        );
 
-        const tempPaddocks = [
-          PaddockModel(
-            farmerId: 'pkCID',
-            propertyId: 'CRIS_ID',
-            code: 'PAD-1A',
-            fkSID: 'fkSID',
-            paddock: 'Paddock A',
-          ),
-          PaddockModel(
-            farmerId: 'pkCID',
-            propertyId: 'CRIS_ID2',
-            code: 'PAD-2A',
-            fkSID: 'fkSID',
-            paddock: 'Paddock A',
-          ),
-          PaddockModel(
-            farmerId: 'pkCID',
-            propertyId: 'CRIS_ID',
-            code: 'PAD-1B',
-            fkSID: 'fkSID',
-            paddock: 'Paddock B',
-          ),
-          PaddockModel(
-            farmerId: 'pkCID',
-            propertyId: 'CRIS_ID',
-            code: 'PAD-1C',
-            fkSID: 'fkSID',
-            paddock: 'Paddock C',
-          ),
-        ];
+        if (result == null) return false;
 
-        _paddocksMap = {for (var e in tempPaddocks) e.code: e};
-        await _ref.read(propertiesController).importPropertiesData(tempPaddocks);
+        final file = File(result.files.single.path!);
+        final paddocksJson = utf16.decode(await file.readAsBytes());
+        final dynamic paddocksList = jsonDecode(paddocksJson);
+
+        if (paddocksList is! List) {
+          throw Exception('Paddock data is not in correct format');
+        }
+        final paddocks = paddocksList
+            .map((dynamic e) => PaddockModel.fromJson(e as JSON))
+            .toList();
+
+        _paddocksMap = {for (var e in paddocks) e.code: e};
+        await _ref.read(propertiesController).importPropertiesData(paddocks);
         // await savePaddockInCache(tempFarmer);
 
+        await _ref
+            .read(dataImportController.notifier)
+            .saveIsImportedFlagToCache(true);
         return true;
       },
       errorMessage: 'Failed to import paddocks data from file',

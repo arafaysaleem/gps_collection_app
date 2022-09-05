@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:charset/charset.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -5,7 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/local/key_value_storage_service.dart';
 import '../../../global/all_providers.dart';
 import '../../../global/states/future_state.codegen.dart';
-import '../../../helpers/constants/app_utils.dart';
+import '../../../helpers/typedefs.dart';
 import '../models/farmer_model.codegen.dart';
 
 final currentFarmerProvider = StateProvider<FarmerModel?>((ref) => null);
@@ -30,15 +35,24 @@ class FarmersController extends StateNotifier<FutureState<bool>> {
 
     state = await FutureState.makeGuardedRequest(
       () async {
-        await Future<void>.delayed(Durations.slower);
-
-        const tempFarmer = FarmerModel(
-          pkCID: 'pkCID',
-          first: 'Abdur',
-          last: 'Rafay',
+        final result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['json'],
+          lockParentWindow: true,
         );
 
-        _ref.read(currentFarmerProvider.notifier).state = tempFarmer;
+        if (result == null) return false;
+
+        final file = File(result.files.single.path!);
+        final farmerString = utf16.decode(await file.readAsBytes());
+        final dynamic farmerJson = jsonDecode(farmerString);
+
+        if (farmerJson is! JSON) {
+          throw Exception('Farmer data is not in correct format');
+        }
+        final farmer = FarmerModel.fromJson(farmerJson);
+
+        _ref.read(currentFarmerProvider.notifier).state = farmer;
         // await saveFarmersInCache(tempFarmer);
 
         return true;
