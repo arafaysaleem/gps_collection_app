@@ -28,21 +28,18 @@ class NoteIcon extends ConsumerWidget {
           falseButtonText: 'Cancel',
           onTrueButtonPressed: () {},
           onFalseButtonPressed: () {},
-          child: CustomTextField(
-            controller: noteTextController,
-            showFocusedBorder: false,
-            autofocus: true,
-            multiline: true,
-            textAlignVertical: TextAlignVertical.top,
-            expands: true,
+          child: SizedBox(
             height: context.screenHeight * 0.31,
-            hintText: "What's the important message?",
-            validator: (body) {
-              if (body == null || body.isEmpty) {
-                return 'Please enter some message';
-              }
-              return null;
-            },
+            child: CustomTextField(
+              controller: noteTextController,
+              showFocusedBorder: false,
+              textAlignVertical: TextAlignVertical.top,
+              autofocus: true,
+              multiline: true,
+              expands: true,
+              height: context.screenHeight * 0.30,
+              hintText: 'Enter message...',
+            ),
           ),
         );
       },

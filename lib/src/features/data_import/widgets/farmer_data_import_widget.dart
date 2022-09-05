@@ -75,7 +75,7 @@ class FarmerDataImportWidget extends ConsumerWidget {
             child: Text(
               'Import',
               style: AppTypography.secondary.body16.copyWith(
-                color: Colors.white,
+                color: importComplete ? Colors.white30 : Colors.white,
               ),
             ),
           ),

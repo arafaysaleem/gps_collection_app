@@ -54,11 +54,13 @@ class PaddocksDataImportWidget extends ConsumerWidget {
       ),
     );
 
+    final disablePaddockImport = !farmerLoaded || paddocksLoaded;
+
     return LabeledWidget(
       label: 'Import paddock data before proceeding.',
       labelGap: Insets.gapH15,
       labelStyle: AppTypography.primary.body16.copyWith(
-        color: !farmerLoaded || paddocksLoaded
+        color: disablePaddockImport
             ? AppColors.textGreyColor
             : AppColors.textWhite80Color,
       ),
@@ -91,7 +93,7 @@ class PaddocksDataImportWidget extends ConsumerWidget {
             child: Text(
               'Import',
               style: AppTypography.secondary.body16.copyWith(
-                color: Colors.white,
+                color: disablePaddockImport ? Colors.white30 : Colors.white,
               ),
             ),
           ),

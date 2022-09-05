@@ -108,7 +108,7 @@ class CustomDialog extends StatelessWidget {
       insetPadding: const EdgeInsets.symmetric(horizontal: 19),
       titlePadding: const EdgeInsets.fromLTRB(19, 14, 19, 0),
       contentPadding: const EdgeInsets.fromLTRB(19, 9, 19, 9),
-      actionsPadding: const EdgeInsets.fromLTRB(0, 0, 8, 8),
+      actionsPadding: const EdgeInsets.fromLTRB(0, 0, 19, 19),
       backgroundColor: AppColors.surfaceColor,
       title: Text(title),
       content: child ?? Text(body),

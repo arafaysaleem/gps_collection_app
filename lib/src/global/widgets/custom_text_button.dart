@@ -66,18 +66,18 @@ class CustomTextButton extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
         border: border,
-        gradient: disabled ? AppColors.buttonGradientGrey : gradient,
-        color: color,
+        gradient: !disabled ? gradient : null,
+        color: color?.withOpacity(disabled ? 0.15 : 1),
       ),
       clipBehavior: Clip.hardEdge,
       child: TextButton(
         style: textButtonTheme.style!.copyWith(
           padding: MaterialStateProperty.all(padding),
           overlayColor: MaterialStateProperty.all(
-            disabled ? AppColors.darkSkeletonColor : AppColors.primaryColor,
+            AppColors.primaryColor.withOpacity(disabled ? 0.15 : 1),
           ),
         ),
-        onPressed: disabled ? () {} : onPressed,
+        onPressed: disabled ? null : onPressed,
         child: child,
       ),
     );
