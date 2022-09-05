@@ -9,6 +9,7 @@ import '../../../global/all_providers.dart';
 import '../../../global/states/future_state.codegen.dart';
 import '../../../helpers/constants/app_utils.dart';
 import '../models/paddock_model.codegen.dart';
+import 'properties_controller.dart';
 
 final paddockByCodeProvider =
     Provider.family<PaddockModel, String>((ref, code) {
@@ -71,6 +72,7 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
         ];
 
         _paddocksMap = {for (var e in tempPaddocks) e.code: e};
+        await _ref.read(propertiesController).importPropertiesData(tempPaddocks);
         // await savePaddockInCache(tempFarmer);
 
         return true;
@@ -92,7 +94,7 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
         currentPaddock == null ? null : _getPaddockByCode(currentPaddock);
   }
 
-  UnmodifiableListView<PaddockModel> getAllPaddocks() {
+  UnmodifiableListView<PaddockModel> getAllPaddocks({String? property}) {
     return UnmodifiableListView(_paddocksMap.values);
   }
 

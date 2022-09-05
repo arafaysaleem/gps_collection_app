@@ -24,6 +24,15 @@ import '../controllers/paddocks_controller.dart';
 // Models
 import '../models/paddock_model.codegen.dart';
 
+final _propertyPaddocksProvider = Provider<List<PaddockModel>>((ref) {
+  final currentPropertyId = ref.watch(currentPropertyProvider);
+  return ref
+      .watch(paddocksController.notifier)
+      .getAllPaddocks()
+      .where((e) => e.propertyId == currentPropertyId)
+      .toList();
+});
+
 class TopAppBar extends HookConsumerWidget {
   const TopAppBar({super.key});
 
@@ -32,16 +41,19 @@ class TopAppBar extends HookConsumerWidget {
     final paddockTextController = useTextEditingController();
     final noteTextController = useTextEditingController();
     final nameTextController = useTextEditingController();
+    final currentPaddock = ref.watch(currentPaddockProvider);
 
-    useEffect(() {
-      paddockTextController.text =
-          ref.read(currentPaddockProvider)?.paddock ?? '';
-      final currentFarmer = ref.read(currentFarmerProvider);
-      nameTextController.text = currentFarmer != null
-          ? '${currentFarmer.first} ${currentFarmer.last}'
-          : '';
-      return null;
-    });
+    useEffect(
+      () {
+        paddockTextController.text = currentPaddock?.paddock ?? '';
+        final currentFarmer = ref.read(currentFarmerProvider);
+        nameTextController.text = currentFarmer != null
+            ? '${currentFarmer.first} ${currentFarmer.last}'
+            : '';
+        return null;
+      },
+      [currentPaddock],
+    );
 
     return Container(
       height: 173,
@@ -71,8 +83,7 @@ class TopAppBar extends HookConsumerWidget {
                 // Paddock Dropdowm
                 Consumer(
                   builder: (_, ref, __) {
-                    final paddocks =
-                        ref.watch(paddocksController.notifier).getAllPaddocks();
+                    final paddocks = ref.watch(_propertyPaddocksProvider);
                     return LabeledWidget(
                       label: 'Paddock',
                       child: CustomDropdownField<PaddockModel>.animated(
@@ -119,18 +130,12 @@ class TopAppBar extends HookConsumerWidget {
                 Insets.expand,
 
                 // Paddock Code
-                if (paddockTextController.text.isNotEmpty)
-                  Consumer(
-                    builder: (_, ref, __) {
-                      final currentPaddockCode =
-                          ref.watch(currentPaddockProvider)!.code;
-                      return Text(
-                        currentPaddockCode,
-                        style: AppTypography.primary.body16.copyWith(
-                          color: AppColors.textWhite80Color,
-                        ),
-                      );
-                    },
+                if (currentPaddock != null)
+                  Text(
+                    currentPaddock.code,
+                    style: AppTypography.primary.body14.copyWith(
+                      color: AppColors.textWhite80Color,
+                    ),
                   ),
 
                 Insets.gapH5,
@@ -154,9 +159,11 @@ class TopAppBar extends HookConsumerWidget {
                         return CustomPopupMenu<String>(
                           initialValue: currentProperty,
                           items: {for (var e in properties) e: e},
-                          onSelected: (property) => ref
-                              .read(currentPropertyProvider.notifier)
-                              .state = property,
+                          onSelected: (property) {
+                            ref.read(currentPropertyProvider.notifier).state =
+                                property;
+                            ref.invalidate(currentPaddockProvider);
+                          },
                           child: SvgPicture.asset(
                             AppAssets.gpsMultiFarmIcon,
                             width: 20,

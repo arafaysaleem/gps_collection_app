@@ -40,14 +40,18 @@ class DataImportController extends StateNotifier<DataImportState> {
   }
 
   void _initImportedData() {
-    final isDataImported = _keyValueStorageService.getIsDataImported();
-    if (isDataImported != null && isDataImported) {
-      _ref.read(farmersController.notifier).loadCurrentFarmerFromCache();
-      _ref.read(paddocksController.notifier).loadPaddocksFromCache();
-      _ref.read(propertiesController).loadPropertiesFromCache();
-      state = const DataImportState.done();
-    } else {
-      state = const DataImportState.idle();
+    try {
+      final isDataImported = _keyValueStorageService.getIsDataImported();
+      if (isDataImported != null && isDataImported) {
+        _ref.read(farmersController.notifier).loadCurrentFarmerFromCache();
+        _ref.read(paddocksController.notifier).loadPaddocksFromCache();
+        _ref.read(propertiesController).loadPropertiesFromCache();
+        state = const DataImportState.done();
+      } else {
+        state = const DataImportState.idle();
+      }
+    } on Exception catch (ex) {
+      state = DataImportState.failed(reason: ex.toString());
     }
   }
 

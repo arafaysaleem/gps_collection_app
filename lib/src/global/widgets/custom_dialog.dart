@@ -143,12 +143,12 @@ class CustomDialog extends StatelessWidget {
                 height: 35,
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 onPressed: () {
-                  trueButtonPressed?.call();
+                  falseButtonPressed?.call();
                   AppRouter.pop(true);
                 },
                 child: Center(
                   child: Text(
-                    trueButtonText!,
+                    falseButtonText!,
                     style: const TextStyle(color: AppColors.primaryColor),
                   ),
                 ),
@@ -162,12 +162,12 @@ class CustomDialog extends StatelessWidget {
                 height: 35,
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 onPressed: () {
-                  falseButtonPressed?.call();
+                  trueButtonPressed?.call();
                   AppRouter.pop(false);
                 },
                 child: Center(
                   child: Text(
-                    falseButtonText!,
+                    trueButtonText!,
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),

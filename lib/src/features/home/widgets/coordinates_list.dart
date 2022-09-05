@@ -14,6 +14,7 @@ class CoordinatesList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final noteController = useTextEditingController();
     return ListView.builder(
       itemCount: 30,
       padding: EdgeInsets.zero,
@@ -47,7 +48,7 @@ class CoordinatesList extends HookWidget {
 
             // Note
             NoteIcon(
-              noteTextController: useTextEditingController(),
+              noteTextController: noteController,
             ),
           ],
         ),
