@@ -17,6 +17,7 @@ import '../../../global/widgets/labeled_widget.dart';
 import 'note_icon.dart';
 
 // Controllers
+import '../controllers/properties_controller.dart';
 import '../controllers/farmer_controller.dart';
 import '../controllers/paddocks_controller.dart';
 
@@ -81,10 +82,9 @@ class TopAppBar extends HookConsumerWidget {
                         ),
                         hintText: 'Choose paddock',
                         items: {for (var e in paddocks) e.paddock: e},
-                        onSelected: (paddock) {
-                          ref.read(currentPaddockProvider.notifier).state =
-                              paddock;
-                        },
+                        onSelected: (paddock) => ref
+                            .read(currentPaddockProvider.notifier)
+                            .state = paddock,
                       ),
                     );
                   },
@@ -145,19 +145,26 @@ class TopAppBar extends HookConsumerWidget {
                     ),
 
                     // Farmer property picker
-                    CustomPopupMenu(
-                      initialValue: 2,
-                      items: const {
-                        'Farm 1': 1,
-                        'Farm 2': 2,
+                    Consumer(
+                      builder: (_, ref, __) {
+                        final currentProperty =
+                            ref.watch(currentPropertyProvider);
+                        final properties =
+                            ref.watch(propertiesController).getAllProperties();
+                        return CustomPopupMenu<String>(
+                          initialValue: currentProperty,
+                          items: {for (var e in properties) e: e},
+                          onSelected: (property) => ref
+                              .read(currentPropertyProvider.notifier)
+                              .state = property,
+                          child: SvgPicture.asset(
+                            AppAssets.gpsMultiFarmIcon,
+                            width: 20,
+                            height: 20,
+                            color: Colors.yellow,
+                          ),
+                        );
                       },
-                      onSelected: (_) {},
-                      child: SvgPicture.asset(
-                        AppAssets.gpsMultiFarmIcon,
-                        width: 20,
-                        height: 20,
-                        color: Colors.yellow,
-                      ),
                     ),
                   ],
                 ),
