@@ -35,11 +35,9 @@ class DataImportController extends StateNotifier<DataImportState> {
     this._ref, {
     required KeyValueStorageService keyValueStorageService,
   })  : _keyValueStorageService = keyValueStorageService,
-        super(const DataImportState.idle()) {
-    _initImportedData();
-  }
+        super(const DataImportState.idle());
 
-  void _initImportedData() {
+  void initImportedData() {
     try {
       final isDataImported = _keyValueStorageService.getIsDataImported();
       if (isDataImported != null && isDataImported) {

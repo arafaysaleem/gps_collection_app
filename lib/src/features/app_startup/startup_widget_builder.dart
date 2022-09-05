@@ -6,11 +6,9 @@ import '../data_import/controllers/data_import_controller.dart';
 
 // Widgets
 import '../../global/widgets/custom_circular_loader.dart';
-import '../../global/widgets/custom_dialog.dart';
 
 // Screens
 import '../data_import/screens/data_import_screen.dart';
-import '../data_import/states/data_import_state.codegen.dart';
 import '../home/screens/home_screen.dart';
 
 class StartupWidgetBuilder extends HookConsumerWidget {
@@ -18,16 +16,6 @@ class StartupWidgetBuilder extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<DataImportState>(
-      dataImportController,
-      (_, importState) => importState.whenOrNull(
-        failed: (reason) => CustomDialog.showAlertDialog(
-          context: context,
-          reason: reason,
-          dialogTitle: 'Operation Failed',
-        ),
-      ),
-    );
     final importState = ref.watch(dataImportController);
     return importState.maybeWhen(
       done: () => const HomeScreen(),
