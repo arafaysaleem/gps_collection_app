@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 
 // Helpers
 import '../../../helpers/constants/app_assets.dart';
 import '../../../helpers/constants/app_styles.dart';
 
-class CoordinatesList extends StatelessWidget {
+// Widgets
+import 'note_icon.dart';
+
+class CoordinatesList extends HookWidget {
   const CoordinatesList({super.key});
 
   @override
@@ -42,11 +46,8 @@ class CoordinatesList extends StatelessWidget {
             Insets.gapW10,
 
             // Note
-            SvgPicture.asset(
-              AppAssets.noteIcon,
-              width: 24,
-              height: 24,
-              color: Colors.grey,
+            NoteIcon(
+              noteTextController: useTextEditingController(),
             ),
           ],
         ),

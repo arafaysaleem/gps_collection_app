@@ -19,6 +19,7 @@ import '../../../helpers/extensions/context_extensions.dart';
 import '../controllers/farmer_controller.dart';
 import '../controllers/paddocks_controller.dart';
 import '../models/paddock_model.codegen.dart';
+import 'note_icon.dart';
 
 class TopAppBar extends HookConsumerWidget {
   const TopAppBar({super.key});
@@ -137,39 +138,8 @@ class TopAppBar extends HookConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Paddock note
-                    InkWell(
-                      onTap: () {
-                        CustomDialog.showConfirmDialog(
-                          context: context,
-                          dialogTitle: 'Add note',
-                          trueButtonText: 'Save',
-                          falseButtonText: 'Cancel',
-                          onTrueButtonPressed: () {},
-                          onFalseButtonPressed: () {},
-                          child: CustomTextField(
-                            controller: noteTextController,
-                            showFocusedBorder: false,
-                            autofocus: true,
-                            multiline: true,
-                            textAlignVertical: TextAlignVertical.top,
-                            expands: true,
-                            height: context.screenHeight * 0.31,
-                            hintText: "What's the important message?",
-                            validator: (body) {
-                              if (body == null || body.isEmpty) {
-                                return 'Please enter some message';
-                              }
-                              return null;
-                            },
-                          ),
-                        );
-                      },
-                      child: SvgPicture.asset(
-                        AppAssets.noteIcon,
-                        width: 20,
-                        height: 20,
-                        color: Colors.white,
-                      ),
+                    NoteIcon(
+                      noteTextController: noteTextController,
                     ),
 
                     // Farmer property picker
