@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Helpers
-import '../../../global/widgets/custom_dialog.dart';
 import '../../../helpers/constants/app_assets.dart';
 import '../../../helpers/constants/app_colors.dart';
 import '../../../helpers/constants/app_styles.dart';
@@ -15,11 +14,14 @@ import '../../../global/widgets/custom_dropdown_field.dart';
 import '../../../global/widgets/custom_popup_menu.dart';
 import '../../../global/widgets/custom_text_field.dart';
 import '../../../global/widgets/labeled_widget.dart';
-import '../../../helpers/extensions/context_extensions.dart';
+import 'note_icon.dart';
+
+// Controllers
 import '../controllers/farmer_controller.dart';
 import '../controllers/paddocks_controller.dart';
+
+// Models
 import '../models/paddock_model.codegen.dart';
-import 'note_icon.dart';
 
 class TopAppBar extends HookConsumerWidget {
   const TopAppBar({super.key});
