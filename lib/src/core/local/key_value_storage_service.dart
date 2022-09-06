@@ -3,6 +3,7 @@
 
 import 'dart:convert';
 
+import '../../features/home/models/coordinate_model.codegen.dart';
 import '../../features/home/models/farmer_model.codegen.dart';
 import '../../features/home/models/paddock_model.codegen.dart';
 import '../../helpers/typedefs.dart';
@@ -16,9 +17,6 @@ class KeyValueStorageService {
 
   /// The name of properties data key
   static const _propertiesKey = 'propertiesKey';
-
-  /// The name of coordinates data key
-  static const _coordinatesKey = 'coordinatesKey';
 
   /// The name of farmer model key
   static const _farmerKey = 'farmerKey';
@@ -44,6 +42,25 @@ class KeyValueStorageService {
     if (paddocks == null) return null;
     return paddocks
         .map((e) => PaddockModel.fromJson(jsonDecode(e) as JSON))
+        .toList();
+  }
+
+  /// Sets the coordinates data for this paddock code to this value.
+  Future<bool> setPaddockCoordinates(
+    List<CoordinateModel> coordinates,
+    String paddockCode,
+  ) async {
+    final paddocksJson =
+        coordinates.map((e) => jsonEncode(e.toJson())).toList();
+    return _keyValueStorage.setCommon<List<String>>(paddockCode, paddocksJson);
+  }
+
+  /// Returns the list of coordinates
+  List<CoordinateModel>? getPaddockCoordinates(String paddockCode) {
+    final coordinates = _keyValueStorage.getCommon<List<String>>(paddockCode);
+    if (coordinates == null) return null;
+    return coordinates
+        .map((e) => CoordinateModel.fromJson(jsonDecode(e) as JSON))
         .toList();
   }
 

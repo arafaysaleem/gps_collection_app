@@ -1,18 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+// States
+import '../../../global/states/future_state.codegen.dart';
 
 // Helpers
 import '../../../helpers/constants/app_assets.dart';
 
 // Widgets
+import '../../../global/widgets/custom_circular_loader.dart';
+import '../../../global/widgets/custom_dialog.dart';
 import '../../../global/widgets/custom_popup_menu.dart';
 import '../../../global/widgets/labeled_widget.dart';
 
-class BottomNavBar extends StatelessWidget {
+// Controllers
+import '../controllers/coordinates_controller.dart';
+import '../controllers/farmer_controller.dart';
+
+class BottomNavBar extends ConsumerWidget {
   const BottomNavBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<FutureState<bool>>(
+      coordinatesController,
+      (_, state) => state.whenOrNull(
+        failed: (reason) => CustomDialog.showAlertDialog(
+          context: context,
+          reason: reason,
+          dialogTitle: 'Operation Failed',
+        ),
+      ),
+    );
     return Container(
       height: 58,
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -20,18 +40,30 @@ class BottomNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // GPS add
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            child: LabeledWidget(
-              label: 'Point',
-              labelPosition: LabelPosition.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              child: Icon(
-                Icons.place,
-                size: 22,
-                color: Colors.white,
-              ),
-            ),
+          Consumer(
+            builder: (_, ref, __) {
+              return ref.watch(coordinatesController).maybeWhen(
+                    loading: () => const CustomCircularLoader(),
+                    orElse: () => InkWell(
+                      onTap: () => ref
+                          .read(coordinatesController.notifier)
+                          .fetchAndSaveCoordinate(),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: LabeledWidget(
+                          label: 'Point',
+                          labelPosition: LabelPosition.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          child: Icon(
+                            Icons.place,
+                            size: 22,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+            },
           ),
 
           const VerticalDivider(
@@ -41,13 +73,14 @@ class BottomNavBar extends StatelessWidget {
           // Tool chooser
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
-            child: CustomPopupMenu(
-              initialValue: 2,
+            child: CustomPopupMenu<String>(
+              initialValue: ref.read(currentToolProvider),
               items: const {
-                'Pogo': 1,
-                'Auger': 2,
+                'Pogo': 'Pogo',
+                'Auger': 'Pogo',
               },
-              onSelected: (_) {},
+              onSelected: (tool) =>
+                  ref.read(currentToolProvider.notifier).state = tool,
               child: LabeledWidget(
                 label: 'Tool',
                 labelPosition: LabelPosition.end,

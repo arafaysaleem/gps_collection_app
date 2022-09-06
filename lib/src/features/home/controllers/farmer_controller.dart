@@ -17,6 +17,8 @@ final currentFarmerProvider = StateProvider<FarmerModel?>((ref) => null);
 
 final coreNoteProvider = StateProvider((ref) => '');
 
+final currentToolProvider = StateProvider<String?>((ref) => null);
+
 final farmersController =
     StateNotifierProvider<FarmersController, FutureState<bool>>(
   (ref) {
