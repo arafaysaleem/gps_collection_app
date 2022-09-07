@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/local/key_value_storage_service.dart';
 
 // Models
+import '../../home/controllers/coordinates_controller.dart';
 import '../../home/controllers/farmer_controller.dart';
 import '../../home/controllers/paddocks_controller.dart';
 import '../../home/controllers/properties_controller.dart';
@@ -44,6 +45,7 @@ class DataImportController extends StateNotifier<DataImportState> {
         _ref.read(farmersController.notifier).loadCurrentFarmerFromCache();
         _ref.read(paddocksController.notifier).loadPaddocksFromCache();
         _ref.read(propertiesController).loadPropertiesFromCache();
+        _ref.read(coordinatesController.notifier).loadCoordinatesFromCache();
         state = const DataImportState.done();
       } else {
         state = const DataImportState.idle();

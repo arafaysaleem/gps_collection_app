@@ -17,44 +17,46 @@ class CoordinatesList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final noteController = useTextEditingController();
-    final coordinates =
-        ref.watch(coordinatesController.notifier).getAllCoordinates();
-    return ListView.builder(
-      itemCount: coordinates.length,
-      padding: EdgeInsets.zero,
-      itemBuilder: (_, i) => Container(
-        color: i.isOdd ? Colors.white : Colors.grey.shade200,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 6,
-        ),
-        child: Row(
-          children: [
-            Text(
-              '${coordinates[i].latitude}, ${coordinates[i].longitude}',
-              style: const TextStyle(
-                color: Colors.black54,
-                fontSize: 15,
+    final coordinates = ref.watch(coordinatesListProvider);
+    return ColoredBox(
+      color: Colors.white,
+      child: ListView.builder(
+        itemCount: coordinates.length,
+        padding: EdgeInsets.zero,
+        itemBuilder: (_, i) => Container(
+          color: i.isOdd ? Colors.white : Colors.grey.shade200,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 6,
+          ),
+          child: Row(
+            children: [
+              Text(
+                '${coordinates[i].latitude.toStringAsPrecision(8)}, ${coordinates[i].longitude.toStringAsPrecision(8)}',
+                style: const TextStyle(
+                  color: Colors.black54,
+                  fontSize: 15,
+                ),
               ),
-            ),
 
-            Insets.expand,
+              Insets.expand,
 
-            // Delete
-            SvgPicture.asset(
-              AppAssets.deleteIcon,
-              width: 24,
-              height: 24,
-              color: Colors.grey,
-            ),
+              // Delete
+              SvgPicture.asset(
+                AppAssets.deleteIcon,
+                width: 24,
+                height: 24,
+                color: Colors.grey,
+              ),
 
-            Insets.gapW10,
+              Insets.gapW10,
 
-            // Note
-            NoteIcon(
-              noteTextController: noteController,
-            ),
-          ],
+              // Note
+              NoteIcon(
+                noteTextController: noteController,
+              ),
+            ],
+          ),
         ),
       ),
     );

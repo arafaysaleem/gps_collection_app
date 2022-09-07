@@ -74,10 +74,10 @@ class BottomNavBar extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: CustomPopupMenu<String>(
-              initialValue: ref.read(currentToolProvider),
+              initialValue: ref.watch(currentToolProvider),
               items: const {
                 'Pogo': 'Pogo',
-                'Auger': 'Pogo',
+                'Auger': 'Auger',
               },
               onSelected: (tool) =>
                   ref.read(currentToolProvider.notifier).state = tool,

@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -20,7 +18,12 @@ import '../../../global/states/future_state.codegen.dart';
 // Helpers
 import '../../../helpers/extensions/int_extension.dart';
 
-final coordinateCountProvider = StateProvider<int>((ref) => 0);
+final coordinateCountProvider = StateProvider<int>((ref) {
+  return ref.watch(coordinatesListProvider).length;
+});
+
+final coordinatesListProvider =
+    StateProvider<List<CoordinateModel>>((ref) => []);
 
 final coordinatesController =
     StateNotifierProvider<CoordinatesController, FutureState<bool>>((ref) {
@@ -32,8 +35,6 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
   final KeyValueStorageService _keyValueStorageService;
   final Ref _ref;
   final _gpsTimeLimit = 5.seconds;
-
-  late final List<CoordinateModel> _coordinatesList;
 
   CoordinatesController(this._ref, this._keyValueStorageService)
       : super(const FutureState.idle());
@@ -63,10 +64,11 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
           horizontaGpsAccuracy: position.accuracy.toInt(),
         );
 
-        _coordinatesList.add(coordinate);
-        _ref.read(coordinateCountProvider.notifier).state++;
+        _ref
+            .read(coordinatesListProvider.notifier)
+            .update((state) => [...state, coordinate]);
         final cached = await _keyValueStorageService.setPaddockCoordinates(
-          _coordinatesList,
+          _ref.read(coordinatesListProvider),
           currentPaddockCode,
         );
 
@@ -116,21 +118,14 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
     final currentPaddock = _ref.read(currentPaddockProvider);
 
     final coordinates = _keyValueStorageService
-            .getPaddockCoordinates(currentPaddock?.code ?? '') ??
-        [];
-    _coordinatesList = coordinates;
-
-    _ref.read(coordinateCountProvider.notifier).state = coordinates.length;
+        .getPaddockCoordinates(currentPaddock?.code ?? '');
+    _ref.read(coordinatesListProvider.notifier).state = [...?coordinates];
   }
 
-  UnmodifiableListView<CoordinateModel> getAllCoordinates() {
-    return UnmodifiableListView(_coordinatesList);
-  }
-
-  Future<bool> saveCoordinatesInCache(List<CoordinateModel> coordinates) async {
+  Future<bool> saveCoordinatesInCache() async {
     final paddockCode = _ref.read(currentPaddockProvider)!.code;
     return _keyValueStorageService.setPaddockCoordinates(
-      coordinates,
+      _ref.read(coordinatesListProvider),
       paddockCode,
     );
   }
