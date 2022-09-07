@@ -14,6 +14,7 @@ import '../../../global/states/future_state.codegen.dart';
 import '../../../helpers/typedefs.dart';
 import '../../data_import/controllers/data_import_controller.dart';
 import '../models/paddock_model.codegen.dart';
+import 'coordinates_controller.dart';
 import 'properties_controller.dart';
 
 final paddockByCodeProvider =
@@ -100,7 +101,13 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
     return _keyValueStorageService.setPaddocks(paddocks);
   }
 
-  Future<bool> saveCurrentPaddockInCache(PaddockModel paddock) async {
+  Future<bool> _saveCurrentPaddockInCache(PaddockModel paddock) async {
     return _keyValueStorageService.setCurrentPaddock(paddock.code);
+  }
+
+  void setCurrentPaddock(PaddockModel? paddock) {
+    _ref.read(currentPaddockProvider.notifier).state = paddock;
+    // _saveCurrentPaddockInCache(paddock);
+    _ref.read(coordinatesController.notifier).loadCoordinatesFromCache();
   }
 }

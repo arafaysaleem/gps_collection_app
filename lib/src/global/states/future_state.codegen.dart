@@ -22,7 +22,9 @@ class FutureState<T> with _$FutureState<T> {
       return FutureState.data(data: result);
     } on Exception catch (ex) {
       debugPrint(ex.toString());
-      return FutureState.failed(reason: errorMessage ?? 'Future failed');
+      return FutureState.failed(
+        reason: errorMessage ?? (ex.toString().split(':')[1].trim()),
+      );
     }
   }
 }

@@ -95,9 +95,9 @@ class TopAppBar extends HookConsumerWidget {
                         ),
                         hintText: 'Choose paddock',
                         items: {for (var e in paddocks) e.paddock: e},
-                        onSelected: (paddock) => ref
-                            .read(currentPaddockProvider.notifier)
-                            .state = paddock,
+                        onSelected: ref
+                            .read(paddocksController.notifier)
+                            .setCurrentPaddock,
                       ),
                     );
                   },

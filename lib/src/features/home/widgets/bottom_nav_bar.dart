@@ -1,4 +1,9 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -120,17 +125,27 @@ class BottomNavBar extends ConsumerWidget {
           ),
 
           // Close icon
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: LabeledWidget(
-              label: 'Close',
-              labelPosition: LabelPosition.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              child: SvgPicture.asset(
-                AppAssets.closeIcon,
-                width: 20,
-                height: 20,
-                color: Colors.white,
+          InkWell(
+            onTap: () {
+              if (defaultTargetPlatform == TargetPlatform.android) {
+                SystemNavigator.pop();
+              } else {
+                debugger();
+                exit(0);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: LabeledWidget(
+                label: 'Close',
+                labelPosition: LabelPosition.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                child: SvgPicture.asset(
+                  AppAssets.closeIcon,
+                  width: 20,
+                  height: 20,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

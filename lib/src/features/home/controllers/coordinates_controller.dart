@@ -44,6 +44,10 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
 
     state = await FutureState.makeGuardedRequest(
       () async {
+        if (_ref.read(coordinateCountProvider) == 30) {
+          throw Exception('Cannot add more than 30 sample coordinates.');
+        }
+
         await _checkGpsEnabled();
 
         final position = await Geolocator.getCurrentPosition(
@@ -51,13 +55,22 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
           timeLimit: _gpsTimeLimit,
         );
 
-        final currentPaddockCode = _ref.read(currentPaddockProvider)!.code;
+        final currentPaddockCode = _ref.read(currentPaddockProvider)?.code;
+
+        if (currentPaddockCode == null) {
+          throw Exception('Please select a paddock first.');
+        }
+
         final tool = _ref.read(currentToolProvider);
+        if (tool == null) {
+          throw Exception('Please select a tool first.');
+        }
+
         final coordinate = CoordinateModel(
           latitude: position.latitude,
           longitude: position.longitude,
           note: '',
-          tool: tool!,
+          tool: tool,
           paddockCode: currentPaddockCode,
           dateTime: position.timestamp ?? DateTime.now(),
           accuracy: position.speedAccuracy.toInt(),
@@ -67,10 +80,7 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
         _ref
             .read(coordinatesListProvider.notifier)
             .update((state) => [...state, coordinate]);
-        final cached = await _keyValueStorageService.setPaddockCoordinates(
-          _ref.read(coordinatesListProvider),
-          currentPaddockCode,
-        );
+        final cached = await _saveCoordinatesInCache();
 
         if (!cached) {
           throw Exception('Failed to save coordinates to cache');
@@ -86,6 +96,7 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
       state[index] = state[index].copyWith(note: note);
       return state;
     });
+    _saveCoordinatesInCache();
   }
 
   void deleteCoordinate(int i) {
@@ -93,6 +104,7 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
       state.removeAt(i);
       return [...state];
     });
+    _saveCoordinatesInCache();
   }
 
   Future<void> _checkGpsEnabled() async {
@@ -136,7 +148,7 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
     _ref.read(coordinatesListProvider.notifier).state = [...?coordinates];
   }
 
-  Future<bool> saveCoordinatesInCache() async {
+  Future<bool> _saveCoordinatesInCache() async {
     final paddockCode = _ref.read(currentPaddockProvider)!.code;
     return _keyValueStorageService.setPaddockCoordinates(
       _ref.read(coordinatesListProvider),
