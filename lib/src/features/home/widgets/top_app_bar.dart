@@ -14,6 +14,7 @@ import '../../../global/widgets/custom_dropdown_field.dart';
 import '../../../global/widgets/custom_popup_menu.dart';
 import '../../../global/widgets/custom_text_field.dart';
 import '../../../global/widgets/labeled_widget.dart';
+import '../controllers/coordinates_controller.dart';
 import 'note_icon.dart';
 
 // Controllers
@@ -116,16 +117,34 @@ class TopAppBar extends HookConsumerWidget {
                 Insets.gapH15,
 
                 // Coordinate Counter
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.orange,
-                  ),
-                  child: const Center(
-                    child: Text('25'),
-                  ),
+                Consumer(
+                  builder: (_, ref, __) {
+                    final count = ref.watch(coordinateCountProvider);
+                    return Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 1.2,
+                        ),
+                        color: count < 25
+                            ? Colors.red
+                            : count < 30
+                                ? Colors.orange
+                                : Colors.green,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$count',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
 
                 Insets.expand,

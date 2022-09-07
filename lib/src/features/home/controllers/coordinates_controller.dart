@@ -81,6 +81,20 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
     );
   }
 
+  void saveCoordinateNote({required int index, required String note}) {
+    _ref.read(coordinatesListProvider.notifier).update((state) {
+      state[index] = state[index].copyWith(note: note);
+      return state;
+    });
+  }
+
+  void deleteCoordinate(int i) {
+    _ref.read(coordinatesListProvider.notifier).update((state) {
+      state.removeAt(i);
+      return [...state];
+    });
+  }
+
   Future<void> _checkGpsEnabled() async {
     bool serviceEnabled;
 
