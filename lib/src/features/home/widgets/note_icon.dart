@@ -8,6 +8,7 @@ import '../../../global/widgets/custom_text_field.dart';
 
 // Helpers
 import '../../../helpers/constants/app_assets.dart';
+import '../../../helpers/constants/app_colors.dart';
 import '../../../helpers/extensions/context_extensions.dart';
 
 class NoteIcon extends ConsumerWidget {
@@ -52,7 +53,9 @@ class NoteIcon extends ConsumerWidget {
         AppAssets.noteIcon,
         width: 24,
         height: 24,
-        color: Colors.grey,
+        color: noteTextController.text.isEmpty
+            ? Colors.grey
+            : AppColors.primaryColor,
       ),
     );
   }
