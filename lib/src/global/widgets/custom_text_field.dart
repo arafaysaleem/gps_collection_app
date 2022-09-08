@@ -218,7 +218,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                           child: const Icon(
                             Icons.remove_red_eye_sharp,
                             color: AppColors.textGreyColor,
-                            size: IconSizes.med22,
+                            size: 22,
                           ),
                         )
                       : null),

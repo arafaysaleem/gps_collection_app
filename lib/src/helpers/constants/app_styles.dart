@@ -1,18 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// A utility class that holds all the icon sizes used throughout
-/// the entire app.
-///
-/// This class has no constructor and all variables are `static`.
-@immutable
-class IconSizes {
-  const IconSizes._();
-
-  static const double sm19 = 19;
-  static const double med22 = 22;
-  static const double lg27 = 27;
-}
-
 /// A utility class that holds all the gaps and insets used
 /// throughout the entire app by things such as padding, sizedbox etc.
 ///
