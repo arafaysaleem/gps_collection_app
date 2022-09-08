@@ -75,6 +75,9 @@ class DataImportController extends StateNotifier<DataImportState> {
     _ref
       ..invalidate(currentFarmerProvider)
       ..invalidate(currentPaddockProvider)
+      ..invalidate(currentToolProvider)
+      ..invalidate(coordinatesListProvider)
+      ..invalidate(coordinateCountProvider)
       ..invalidate(currentPropertyProvider);
   }
 }

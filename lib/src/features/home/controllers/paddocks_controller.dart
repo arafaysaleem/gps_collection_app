@@ -72,7 +72,8 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
             .saveIsImportedFlagToCache(true);
         return true;
       },
-      errorMessage: 'Failed to import paddocks data from file',
+      errorMessage:
+          "Failed to import farmer's paddocks data from file. Either the file is empty or the contents' format is invalid",
     );
   }
 
