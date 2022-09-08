@@ -14,10 +14,10 @@ import '../../../global/widgets/custom_dropdown_field.dart';
 import '../../../global/widgets/custom_popup_menu.dart';
 import '../../../global/widgets/custom_text_field.dart';
 import '../../../global/widgets/labeled_widget.dart';
-import '../controllers/coordinates_controller.dart';
 import 'note_icon.dart';
 
 // Controllers
+import '../controllers/coordinates_controller.dart';
 import '../controllers/properties_controller.dart';
 import '../controllers/farmer_controller.dart';
 import '../controllers/paddocks_controller.dart';
@@ -183,21 +183,24 @@ class TopAppBar extends HookConsumerWidget {
                             ref.watch(currentPropertyProvider);
                         final properties =
                             ref.watch(propertiesController).getAllProperties();
-                        return CustomPopupMenu<String>(
-                          initialValue: currentProperty,
-                          items: {for (var e in properties) e: e},
-                          onSelected: (property) {
-                            ref.read(currentPropertyProvider.notifier).state =
-                                property;
-                            ref.invalidate(currentPaddockProvider);
-                          },
-                          child: SvgPicture.asset(
-                            AppAssets.gpsMultiFarmIcon,
-                            width: 20,
-                            height: 20,
-                            color: Colors.yellow,
-                          ),
-                        );
+                        return properties.length == 1
+                            ? Insets.shrink
+                            : CustomPopupMenu<String>(
+                                initialValue: currentProperty,
+                                items: {for (var e in properties) e: e},
+                                onSelected: (property) {
+                                  ref
+                                      .read(currentPropertyProvider.notifier)
+                                      .state = property;
+                                  ref.invalidate(currentPaddockProvider);
+                                },
+                                child: SvgPicture.asset(
+                                  AppAssets.gpsMultiFarmIcon,
+                                  width: 20,
+                                  height: 20,
+                                  color: Colors.yellow,
+                                ),
+                              );
                       },
                     ),
                   ],
