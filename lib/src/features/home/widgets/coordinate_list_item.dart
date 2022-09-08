@@ -50,8 +50,9 @@ class CoordinateListItem extends HookConsumerWidget {
 
           // Delete
           InkWell(
-            onTap: () =>
-                ref.read(coordinatesController.notifier).deleteCoordinate(i),
+            onTap: () {
+              ref.read(coordinatesController.notifier).deleteCoordinate(i);
+            },
             child: SvgPicture.asset(
               AppAssets.deleteIcon,
               width: 24,

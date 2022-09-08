@@ -55,40 +55,68 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
           timeLimit: _gpsTimeLimit,
         );
 
-        final currentPaddockCode = _ref.read(currentPaddockProvider)?.code;
-
-        if (currentPaddockCode == null) {
-          throw Exception('Please select a paddock first.');
+        if (_checkCoordinateInvalid(position)) {
+          throw Exception('Coordinate already exists in this paddock');
         }
 
-        final tool = _ref.read(currentToolProvider);
-        if (tool == null) {
-          throw Exception('Please select a tool first.');
-        }
-
-        final coordinate = CoordinateModel(
-          latitude: position.latitude,
-          longitude: position.longitude,
-          note: '',
-          tool: tool,
-          paddockCode: currentPaddockCode,
-          dateTime: position.timestamp ?? DateTime.now(),
-          accuracy: position.speedAccuracy.toInt(),
-          horizontaGpsAccuracy: position.accuracy.toInt(),
-        );
-
-        _ref
-            .read(coordinatesListProvider.notifier)
-            .update((state) => [...state, coordinate]);
-        final cached = await _saveCoordinatesInCache();
-
-        if (!cached) {
-          throw Exception('Failed to save coordinates to cache');
-        }
+        await _createCoordinateFromPosition(position);
 
         return true;
       },
     );
+  }
+
+  bool _checkCoordinateInvalid(Position position) {
+    final latitude = position.latitude.toInt();
+    final longitude = position.longitude.toInt();
+
+    if (latitude == 0 && longitude == 0) {
+      return true;
+    }
+
+    final currentPaddockCode = _ref.read(currentPaddockProvider)?.code;
+
+    final coordinates = _keyValueStorageService.getPaddockCoordinates(
+      currentPaddockCode ?? '',
+    );
+
+    return coordinates?.any(
+          (e) => e.latitude == latitude && e.longitude == longitude,
+        ) ??
+        false;
+  }
+
+  Future<void> _createCoordinateFromPosition(Position position) async {
+    final currentPaddockCode = _ref.read(currentPaddockProvider)?.code;
+
+    if (currentPaddockCode == null) {
+      throw Exception('Please select a paddock first.');
+    }
+
+    final tool = _ref.read(currentToolProvider);
+    if (tool == null) {
+      throw Exception('Please select a tool first.');
+    }
+
+    final coordinate = CoordinateModel(
+      latitude: position.latitude,
+      longitude: position.longitude,
+      note: '',
+      tool: tool,
+      paddockCode: currentPaddockCode,
+      dateTime: position.timestamp ?? DateTime.now(),
+      accuracy: position.speedAccuracy.toInt(),
+      horizontaGpsAccuracy: position.accuracy.toInt(),
+    );
+
+    _ref
+        .read(coordinatesListProvider.notifier)
+        .update((state) => [...state, coordinate]);
+    final cached = await _saveCoordinatesInCache();
+
+    if (!cached) {
+      throw Exception('Failed to save coordinates to cache');
+    }
   }
 
   void saveCoordinateNote({required int index, required String note}) {
