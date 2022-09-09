@@ -10,11 +10,16 @@ part 'farmer_model.codegen.g.dart';
 
 @freezed
 class FarmerModel with _$FarmerModel {
+
   const factory FarmerModel({
     @JsonKey(name: 'pkCID') required String pkCID,
     @JsonKey(name: 'First') required String first,
     @JsonKey(name: 'Last') required String last,
   }) = _FarmerModel;
+  
+  const FarmerModel._();
 
   factory FarmerModel.fromJson(JSON json) => _$FarmerModelFromJson(json);
+
+  String get fullName => '$first $last';
 }

@@ -21,6 +21,7 @@ import '../../../global/widgets/labeled_widget.dart';
 
 // Controllers
 import '../controllers/coordinates_controller.dart';
+import '../controllers/data_export_controller.dart';
 import '../controllers/farmer_controller.dart';
 
 class BottomNavBar extends ConsumerWidget {
@@ -105,17 +106,22 @@ class BottomNavBar extends ConsumerWidget {
           ),
 
           // Email send
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: LabeledWidget(
-              label: 'Send',
-              labelPosition: LabelPosition.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              child: SvgPicture.asset(
-                AppAssets.emailIcon,
-                width: 20,
-                height: 20,
-                color: Colors.white,
+          InkWell(
+            onTap: (){
+              ref.read(dataExportController).exportCoordinatesToExcel();
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: LabeledWidget(
+                label: 'Send',
+                labelPosition: LabelPosition.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                child: SvgPicture.asset(
+                  AppAssets.emailIcon,
+                  width: 20,
+                  height: 20,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

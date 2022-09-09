@@ -25,10 +25,13 @@ class CoordinateListItem extends HookConsumerWidget {
     final noteController = useTextEditingController();
     final coordinate = ref.watch(coordinatesListProvider)[i];
 
-    useEffect(() {
-      noteController.text = ref.read(coordinatesListProvider)[i].note;
-      return null;
-    });
+    useEffect(
+      () {
+        noteController.text = ref.read(coordinatesListProvider)[i].note;
+        return null;
+      },
+      const [],
+    );
 
     return Container(
       color: i.isOdd ? Colors.white : Colors.grey.shade200,

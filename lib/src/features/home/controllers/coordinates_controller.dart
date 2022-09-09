@@ -15,9 +15,6 @@ import '../../../global/all_providers.dart';
 // States
 import '../../../global/states/future_state.codegen.dart';
 
-// Helpers
-import '../../../helpers/extensions/int_extension.dart';
-
 final coordinateCountProvider = StateProvider<int>((ref) {
   return ref.watch(coordinatesListProvider).length;
 });
@@ -31,10 +28,11 @@ final coordinatesController =
   return CoordinatesController(ref, _keyValueService);
 });
 
+const gpsTimeLimit = Duration(seconds: 5);
+
 class CoordinatesController extends StateNotifier<FutureState<bool>> {
   final KeyValueStorageService _keyValueStorageService;
   final Ref _ref;
-  final _gpsTimeLimit = 5.seconds;
 
   CoordinatesController(this._ref, this._keyValueStorageService)
       : super(const FutureState.idle());
@@ -44,15 +42,11 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
 
     state = await FutureState.makeGuardedRequest(
       () async {
-        if (_ref.read(coordinateCountProvider) == 30) {
-          throw Exception('Cannot add more than 30 sample coordinates.');
-        }
-
         await _checkGpsEnabled();
 
         final position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
-          timeLimit: _gpsTimeLimit,
+          timeLimit: gpsTimeLimit,
         );
 
         if (_checkCoordinateInvalid(position)) {
@@ -122,7 +116,7 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
   void saveCoordinateNote({required int index, required String note}) {
     _ref.read(coordinatesListProvider.notifier).update((state) {
       state[index] = state[index].copyWith(note: note);
-      return state;
+      return [...state];
     });
     _saveCoordinatesInCache();
   }
