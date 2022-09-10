@@ -22,8 +22,9 @@ class FutureState<T> with _$FutureState<T> {
       return FutureState.data(data: result);
     } on Exception catch (ex) {
       debugPrint(ex.toString());
+      final message = ex.toString().split(':').last.trim();
       return FutureState.failed(
-        reason: errorMessage ?? (ex.toString().split(':')[1].trim()),
+        reason: message.isNotEmpty ? message : (errorMessage ?? 'Guarded future request failed.'),
       );
     }
   }

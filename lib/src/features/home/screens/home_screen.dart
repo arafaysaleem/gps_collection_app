@@ -13,17 +13,19 @@ class HomeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          // Paddock and Farmer name
-          TopAppBar(),
-
-          // Coordinate table
-          Expanded(
-            child: CoordinatesList(),
-          ),
-        ],
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            // Paddock and Farmer name
+            TopAppBar(),
+      
+            // Coordinate table
+            Expanded(
+              child: CoordinatesList(),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: const BottomNavBar(),
     );

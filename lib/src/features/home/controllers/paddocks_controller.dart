@@ -11,6 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/local/key_value_storage_service.dart';
 import '../../../global/all_providers.dart';
 import '../../../global/states/future_state.codegen.dart';
+import '../../../helpers/extensions/string_extension.dart';
 import '../../../helpers/typedefs.dart';
 import '../../data_import/controllers/data_import_controller.dart';
 import '../models/paddock_model.codegen.dart';
@@ -45,12 +46,20 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
     state = await FutureState.makeGuardedRequest(
       () async {
         final result = await FilePicker.platform.pickFiles(
-          type: FileType.custom,
-          allowedExtensions: ['json'],
+          type: defaultTargetPlatform == TargetPlatform.windows
+              ? FileType.custom
+              : FileType.any,
+          allowedExtensions:
+              defaultTargetPlatform == TargetPlatform.windows ? ['json'] : null,
           lockParentWindow: true,
         );
 
         if (result == null) return false;
+        if (result.files.single.path!.ext != '.json') {
+          throw Exception(
+            'Unsupported file format. Please ensure to only select .json files',
+          );
+        }
 
         final file = File(result.files.single.path!);
         final paddocksJson = utf16.decode(await file.readAsBytes());

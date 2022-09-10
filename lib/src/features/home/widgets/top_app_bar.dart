@@ -58,7 +58,7 @@ class TopAppBar extends HookConsumerWidget {
     );
 
     return Container(
-      height: 173,
+      height: 190,
       padding: const EdgeInsets.all(15),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -80,7 +80,7 @@ class TopAppBar extends HookConsumerWidget {
                   ),
                 ),
 
-                Insets.gapH(7),
+                Insets.gapH15,
 
                 // Paddock Dropdowm
                 Consumer(
@@ -121,8 +121,8 @@ class TopAppBar extends HookConsumerWidget {
                   builder: (_, ref, __) {
                     final count = ref.watch(coordinateCountProvider);
                     return Container(
-                      height: 50,
-                      width: 50,
+                      height: 55,
+                      width: 55,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(

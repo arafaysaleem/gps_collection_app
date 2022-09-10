@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -42,12 +45,32 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
 
     state = await FutureState.makeGuardedRequest(
       () async {
+        if (_ref.read(currentPaddockProvider) == null) {
+          throw Exception('Please select a paddock first.');
+        }
+
+        if (_ref.read(currentToolProvider) == null) {
+          throw Exception('Please select a tool first.');
+        }
+
         await _checkGpsEnabled();
 
-        final position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high,
-          timeLimit: gpsTimeLimit,
-        );
+        Position? position;
+        try {
+          position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high,
+            timeLimit: gpsTimeLimit,
+          );
+        } on TimeoutException catch (ex) {
+          debugPrint(ex.toString());
+          position = await Geolocator.getLastKnownPosition();
+        }
+
+        if (position == null) {
+          throw Exception(
+            'Failed to capture current location. Try again a few seconds later.',
+          );
+        }
 
         if (_checkCoordinateInvalid(position)) {
           throw Exception('Coordinate already exists in this paddock');
@@ -81,16 +104,9 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
   }
 
   Future<void> _createCoordinateFromPosition(Position position) async {
-    final currentPaddockCode = _ref.read(currentPaddockProvider)?.code;
+    final currentPaddockCode = _ref.read(currentPaddockProvider)!.code;
 
-    if (currentPaddockCode == null) {
-      throw Exception('Please select a paddock first.');
-    }
-
-    final tool = _ref.read(currentToolProvider);
-    if (tool == null) {
-      throw Exception('Please select a tool first.');
-    }
+    final tool = _ref.read(currentToolProvider)!;
 
     final coordinate = CoordinateModel(
       latitude: position.latitude,
@@ -138,7 +154,11 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
-      throw Exception('Location services are disabled.');
+      final locationOpened = await Geolocator.openLocationSettings();
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!locationOpened || !serviceEnabled) {
+        throw Exception('Location services are disabled.');
+      }
     }
 
     var permission = await Geolocator.checkPermission();
@@ -156,9 +176,12 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      throw Exception(
-        'Location permissions are permanently denied, we cannot request permissions.',
-      );
+      final openPermSettings = await Geolocator.openAppSettings();
+      if (!openPermSettings) {
+        throw Exception(
+          'Location permissions are permanently denied, we cannot request permissions.',
+        );
+      }
     }
   }
 

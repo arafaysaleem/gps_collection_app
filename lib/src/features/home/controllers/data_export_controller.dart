@@ -59,7 +59,9 @@ class DataExportController {
       currentFarmer.fullName,
     );
 
-    // await _sendEmail(file.path);
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      await _sendEmail(file.path);
+    }
   }
 
   Future<void> _sendEmail(String filePath) async {

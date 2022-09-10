@@ -41,30 +41,32 @@ class DataImportScreen extends HookConsumerWidget {
     );
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            // Screen Title
-            Text(
-              'Welcome to GPS Collection App',
-              style: AppTypography.primary.heading34.copyWith(
-                color: AppColors.lightPrimaryColor,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              // Screen Title
+              Text(
+                'Welcome to GPS Collection App',
+                style: AppTypography.primary.heading34.copyWith(
+                  color: AppColors.lightPrimaryColor,
+                ),
               ),
-            ),
-
-            Insets.gapH(70),
-
-            // Farmer data importer
-            const FarmerDataImportWidget(),
-
-            Insets.gapH(45),
-
-            // Paddock data import button
-            const PaddocksDataImportWidget(),
-
-            Insets.expand,
-          ],
+      
+              Insets.gapH(70),
+      
+              // Farmer data importer
+              const FarmerDataImportWidget(),
+      
+              Insets.gapH(45),
+      
+              // Paddock data import button
+              const PaddocksDataImportWidget(),
+      
+              Insets.expand,
+            ],
+          ),
         ),
       ),
     );
