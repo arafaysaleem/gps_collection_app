@@ -26,10 +26,12 @@ final coordinatesListProvider =
     StateProvider<List<CoordinateModel>>((ref) => []);
 
 final coordinatesController =
-    StateNotifierProvider<CoordinatesController, FutureState<bool>>((ref) {
-  final _keyValueService = ref.watch(keyValueStorageServiceProvider);
-  return CoordinatesController(ref, _keyValueService);
-});
+    StateNotifierProvider<CoordinatesController, FutureState<bool>>(
+  (ref) {
+    final _keyValueService = ref.watch(keyValueStorageServiceProvider);
+    return CoordinatesController(ref, _keyValueService);
+  },
+);
 
 const gpsTimeLimit = Duration(seconds: 5);
 
@@ -84,8 +86,8 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
   }
 
   bool _checkCoordinateInvalid(Position position) {
-    final latitude = position.latitude.toInt();
-    final longitude = position.longitude.toInt();
+    final latitude = position.latitude;
+    final longitude = position.longitude;
 
     if (latitude == 0 && longitude == 0) {
       return true;

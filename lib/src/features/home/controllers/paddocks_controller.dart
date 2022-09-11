@@ -74,7 +74,6 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
 
         _paddocksMap = {for (var e in paddocks) e.code: e};
         await _ref.read(propertiesController).importPropertiesData(paddocks);
-        // await savePaddockInCache(tempFarmer);
 
         await _ref
             .read(dataImportController.notifier)
@@ -109,10 +108,6 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
 
   Future<bool> savePaddocksInCache(List<PaddockModel> paddocks) async {
     return _keyValueStorageService.setPaddocks(paddocks);
-  }
-
-  Future<bool> _saveCurrentPaddockInCache(PaddockModel paddock) async {
-    return _keyValueStorageService.setCurrentPaddock(paddock.code);
   }
 
   void setCurrentPaddock(PaddockModel? paddock) {

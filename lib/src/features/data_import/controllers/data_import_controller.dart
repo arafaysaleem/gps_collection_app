@@ -7,6 +7,7 @@ import '../../../core/local/key_value_storage_service.dart';
 
 // Models
 import '../../home/controllers/coordinates_controller.dart';
+import '../../home/controllers/data_export_controller.dart';
 import '../../home/controllers/farmer_controller.dart';
 import '../../home/controllers/paddocks_controller.dart';
 import '../../home/controllers/properties_controller.dart';
@@ -74,10 +75,17 @@ class DataImportController extends StateNotifier<DataImportState> {
     state = const DataImportState.idle();
     _ref
       ..invalidate(currentFarmerProvider)
-      ..invalidate(currentPaddockProvider)
+      ..invalidate(farmersController)
       ..invalidate(currentToolProvider)
+      ..invalidate(currentPropertyProvider)
+      ..invalidate(propertiesController)
+      ..invalidate(currentPaddockProvider)
+      ..invalidate(propertiesController)
+      ..invalidate(paddockNoteProvider)
       ..invalidate(coordinatesListProvider)
       ..invalidate(coordinateCountProvider)
-      ..invalidate(currentPropertyProvider);
+      ..invalidate(coordinatesController)
+      ..invalidate(dataImportController)
+      ..invalidate(dataExportController);
   }
 }

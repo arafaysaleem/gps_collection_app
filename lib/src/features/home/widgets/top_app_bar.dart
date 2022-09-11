@@ -51,7 +51,7 @@ class TopAppBar extends HookConsumerWidget {
         nameTextController.text = currentFarmer != null
             ? '${currentFarmer.first} ${currentFarmer.last}'
             : '';
-        noteTextController.text = ref.read(coreNoteProvider);
+        noteTextController.text = ref.read(paddockNoteProvider);
         return null;
       },
       [currentPaddock],
@@ -84,8 +84,8 @@ class TopAppBar extends HookConsumerWidget {
 
                 // Paddock Dropdowm
                 Consumer(
-                  builder: (_, ref, __) {
-                    final paddocks = ref.watch(_propertyPaddocksProvider);
+                  builder: (_, _ref, __) {
+                    final paddocks = _ref.watch(_propertyPaddocksProvider);
                     return LabeledWidget(
                       label: 'Paddock',
                       child: CustomDropdownField<PaddockModel>.animated(
@@ -95,7 +95,7 @@ class TopAppBar extends HookConsumerWidget {
                         ),
                         hintText: 'Choose paddock',
                         items: {for (var e in paddocks) e.paddock: e},
-                        onSelected: ref
+                        onSelected: _ref
                             .read(paddocksController.notifier)
                             .setCurrentPaddock,
                       ),
@@ -118,8 +118,8 @@ class TopAppBar extends HookConsumerWidget {
 
                 // Coordinate Counter
                 Consumer(
-                  builder: (_, ref, __) {
-                    final count = ref.watch(coordinateCountProvider);
+                  builder: (_, _ref, __) {
+                    final count = _ref.watch(coordinateCountProvider);
                     return Container(
                       height: 55,
                       width: 55,
@@ -168,31 +168,31 @@ class TopAppBar extends HookConsumerWidget {
                     NoteIcon(
                       noteTextController: noteTextController,
                       onSave: () {
-                        ref.read(coreNoteProvider.notifier).state =
+                        ref.read(paddockNoteProvider.notifier).state =
                             noteTextController.text;
                       },
                       onCancel: () {
-                        noteTextController.text = ref.read(coreNoteProvider);
+                        noteTextController.text = ref.read(paddockNoteProvider);
                       },
                     ),
 
                     // Farmer property picker
                     Consumer(
-                      builder: (_, ref, __) {
+                      builder: (_, _ref, __) {
                         final currentProperty =
-                            ref.watch(currentPropertyProvider);
+                            _ref.watch(currentPropertyProvider);
                         final properties =
-                            ref.watch(propertiesController).getAllProperties();
+                            _ref.watch(propertiesController).getAllProperties();
                         return properties.length == 1
                             ? Insets.shrink
                             : CustomPopupMenu<String>(
                                 initialValue: currentProperty,
                                 items: {for (var e in properties) e: e},
                                 onSelected: (property) {
-                                  ref
+                                  _ref
                                       .read(currentPropertyProvider.notifier)
                                       .state = property;
-                                  ref.invalidate(currentPaddockProvider);
+                                  _ref.invalidate(currentPaddockProvider);
                                 },
                                 child: SvgPicture.asset(
                                   AppAssets.gpsMultiFarmIcon,

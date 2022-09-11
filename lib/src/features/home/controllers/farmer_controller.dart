@@ -16,7 +16,7 @@ import '../models/farmer_model.codegen.dart';
 
 final currentFarmerProvider = StateProvider<FarmerModel?>((ref) => null);
 
-final coreNoteProvider = StateProvider((ref) => '');
+final paddockNoteProvider = StateProvider((ref) => '');
 
 final currentToolProvider = StateProvider<String?>((ref) => null);
 
@@ -66,7 +66,7 @@ class FarmersController extends StateNotifier<FutureState<bool>> {
         final farmer = FarmerModel.fromJson(farmerJson);
 
         _ref.read(currentFarmerProvider.notifier).state = farmer;
-        // await saveFarmersInCache(tempFarmer);
+        await saveFarmersInCache(farmer);
 
         return true;
       },

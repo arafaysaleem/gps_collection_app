@@ -8,6 +8,7 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 // Providers
 import '../../../core/local/path_provider_service.dart';
 import '../../../global/all_providers.dart';
+import '../../../global/states/future_state.codegen.dart';
 import 'coordinates_controller.dart';
 import 'farmer_controller.dart';
 import 'paddocks_controller.dart';
@@ -20,16 +21,21 @@ import '../models/coordinate_model.codegen.dart';
 import '../models/farmer_model.codegen.dart';
 import '../models/paddock_model.codegen.dart';
 
-final dataExportController = Provider<DataExportController>((ref) {
-  return DataExportController(ref);
-});
+final dataExportController =
+    StateNotifierProvider<DataExportController, FutureState<void>>(
+  (ref) {
+    return DataExportController(ref);
+  },
+);
 
-class DataExportController {
+class DataExportController extends StateNotifier<FutureState<void>> {
   final Ref _ref;
 
-  DataExportController(this._ref);
+  DataExportController(this._ref) : super(const FutureState.idle());
 
   Future<void> exportCoordinatesToExcel() async {
+    state = const FutureState.loading();
+
     final excelDataRows = <ExcelDataRow>[];
 
     final paddocks = _ref.read(paddocksController.notifier).getAllPaddocks();
@@ -48,20 +54,27 @@ class DataExportController {
             currentPaddock: paddock,
             currentFarmer: currentFarmer,
             timeLimit: gpsTimeLimit.inSeconds,
-            paddockNote: _ref.read(coreNoteProvider),
+            paddockNote: _ref.read(paddockNoteProvider),
           ),
         );
       }
     }
 
-    final file = await _saveRowsToWorkbook(
-      excelDataRows,
-      currentFarmer.fullName,
-    );
+    state = await FutureState.makeGuardedRequest(
+      () async {
+        final file = await _saveRowsToWorkbook(
+          excelDataRows,
+          currentFarmer.fullName,
+        );
 
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      await _sendEmail(file.path);
-    }
+        if (defaultTargetPlatform == TargetPlatform.android) {
+          await _sendEmail(file.path);
+        }
+
+        return;
+      },
+      errorMessage: 'Failed to export and email data',
+    );
   }
 
   Future<void> _sendEmail(String filePath) async {

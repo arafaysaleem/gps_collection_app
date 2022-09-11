@@ -3,9 +3,13 @@ import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-// Models
+// Services
 import '../../../core/local/key_value_storage_service.dart';
+
+// Providers
 import '../../../global/all_providers.dart';
+
+// Models
 import '../models/paddock_model.codegen.dart';
 
 final currentPropertyProvider = StateProvider<String?>((ref) => null);
@@ -25,7 +29,7 @@ class PropertiesController {
 
   Future<void> importPropertiesData(List<PaddockModel> paddocks) async {
     _properties = paddocks.map((element) => element.propertyId).toSet();
-    // await savePropertiesInCache(_properties);
+    await savePropertiesInCache(_properties);
     _ref.read(currentPropertyProvider.notifier).state = _properties.first;
   }
 
