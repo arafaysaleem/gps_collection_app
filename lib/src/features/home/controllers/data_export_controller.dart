@@ -7,12 +7,13 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 // Providers
 import '../../../core/local/path_provider_service.dart';
-import '../../../core/remote/remote_config_service.dart';
 import '../../../global/all_providers.dart';
-import '../../../global/states/future_state.codegen.dart';
 import 'coordinates_controller.dart';
 import 'farmer_controller.dart';
 import 'paddocks_controller.dart';
+
+// States
+import '../../../global/states/future_state.codegen.dart';
 
 // Helpers
 import '../../../helpers/extensions/datetime_extension.dart';
@@ -46,6 +47,10 @@ class DataExportController extends StateNotifier<FutureState<void>> {
       final coords = _ref
           .read(keyValueStorageServiceProvider)
           .getPaddockCoordinates(paddock.code);
+      final note = _ref
+          .read(keyValueStorageServiceProvider)
+          .getPaddockNote(paddock.code);
+
       if (coords == null) continue;
       for (final coord in coords) {
         // Add row
@@ -55,7 +60,7 @@ class DataExportController extends StateNotifier<FutureState<void>> {
             currentPaddock: paddock,
             currentFarmer: currentFarmer,
             timeLimit: gpsTimeLimit.inSeconds,
-            paddockNote: _ref.read(paddockNoteProvider),
+            paddockNote: note ?? '',
           ),
         );
       }
@@ -80,7 +85,11 @@ class DataExportController extends StateNotifier<FutureState<void>> {
 
   Future<void> _sendEmail(String filePath) async {
     final farmerName = _ref.read(currentFarmerProvider)!.fullName;
-    final remoteConfig = RemoteConfigService.instance;
+
+    // Fetch emails from remote server
+    final remoteConfig = _ref.read(remoteConfigServiceProvider);
+    await remoteConfig.fetchAndActivate();
+
     final email = Email(
       subject: 'HEWA Coordinates from $farmerName',
       recipients: ['a.rafaysaleem@gmail.com', remoteConfig.primaryEmail],

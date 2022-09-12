@@ -18,10 +18,7 @@ import '../models/paddock_model.codegen.dart';
 import 'coordinates_controller.dart';
 import 'properties_controller.dart';
 
-final paddockByCodeProvider =
-    Provider.family<PaddockModel, String>((ref, code) {
-  return ref.watch(paddocksController.notifier)._getPaddockByCode(code);
-});
+final currentPaddockNoteProvider = StateProvider((ref) => '');
 
 final currentPaddockProvider = StateProvider<PaddockModel?>((ref) => null);
 
@@ -35,7 +32,7 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
   final KeyValueStorageService _keyValueStorageService;
   final Ref _ref;
 
-  late final Map<String, PaddockModel> _paddocksMap;
+  late Map<String, PaddockModel> _paddocksMap;
 
   PaddocksController(this._ref, this._keyValueStorageService)
       : super(const FutureState.idle());
@@ -74,6 +71,7 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
 
         _paddocksMap = {for (var e in paddocks) e.code: e};
         await _ref.read(propertiesController).importPropertiesData(paddocks);
+        await _savePaddocksInCache(paddocks);
 
         await _ref
             .read(dataImportController.notifier)
@@ -106,13 +104,21 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
     return _paddocksMap[code]!;
   }
 
-  Future<bool> savePaddocksInCache(List<PaddockModel> paddocks) async {
+  Future<bool> _savePaddocksInCache(List<PaddockModel> paddocks) async {
     return _keyValueStorageService.setPaddocks(paddocks);
   }
 
   void setCurrentPaddock(PaddockModel? paddock) {
     _ref.read(currentPaddockProvider.notifier).state = paddock;
-    // _saveCurrentPaddockInCache(paddock);
     _ref.read(coordinatesController.notifier).loadCoordinatesFromCache();
+    _ref.read(currentPaddockNoteProvider.notifier).state =
+        _keyValueStorageService.getPaddockNote(paddock?.code ?? '') ?? '';
+  }
+
+  void setCurrentPaddockNote(String note) {
+    _ref.read(currentPaddockNoteProvider.notifier).state = note;
+
+    final currentPaddock = _ref.read(currentPaddockProvider);
+    _keyValueStorageService.setPaddockNote(note, currentPaddock!.code);
   }
 }

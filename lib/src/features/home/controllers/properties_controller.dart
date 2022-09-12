@@ -11,6 +11,7 @@ import '../../../global/all_providers.dart';
 
 // Models
 import '../models/paddock_model.codegen.dart';
+import 'paddocks_controller.dart';
 
 final currentPropertyProvider = StateProvider<String?>((ref) => null);
 
@@ -56,5 +57,10 @@ class PropertiesController {
 
   Future<bool> savePropertiesInCache(Set<String> properties) async {
     return _keyValueStorageService.setProperties(properties);
+  }
+
+  void setCurrentProperty(String property) {
+    _ref.read(currentPropertyProvider.notifier).state = property;
+    _ref.read(paddocksController.notifier).setCurrentPaddock(null);
   }
 }

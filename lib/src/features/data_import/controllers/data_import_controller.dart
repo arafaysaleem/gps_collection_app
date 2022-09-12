@@ -74,6 +74,7 @@ class DataImportController extends StateNotifier<DataImportState> {
     _keyValueStorageService.resetKeys();
     state = const DataImportState.idle();
     _ref
+      ..invalidate(dataImportController)
       ..invalidate(currentFarmerProvider)
       ..invalidate(farmersController)
       ..invalidate(currentToolProvider)
@@ -81,11 +82,10 @@ class DataImportController extends StateNotifier<DataImportState> {
       ..invalidate(propertiesController)
       ..invalidate(currentPaddockProvider)
       ..invalidate(propertiesController)
-      ..invalidate(paddockNoteProvider)
+      ..invalidate(currentPaddockNoteProvider)
       ..invalidate(coordinatesListProvider)
       ..invalidate(coordinateCountProvider)
       ..invalidate(coordinatesController)
-      ..invalidate(dataImportController)
       ..invalidate(dataExportController);
   }
 }

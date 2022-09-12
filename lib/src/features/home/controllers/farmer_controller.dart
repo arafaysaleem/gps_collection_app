@@ -16,8 +16,6 @@ import '../models/farmer_model.codegen.dart';
 
 final currentFarmerProvider = StateProvider<FarmerModel?>((ref) => null);
 
-final paddockNoteProvider = StateProvider((ref) => '');
-
 final currentToolProvider = StateProvider<String?>((ref) => null);
 
 final farmersController =

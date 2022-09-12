@@ -33,6 +33,12 @@ class KeyValueStorageService {
   /// The name of data imported key
   static const _isDataImportedKey = 'isDataImportedKey';
 
+  /// The name of the key for paddock's coordinates
+  String _getPaddockCoordinateKey(String paddockCode) => '$paddockCode-COORDS';
+
+  /// The name of the key for paddock's note
+  String _getPaddockNoteKey(String paddockCode) => '$paddockCode-NOTE';
+
   /// Instance of key-value storage base class
   final _keyValueStorage = KeyValueStorageBase();
 
@@ -52,12 +58,17 @@ class KeyValueStorageService {
   ) async {
     final paddocksJson =
         coordinates.map((e) => jsonEncode(e.toJson())).toList();
-    return _keyValueStorage.setCommon<List<String>>(paddockCode, paddocksJson);
+    return _keyValueStorage.setCommon<List<String>>(
+      _getPaddockCoordinateKey(paddockCode),
+      paddocksJson,
+    );
   }
 
   /// Returns the list of coordinates
   List<CoordinateModel>? getPaddockCoordinates(String paddockCode) {
-    final coordinates = _keyValueStorage.getCommon<List<String>>(paddockCode);
+    final coordinates = _keyValueStorage.getCommon<List<String>>(
+      _getPaddockCoordinateKey(paddockCode),
+    );
     if (coordinates == null) return null;
     return coordinates
         .map((e) => CoordinateModel.fromJson(jsonDecode(e) as JSON))
@@ -141,7 +152,6 @@ class KeyValueStorageService {
   /// Returns the current tool name
   String? getCurrentTool() {
     final tool = _keyValueStorage.getCommon<String>(_toolKey);
-    if (tool == null) return null;
     return tool;
   }
 
@@ -150,6 +160,24 @@ class KeyValueStorageService {
   /// use `await` and let it execute in the background.
   void setCurrentTool(String tool) {
     _keyValueStorage.setCommon<String>(_toolKey, tool);
+  }
+
+  /// Returns the paddock note
+  String? getPaddockNote(String paddockCode) {
+    final note = _keyValueStorage.getCommon<String>(
+      _getPaddockNoteKey(paddockCode),
+    );
+    return note;
+  }
+
+  /// Sets the current paddock note to this value. Even though this method is
+  /// asynchronous, we don't care about it's completion which is why we don't
+  /// use `await` and let it execute in the background.
+  void setPaddockNote(String note, String paddockCode) {
+    _keyValueStorage.setCommon<String>(
+      _getPaddockNoteKey(paddockCode),
+      note,
+    );
   }
 
   /// Resets the keys. Even though these methods are asynchronous, we

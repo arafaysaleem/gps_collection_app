@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clock/clock.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 // Config
 // import 'firebase_options.dart';
+import 'firebase_options.dart';
 import 'src/config/config.dart';
 
 // Services
@@ -37,7 +39,12 @@ class AppBootstrapper {
     // For preparing to read application directory paths
     await PathProviderService.init();
 
-    // For preparing Remote config
+    // For preparing to firebase services
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    // For preparing remote config defaults
     await RemoteConfigService.init();
 
     // For prettyifying console debug messages

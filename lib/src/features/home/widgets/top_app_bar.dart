@@ -51,7 +51,7 @@ class TopAppBar extends HookConsumerWidget {
         nameTextController.text = currentFarmer != null
             ? '${currentFarmer.first} ${currentFarmer.last}'
             : '';
-        noteTextController.text = ref.read(paddockNoteProvider);
+        noteTextController.text = ref.read(currentPaddockNoteProvider);
         return null;
       },
       [currentPaddock],
@@ -165,16 +165,17 @@ class TopAppBar extends HookConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Paddock note
-                    NoteIcon(
-                      noteTextController: noteTextController,
-                      onSave: () {
-                        ref.read(paddockNoteProvider.notifier).state =
-                            noteTextController.text;
-                      },
-                      onCancel: () {
-                        noteTextController.text = ref.read(paddockNoteProvider);
-                      },
-                    ),
+                    if (currentPaddock != null)
+                      NoteIcon(
+                        noteTextController: noteTextController,
+                        onSave: () => ref
+                            .read(paddocksController.notifier)
+                            .setCurrentPaddockNote(noteTextController.text),
+                        onCancel: () {
+                          noteTextController.text =
+                              ref.read(currentPaddockNoteProvider);
+                        },
+                      ),
 
                     // Farmer property picker
                     Consumer(
@@ -188,12 +189,9 @@ class TopAppBar extends HookConsumerWidget {
                             : CustomPopupMenu<String>(
                                 initialValue: currentProperty,
                                 items: {for (var e in properties) e: e},
-                                onSelected: (property) {
-                                  _ref
-                                      .read(currentPropertyProvider.notifier)
-                                      .state = property;
-                                  _ref.invalidate(currentPaddockProvider);
-                                },
+                                onSelected: (property) => _ref
+                                    .read(propertiesController)
+                                    .setCurrentProperty(property),
                                 child: SvgPicture.asset(
                                   AppAssets.gpsMultiFarmIcon,
                                   width: 20,
