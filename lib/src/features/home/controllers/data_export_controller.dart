@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 // Providers
 import '../../../core/local/path_provider_service.dart';
+import '../../../core/remote/remote_config_service.dart';
 import '../../../global/all_providers.dart';
 import '../../../global/states/future_state.codegen.dart';
 import 'coordinates_controller.dart';
@@ -79,10 +80,11 @@ class DataExportController extends StateNotifier<FutureState<void>> {
 
   Future<void> _sendEmail(String filePath) async {
     final farmerName = _ref.read(currentFarmerProvider)!.fullName;
+    final remoteConfig = RemoteConfigService.instance;
     final email = Email(
       subject: 'HEWA Coordinates from $farmerName',
-      recipients: ['a.rafaysaleem@gmail.com'],
-      cc: ['rafay.incept@gmail.com'],
+      recipients: ['a.rafaysaleem@gmail.com', remoteConfig.primaryEmail],
+      cc: ['rafay.incept@gmail.com', remoteConfig.ccEmail],
       attachmentPaths: [filePath],
     );
 

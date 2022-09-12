@@ -13,6 +13,7 @@ import 'src/config/config.dart';
 // Services
 import 'src/core/local/key_value_storage_base.dart';
 import 'src/core/local/path_provider_service.dart';
+import 'src/core/remote/remote_config_service.dart';
 
 /// A wrapper class that contains methods to bootstrap the app launch.
 ///
@@ -35,6 +36,9 @@ class AppBootstrapper {
 
     // For preparing to read application directory paths
     await PathProviderService.init();
+
+    // For preparing Remote config
+    await RemoteConfigService.init();
 
     // For prettyifying console debug messages
     debugPrint = _prettifyDebugPrint;
