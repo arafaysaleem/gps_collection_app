@@ -20,7 +20,8 @@ class RemoteConfigService {
     await _remoteConfig.setConfigSettings(
       RemoteConfigSettings(
         fetchTimeout: const Duration(seconds: 15),
-        minimumFetchInterval: const Duration(hours: kDebugMode ? 5 : 14),
+        minimumFetchInterval:
+            kDebugMode ? const Duration(minutes: 1) : const Duration(hours: 14),
       ),
     );
     await _remoteConfig.setDefaults(_defaults);
@@ -29,7 +30,10 @@ class RemoteConfigService {
 
   static Future<void> _fetchAndActivate() async {
     try {
-      await _remoteConfig.fetchAndActivate();
+      final activated = await _remoteConfig.fetchAndActivate();
+      if (activated){
+        debugPrint('New parameters already applied. Using previously activated values');
+      }
     } catch (e) {
       debugPrint('Unable to fetch remote config, default value will be used');
     }
