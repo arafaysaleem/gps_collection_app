@@ -16,6 +16,7 @@ import '../../../helpers/typedefs.dart';
 import '../../data_import/controllers/data_import_controller.dart';
 import '../models/paddock_model.codegen.dart';
 import 'coordinates_controller.dart';
+import 'farmer_controller.dart';
 import 'properties_controller.dart';
 
 final currentPaddockNoteProvider = StateProvider((ref) => '');
@@ -68,6 +69,13 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
         final paddocks = paddocksList
             .map((dynamic e) => PaddockModel.fromJson(e as JSON))
             .toList();
+
+        final currentFarmer = _ref.read(currentFarmerProvider)!;
+        if (paddocks.any((e) => e.farmerId != currentFarmer.pkCID)) {
+          throw Exception(
+            "Paddocks data does not belong to farmer '${currentFarmer.fullName}'",
+          );
+        }
 
         _paddocksMap = {for (var e in paddocks) e.code: e};
         await _ref.read(propertiesController).importPropertiesData(paddocks);
