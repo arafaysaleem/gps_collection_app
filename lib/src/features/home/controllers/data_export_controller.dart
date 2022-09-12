@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io' as io;
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 // Providers
+import '../../../core/local/key_value_storage_service.dart';
 import '../../../core/local/path_provider_service.dart';
 import '../../../global/all_providers.dart';
 import 'coordinates_controller.dart';
@@ -26,55 +28,47 @@ import '../models/paddock_model.codegen.dart';
 final dataExportController =
     StateNotifierProvider<DataExportController, FutureState<void>>(
   (ref) {
-    return DataExportController(ref);
+    final keyValueStorageService = ref.watch(keyValueStorageServiceProvider);
+    return DataExportController(ref, keyValueStorageService);
   },
 );
 
+class _ComputeArgs {
+  final List<PaddockModel> paddocks;
+  final FarmerModel currentFarmer;
+
+  _ComputeArgs(this.paddocks, this.currentFarmer);
+}
+
 class DataExportController extends StateNotifier<FutureState<void>> {
   final Ref _ref;
+  final KeyValueStorageService _keyValueStorageService;
 
-  DataExportController(this._ref) : super(const FutureState.idle());
+  DataExportController(this._ref, this._keyValueStorageService)
+      : super(const FutureState.idle());
 
   Future<void> exportCoordinatesToExcel() async {
     state = const FutureState.loading();
 
-    final excelDataRows = <ExcelDataRow>[];
-
+    // Load all paddocks and current farmer
     final paddocks = _ref.read(paddocksController.notifier).getAllPaddocks();
     final currentFarmer = _ref.read(currentFarmerProvider)!;
 
-    for (final paddock in paddocks) {
-      final coords = _ref
-          .read(keyValueStorageServiceProvider)
-          .getPaddockCoordinates(paddock.code);
-      final note = _ref
-          .read(keyValueStorageServiceProvider)
-          .getPaddockNote(paddock.code);
-
-      if (coords == null) continue;
-      for (final coord in coords) {
-        // Add row
-        excelDataRows.add(
-          _createExcelDataRow(
-            coordinateModel: coord,
-            currentPaddock: paddock,
-            currentFarmer: currentFarmer,
-            timeLimit: gpsTimeLimit.inSeconds,
-            paddockNote: note ?? '',
-          ),
-        );
-      }
-    }
-
     state = await FutureState.makeGuardedRequest(
       () async {
+        // Perform data to excel conversion in a seperate asynchronous isolate
+        final args = _ComputeArgs(paddocks, currentFarmer);
+        final excelDataRows = await compute(_convertAllDataToExcelRows, args);
+
+        // Create an excel sheet using the previous rows
         final file = await _saveRowsToWorkbook(
           excelDataRows,
           currentFarmer.fullName,
         );
 
+        // Email the sheet
         if (defaultTargetPlatform == TargetPlatform.android) {
-          await _sendEmail(file.path);
+          await _sendEmail(file.path, currentFarmer.fullName);
         }
 
         return;
@@ -83,12 +77,41 @@ class DataExportController extends StateNotifier<FutureState<void>> {
     );
   }
 
-  Future<void> _sendEmail(String filePath) async {
-    final farmerName = _ref.read(currentFarmerProvider)!.fullName;
+  List<ExcelDataRow> _convertAllDataToExcelRows(_ComputeArgs args) {
+    final excelDataRows = <ExcelDataRow>[];
 
+    // Loop each paddock
+    for (final paddock in args.paddocks) {
+      // Fetch all coordinates of the paddock
+      final coords =
+          _keyValueStorageService.getPaddockCoordinates(paddock.code);
+
+      // Fetch note of the paddock
+      final note = _keyValueStorageService.getPaddockNote(paddock.code);
+
+      if (coords == null) continue; // If no coords move to next paddock
+
+      // Convert each coordinate to excel row
+      for (final coord in coords) {
+        // Add row to list
+        excelDataRows.add(
+          _createExcelDataRow(
+            coordinateModel: coord,
+            currentPaddock: paddock,
+            currentFarmer: args.currentFarmer,
+            timeLimit: gpsTimeLimit.inSeconds,
+            paddockNote: note ?? '',
+          ),
+        );
+      }
+    }
+
+    return excelDataRows;
+  }
+
+  Future<void> _sendEmail(String filePath, String farmerName) async {
     // Fetch emails from remote server
     final remoteConfig = _ref.read(remoteConfigServiceProvider);
-    await remoteConfig.fetchAndActivate();
 
     final email = Email(
       subject: 'HEWA Coordinates from $farmerName',
@@ -104,21 +127,30 @@ class DataExportController extends StateNotifier<FutureState<void>> {
     List<ExcelDataRow> rows,
     String farmerName,
   ) async {
+    // Create empty sheet
     final workbook = Workbook();
-    final headerStyle = CellStyle(workbook)..bold = true;
 
+    // Prepare header style to bold
+    final headerStyle = CellStyle(workbook)..bold = true;
     workbook.worksheets[0]
-      ..getRangeByName('A1:O1').cellStyle = headerStyle
-      ..importData(rows, 1, 1);
+      ..getRangeByName('A1:O1').cellStyle =
+          headerStyle // Apply header style to all columns
+      ..importData(rows, 1, 1); // Fill sheet with excel data rows
+
+    // Convert to bytes and dispose sheet
     final bytes = workbook.saveAsStream();
     workbook.dispose();
 
+    // Create file path
     final path = PathProviderService.path;
     final fileName = defaultTargetPlatform == TargetPlatform.windows
         ? '$path\\$farmerName.xlsx'
         : '$path/$farmerName.xlsx';
+
+    // Create and save file at path
     final file = io.File(fileName);
     await file.writeAsBytes(bytes, flush: true);
+
     return file;
   }
 
