@@ -10,6 +10,8 @@
             "type": "dart",
             "args": [
                 "--dart-define=SENTRY_DSN=https://5120a9b80b9749609c4347828c6b377c@o1009394.ingest.sentry.io/6713672",
+                "--dart-define=PRIMARY_EMAIL=nutrientmapping@dpird.wa.gov.au",
+                "--dart-define=CC_EMAIL=peta.richards@dpird.wa.gov.au",
             ]
         },
         {
@@ -19,6 +21,8 @@
             "flutterMode": "profile",
             "args": [
                 "--dart-define=SENTRY_DSN=https://5120a9b80b9749609c4347828c6b377c@o1009394.ingest.sentry.io/6713672",
+                "--dart-define=PRIMARY_EMAIL=nutrientmapping@dpird.wa.gov.au",
+                "--dart-define=CC_EMAIL=peta.richards@dpird.wa.gov.au",
             ]
         },
         {
@@ -28,6 +32,8 @@
             "flutterMode": "release",
             "args": [
                 "--dart-define=SENTRY_DSN=https://5120a9b80b9749609c4347828c6b377c@o1009394.ingest.sentry.io/6713672",
+                "--dart-define=PRIMARY_EMAIL=nutrientmapping@dpird.wa.gov.au",
+                "--dart-define=CC_EMAIL=peta.richards@dpird.wa.gov.au",
             ]
         },
         {
@@ -37,6 +43,8 @@
             "type": "dart",
             "args": [
                 "--dart-define=SENTRY_DSN=https://5120a9b80b9749609c4347828c6b377c@o1009394.ingest.sentry.io/6713672",
+                "--dart-define=PRIMARY_EMAIL=nutrientmapping@dpird.wa.gov.au",
+                "--dart-define=CC_EMAIL=peta.richards@dpird.wa.gov.au",
             ]
         },
         {
@@ -47,6 +55,8 @@
             "flutterMode": "profile",
             "args": [
                 "--dart-define=SENTRY_DSN=https://5120a9b80b9749609c4347828c6b377c@o1009394.ingest.sentry.io/6713672",
+                "--dart-define=PRIMARY_EMAIL=nutrientmapping@dpird.wa.gov.au",
+                "--dart-define=CC_EMAIL=peta.richards@dpird.wa.gov.au",
             ]
         },
         {
@@ -54,7 +64,12 @@
             "cwd": "windows",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "args": [
+                "--dart-define=SENTRY_DSN=https://5120a9b80b9749609c4347828c6b377c@o1009394.ingest.sentry.io/6713672",
+                "--dart-define=PRIMARY_EMAIL=nutrientmapping@dpird.wa.gov.au",
+                "--dart-define=CC_EMAIL=peta.richards@dpird.wa.gov.au",
+            ]
         }
     ]
 }

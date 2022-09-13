@@ -1,10 +1,13 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../config/config.dart';
+
 class RemoteConfigService {
   static final FirebaseRemoteConfig _remoteConfig =
       FirebaseRemoteConfig.instance;
 
+  // These key names have to match the ones on the Firebase Console
   static const _primaryEmail = 'primary_email';
   static const _ccEmail = 'cc_email';
 
@@ -12,8 +15,8 @@ class RemoteConfigService {
   String get ccEmail => _remoteConfig.getString(_ccEmail);
 
   static const _defaults = <String, dynamic>{
-    _primaryEmail: 'nutrientmapping@dpird.wa.gov.au',
-    _ccEmail: 'peta.richards@dpird.wa.gov.au',
+    _primaryEmail: Config.primaryEmail,
+    _ccEmail: Config.ccEmail,
   };
 
   static Future<void> init() async {
@@ -31,8 +34,10 @@ class RemoteConfigService {
   static Future<void> _fetchAndActivate() async {
     try {
       final activated = await _remoteConfig.fetchAndActivate();
-      if (activated){
-        debugPrint('New parameters already applied. Using previously activated values');
+      if (activated) {
+        debugPrint(
+          'New parameters already applied. Using previously activated values',
+        );
       }
     } catch (e) {
       debugPrint('Unable to fetch remote config, default value will be used');
