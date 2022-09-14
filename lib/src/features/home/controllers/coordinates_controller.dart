@@ -70,7 +70,7 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
 
         if (position == null) {
           throw Exception(
-            'Failed to capture current location. Try again a few seconds later.',
+            'Location capture failed. You might need to enable internet only for the first coordinate.',
           );
         }
 

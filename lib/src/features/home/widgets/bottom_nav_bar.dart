@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:time/time.dart';
 
 // States
 import '../../../global/states/future_state.codegen.dart';
@@ -15,6 +16,7 @@ import '../../../global/widgets/custom_popup_menu.dart';
 import '../../../global/widgets/labeled_widget.dart';
 
 // Controllers
+import '../../../helpers/constants/app_utils.dart';
 import '../../data_import/controllers/data_import_controller.dart';
 import '../controllers/coordinates_controller.dart';
 import '../controllers/data_export_controller.dart';
@@ -29,10 +31,9 @@ class BottomNavBar extends ConsumerWidget {
       ..listen<FutureState<bool>>(
         coordinatesController,
         (_, state) => state.whenOrNull(
-          failed: (reason) => CustomDialog.showAlertDialog(
+          failed: (reason) => AppUtils.showFlushBar(
             context: context,
-            reason: reason,
-            dialogTitle: 'GPS Operation Failed',
+            message: reason,
           ),
         ),
       )
@@ -119,9 +120,21 @@ class BottomNavBar extends ConsumerWidget {
               return state.maybeWhen(
                 loading: () => const CustomCircularLoader(),
                 orElse: () => InkWell(
-                  onTap: () => _ref
-                      .read(dataExportController.notifier)
-                      .exportCoordinatesToExcel(),
+                  onTap: () async {
+                    AppUtils.showFlushBar(
+                      context: context,
+                      message:
+                          'Converting to excel. This might take a few minutes',
+                      icon: Icons.restore_page_outlined,
+                      iconColor: Colors.green.shade600,
+                    );
+                    await Future.delayed(
+                      2.seconds,
+                      () => _ref
+                          .read(dataExportController.notifier)
+                          .exportCoordinatesToExcel(),
+                    );
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: LabeledWidget(
@@ -151,7 +164,8 @@ class BottomNavBar extends ConsumerWidget {
               CustomDialog.showConfirmDialog(
                 context: context,
                 dialogTitle: 'Erase All Data',
-                reason: "This will erase all data you have collected and prepare the app for a fresh soil sampling program.\nAre you sure you want to delete all data? You can't undo this.",
+                reason:
+                    "This will erase all data you have collected and prepare the app for a fresh soil sampling program.\n\nAre you sure you want to delete all data? You can't undo this.",
                 trueButtonText: 'Erase',
                 falseButtonText: 'Cancel',
                 onTrueButtonPressed: () {

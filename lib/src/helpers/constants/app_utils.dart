@@ -65,15 +65,16 @@ class AppUtils {
     required BuildContext context,
     required String message,
     IconData? icon = Icons.error_rounded,
-    double? iconSize = 28,
+    double? iconSize = 26,
     Color? iconColor = Colors.redAccent,
   }) {
     Flushbar<void>(
       message: message,
       messageSize: 15,
       messageColor: AppColors.textWhite80Color,
+      animationDuration: Durations.slow,
       borderRadius: Corners.rounded(9),
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 70),
       padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
       backgroundColor: const Color.fromARGB(218, 48, 48, 48),
       boxShadows: Shadows.universal,
@@ -84,7 +85,7 @@ class AppUtils {
       ),
       shouldIconPulse: false,
       dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(milliseconds: 1300),
     ).show(context);
   }
 }

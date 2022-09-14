@@ -54,6 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:636770032873:android:b4dd9eca7babb21cece478',
     messagingSenderId: '636770032873',
     projectId: 'gps-collection-app',
+    databaseURL: 'https://gps-collection-app-default-rtdb.firebaseio.com',
     storageBucket: 'gps-collection-app.appspot.com',
   );
 
@@ -62,9 +63,9 @@ class DefaultFirebaseOptions {
     appId: '1:636770032873:ios:42a2873528a2cc12ece478',
     messagingSenderId: '636770032873',
     projectId: 'gps-collection-app',
+    databaseURL: 'https://gps-collection-app-default-rtdb.firebaseio.com',
     storageBucket: 'gps-collection-app.appspot.com',
-    iosClientId:
-        '636770032873-m3uihl1bhs14rli5pjn2766ekoua3urk.apps.googleusercontent.com',
+    iosClientId: '636770032873-m3uihl1bhs14rli5pjn2766ekoua3urk.apps.googleusercontent.com',
     iosBundleId: 'com.inceptrafay.gpsCollectionApp',
   );
 }
