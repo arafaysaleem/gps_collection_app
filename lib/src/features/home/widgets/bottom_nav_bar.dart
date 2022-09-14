@@ -148,13 +148,16 @@ class BottomNavBar extends ConsumerWidget {
           // Close icon
           InkWell(
             onTap: () {
-              ref.read(dataImportController.notifier).erase();
-              // if (defaultTargetPlatform == TargetPlatform.android) {
-              //   SystemNavigator.pop();
-              // } else {
-              //   debugger();
-              //   exit(0);
-              // }
+              CustomDialog.showConfirmDialog(
+                context: context,
+                dialogTitle: 'Erase All Data',
+                reason: "This will erase all data you have collected and prepare the app for a fresh soil sampling program.\nAre you sure you want to delete all data? You can't undo this.",
+                trueButtonText: 'Erase',
+                falseButtonText: 'Cancel',
+                onTrueButtonPressed: () {
+                  ref.read(dataImportController.notifier).erase();
+                },
+              );
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
