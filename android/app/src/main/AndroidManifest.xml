@@ -13,7 +13,7 @@
         </intent>
     </queries>
    <application
-        android:label="gps_collection_app"
+        android:label="DIY"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
