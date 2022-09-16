@@ -61,8 +61,8 @@ class DataExportController extends StateNotifier<FutureState<void>> {
 
     final email = Email(
       subject: 'HEWA Coordinates from $farmerName',
-      recipients: ['a.rafaysaleem@gmail.com', remoteConfig.primaryEmail],
-      cc: ['rafay.incept@gmail.com', remoteConfig.ccEmail],
+      recipients: [remoteConfig.primaryEmail],
+      cc: [remoteConfig.ccEmail],
       attachmentPaths: [filePath],
     );
 

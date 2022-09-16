@@ -110,7 +110,7 @@ class TopAppBar extends HookConsumerWidget {
 
           // Paddock and coords info
           SizedBox(
-            width: 70,
+            width: 0,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -153,7 +153,7 @@ class TopAppBar extends HookConsumerWidget {
                 if (currentPaddock != null)
                   Text(
                     currentPaddock.code,
-                    style: AppTypography.primary.subtitle13.copyWith(
+                    style: AppTypography.primary.body14.copyWith(
                       color: AppColors.textWhite80Color,
                     ),
                   ),
@@ -194,8 +194,8 @@ class TopAppBar extends HookConsumerWidget {
                                     .setCurrentProperty(property),
                                 child: SvgPicture.asset(
                                   AppAssets.gpsMultiFarmIcon,
-                                  width: 20,
-                                  height: 20,
+                                  width: 24,
+                                  height: 24,
                                   color: Colors.yellow,
                                 ),
                               );

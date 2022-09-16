@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Helpers
+import '../../../global/widgets/custom_dialog.dart';
 import '../../../helpers/constants/app_assets.dart';
 import '../../../helpers/constants/app_styles.dart';
 
@@ -37,7 +38,7 @@ class CoordinateListItem extends HookConsumerWidget {
       color: i.isOdd ? Colors.white : Colors.grey.shade200,
       padding: const EdgeInsets.symmetric(
         horizontal: 15,
-        vertical: 6,
+        vertical: 12,
       ),
       child: Row(
         children: [
@@ -45,7 +46,7 @@ class CoordinateListItem extends HookConsumerWidget {
             '${coordinate.latitude.toStringAsPrecision(8)}, ${coordinate.longitude.toStringAsPrecision(8)}',
             style: const TextStyle(
               color: Colors.black54,
-              fontSize: 15,
+              fontSize: 16,
             ),
           ),
 
@@ -54,12 +55,24 @@ class CoordinateListItem extends HookConsumerWidget {
           // Delete
           InkWell(
             onTap: () {
-              ref.read(coordinatesController.notifier).deleteCoordinate(i);
+              CustomDialog.showConfirmDialog(
+                context: context,
+                dialogTitle: 'Delete Point?',
+                reason:
+                    'Are you sure? This will remove the coordinates from the list.',
+                trueButtonText: 'Delete',
+                falseButtonText: 'Cancel',
+                isDanger: true,
+                flipButtons: true,
+                onTrueButtonPressed: () {
+                  ref.read(coordinatesController.notifier).deleteCoordinate(i);
+                },
+              );
             },
             child: SvgPicture.asset(
               AppAssets.deleteIcon,
-              width: 24,
-              height: 24,
+              width: 28,
+              height: 28,
               color: Colors.grey,
             ),
           ),

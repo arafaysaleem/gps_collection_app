@@ -48,7 +48,7 @@ class BottomNavBar extends ConsumerWidget {
         ),
       );
     return Container(
-      height: 58,
+      height: 88,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,7 +70,7 @@ class BottomNavBar extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           child: Icon(
                             Icons.place,
-                            size: 22,
+                            size: 28,
                             color: Colors.white,
                           ),
                         ),
@@ -101,8 +101,8 @@ class BottomNavBar extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 child: SvgPicture.asset(
                   AppAssets.toolsIcon,
-                  width: 20,
-                  height: 20,
+                  width: 28,
+                  height: 28,
                   color: Colors.white,
                 ),
               ),
@@ -143,8 +143,8 @@ class BottomNavBar extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       child: SvgPicture.asset(
                         AppAssets.emailIcon,
-                        width: 20,
-                        height: 20,
+                        width: 28,
+                        height: 28,
                         color: Colors.white,
                       ),
                     ),
@@ -158,31 +158,32 @@ class BottomNavBar extends ConsumerWidget {
             color: Colors.white,
           ),
 
-          // Close icon
+          // Reset icon
           InkWell(
             onTap: () {
               CustomDialog.showConfirmDialog(
                 context: context,
-                dialogTitle: 'Erase All Data',
+                dialogTitle: 'Reset All Data',
                 reason:
                     "This will erase all data you have collected and prepare the app for a fresh soil sampling program.\n\nAre you sure you want to delete all data? You can't undo this.",
-                trueButtonText: 'Erase',
+                trueButtonText: 'Reset',
                 falseButtonText: 'Cancel',
+                isDanger: true,
+                flipButtons: true,
                 onTrueButtonPressed: () {
                   ref.read(dataImportController.notifier).erase();
                 },
               );
             },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 5),
               child: LabeledWidget(
-                label: 'Close',
+                label: 'Reset',
                 labelPosition: LabelPosition.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                child: SvgPicture.asset(
-                  AppAssets.closeIcon,
-                  width: 20,
-                  height: 20,
+                child: Icon(
+                  Icons.restart_alt,
+                  size: 28,
                   color: Colors.white,
                 ),
               ),

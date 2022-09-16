@@ -51,8 +51,8 @@ class NoteIcon extends ConsumerWidget {
       },
       child: SvgPicture.asset(
         AppAssets.noteIcon,
-        width: 24,
-        height: 24,
+        width: 28,
+        height: 28,
         color: noteTextController.text.isEmpty
             ? Colors.grey
             : AppColors.primaryColor,

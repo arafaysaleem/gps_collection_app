@@ -19,6 +19,8 @@ enum _CustomDialogType { ALERT, CONFIRM, ABOUT, SIMPLE }
 class CustomDialog extends StatelessWidget {
   final String title, body;
   final Widget? child;
+  final bool isDanger;
+  final bool flipButtons;
   final String? buttonText, falseButtonText, trueButtonText;
   final _CustomDialogType _type;
   final VoidCallback? falseButtonPressed, trueButtonPressed;
@@ -50,7 +52,9 @@ class CustomDialog extends StatelessWidget {
     VoidCallback? onTrueButtonPressed,
     VoidCallback? onFalseButtonPressed,
     String? dialogTitle,
+    bool? flipButtons,
     String? trueButtonText,
+    bool? isDanger,
     Widget? child,
     String? falseButtonText,
   }) async {
@@ -60,7 +64,9 @@ class CustomDialog extends StatelessWidget {
       builder: (ctx) => CustomDialog.confirm(
         title: dialogTitle ?? 'Confirm Operation',
         body: reason,
+        flipButtons: flipButtons,
         trueButtonText: trueButtonText ?? 'Okay',
+        isDanger: isDanger,
         falseButtonText: falseButtonText ?? 'Cancel',
         trueButtonPressed: onTrueButtonPressed,
         falseButtonPressed: onFalseButtonPressed,
@@ -76,10 +82,14 @@ class CustomDialog extends StatelessWidget {
     this.falseButtonPressed,
     this.trueButtonPressed,
     this.child,
+    bool? isDanger,
+    bool? flipButtons,
     required this.title,
     required this.body,
     required _CustomDialogType type,
-  }) : _type = type;
+  })  : _type = type,
+        flipButtons = flipButtons ?? false,
+        isDanger = isDanger ?? false;
 
   const factory CustomDialog.alert({
     required String title,
@@ -94,6 +104,8 @@ class CustomDialog extends StatelessWidget {
     required String body,
     required String falseButtonText,
     required String trueButtonText,
+    bool? flipButtons,
+    bool? isDanger,
     Widget? child,
     VoidCallback? falseButtonPressed,
     VoidCallback? trueButtonPressed,
@@ -119,64 +131,83 @@ class CustomDialog extends StatelessWidget {
       actions: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if (_type == _CustomDialogType.ALERT)
-              CustomTextButton.gradient(
-                gradient: AppColors.buttonGradientPurple,
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                height: 35,
-                onPressed: () {
-                  trueButtonPressed?.call();
-                  AppRouter.pop();
-                },
-                child: Center(
-                  child: Text(
-                    buttonText!,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              )
-            else if (_type == _CustomDialogType.CONFIRM) ...[
-              // Yes
-              CustomTextButton.outlined(
-                border: Border.all(color: AppColors.primaryColor),
-                height: 35,
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                onPressed: () {
-                  falseButtonPressed?.call();
-                  AppRouter.pop(true);
-                },
-                child: Center(
-                  child: Text(
-                    falseButtonText!,
-                    style: const TextStyle(color: AppColors.primaryColor),
-                  ),
-                ),
-              ),
-
-              Insets.gapW10,
-
-              // No
-              CustomTextButton.gradient(
-                gradient: AppColors.buttonGradientPurple,
-                height: 35,
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                onPressed: () {
-                  trueButtonPressed?.call();
-                  AppRouter.pop(false);
-                },
-                child: Center(
-                  child: Text(
-                    trueButtonText!,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ]
-          ],
+          children: [..._getButtons],
         ),
       ],
     );
+  }
+
+  List<Widget> get _getButtons {
+    var children = <Widget>[];
+    if (_type == _CustomDialogType.ALERT) {
+      children = [
+        CustomTextButton.gradient(
+          gradient: isDanger
+              ? AppColors.buttonGradientDanger
+              : AppColors.buttonGradientPrimary,
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          height: 35,
+          onPressed: () {
+            trueButtonPressed?.call();
+            AppRouter.pop();
+          },
+          child: Center(
+            child: Text(
+              buttonText!,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ];
+    } else if (_type == _CustomDialogType.CONFIRM) {
+      children = [
+        // Yes
+        CustomTextButton.outlined(
+          border: Border.all(
+            color: isDanger
+                ? AppColors.textLightGreyColor
+                : AppColors.primaryColor,
+          ),
+          height: 35,
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          onPressed: () {
+            falseButtonPressed?.call();
+            AppRouter.pop(true);
+          },
+          child: Center(
+            child: Text(
+              falseButtonText!,
+              style: TextStyle(
+                color: isDanger
+                    ? AppColors.textLightGreyColor
+                    : AppColors.primaryColor,
+              ),
+            ),
+          ),
+        ),
+
+        Insets.gapW10,
+
+        // No
+        CustomTextButton.gradient(
+          gradient: AppColors.buttonGradientPrimary,
+          height: 35,
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          onPressed: () {
+            trueButtonPressed?.call();
+            AppRouter.pop(false);
+          },
+          child: Center(
+            child: Text(
+              trueButtonText!,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ];
+    }
+
+    return flipButtons ? children.reversed.toList() : children;
   }
 }
 
@@ -201,7 +232,9 @@ class _CustomDialogWithConfirm extends CustomDialog {
     required String super.trueButtonText,
     super.falseButtonPressed,
     super.trueButtonPressed,
+    super.isDanger,
     super.child,
+    super.flipButtons,
   }) : super._(
           type: _CustomDialogType.CONFIRM,
         );
