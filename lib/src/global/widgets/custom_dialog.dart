@@ -190,7 +190,9 @@ class CustomDialog extends StatelessWidget {
 
         // No
         CustomTextButton.gradient(
-          gradient: AppColors.buttonGradientPrimary,
+          gradient: isDanger
+              ? AppColors.buttonGradientDanger
+              : AppColors.buttonGradientPrimary,
           height: 35,
           padding: const EdgeInsets.symmetric(horizontal: 15),
           onPressed: () {

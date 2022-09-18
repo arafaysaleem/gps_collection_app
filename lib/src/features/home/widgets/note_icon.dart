@@ -15,10 +15,12 @@ class NoteIcon extends ConsumerWidget {
   final TextEditingController noteTextController;
   final VoidCallback? onCancel;
   final VoidCallback? onSave;
+  final double? size;
 
   const NoteIcon({
     super.key,
     this.onCancel,
+    this.size,
     this.onSave,
     required this.noteTextController,
   });
@@ -51,8 +53,8 @@ class NoteIcon extends ConsumerWidget {
       },
       child: SvgPicture.asset(
         AppAssets.noteIcon,
-        width: 28,
-        height: 28,
+        width: size ?? 28,
+        height: size ?? 28,
         color: noteTextController.text.isEmpty
             ? Colors.grey
             : AppColors.primaryColor,

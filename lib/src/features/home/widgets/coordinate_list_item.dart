@@ -38,7 +38,7 @@ class CoordinateListItem extends HookConsumerWidget {
       color: i.isOdd ? Colors.white : Colors.grey.shade200,
       padding: const EdgeInsets.symmetric(
         horizontal: 15,
-        vertical: 12,
+        vertical: 6,
       ),
       child: Row(
         children: [
@@ -71,8 +71,8 @@ class CoordinateListItem extends HookConsumerWidget {
             },
             child: SvgPicture.asset(
               AppAssets.deleteIcon,
-              width: 28,
-              height: 28,
+              width: 26,
+              height: 26,
               color: Colors.grey,
             ),
           ),
@@ -81,6 +81,7 @@ class CoordinateListItem extends HookConsumerWidget {
 
           // Note
           NoteIcon(
+            size: 26,
             noteTextController: noteController,
             onSave: () {
               ref.read(coordinatesController.notifier).saveCoordinateNote(

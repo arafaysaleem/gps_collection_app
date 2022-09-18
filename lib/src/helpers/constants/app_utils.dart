@@ -74,7 +74,7 @@ class AppUtils {
       messageColor: AppColors.textWhite80Color,
       animationDuration: Durations.slow,
       borderRadius: Corners.rounded(9),
-      margin: const EdgeInsets.fromLTRB(20, 0, 20, 70),
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 85),
       padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
       backgroundColor: const Color.fromARGB(218, 48, 48, 48),
       boxShadows: Shadows.universal,

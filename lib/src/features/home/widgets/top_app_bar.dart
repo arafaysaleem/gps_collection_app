@@ -153,8 +153,9 @@ class TopAppBar extends HookConsumerWidget {
                 if (currentPaddock != null)
                   Text(
                     currentPaddock.code,
-                    style: AppTypography.primary.body14.copyWith(
+                    style: AppTypography.primary.body16.copyWith(
                       color: AppColors.textWhite80Color,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
 

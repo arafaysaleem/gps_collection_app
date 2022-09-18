@@ -48,7 +48,7 @@ class BottomNavBar extends ConsumerWidget {
         ),
       );
     return Container(
-      height: 88,
+      height: 74,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,7 +70,7 @@ class BottomNavBar extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           child: Icon(
                             Icons.place,
-                            size: 28,
+                            size: 38,
                             color: Colors.white,
                           ),
                         ),
@@ -101,8 +101,8 @@ class BottomNavBar extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 child: SvgPicture.asset(
                   AppAssets.toolsIcon,
-                  width: 28,
-                  height: 28,
+                  width: 34,
+                  height: 34,
                   color: Colors.white,
                 ),
               ),
@@ -143,8 +143,8 @@ class BottomNavBar extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       child: SvgPicture.asset(
                         AppAssets.emailIcon,
-                        width: 28,
-                        height: 28,
+                        width: 34,
+                        height: 34,
                         color: Colors.white,
                       ),
                     ),
@@ -183,7 +183,7 @@ class BottomNavBar extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 child: Icon(
                   Icons.restart_alt,
-                  size: 28,
+                  size: 38,
                   color: Colors.white,
                 ),
               ),
