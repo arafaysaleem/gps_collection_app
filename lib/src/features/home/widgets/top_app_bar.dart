@@ -110,7 +110,7 @@ class TopAppBar extends HookConsumerWidget {
 
           // Paddock and coords info
           SizedBox(
-            width: 0,
+            width: 90,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
