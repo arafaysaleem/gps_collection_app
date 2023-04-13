@@ -12,6 +12,7 @@ class ScrollableColumn extends StatelessWidget {
   final ScrollController? controller;
 
   const ScrollableColumn({
+    required this.children,
     super.key,
     this.crossAxisAlignment = CrossAxisAlignment.start,
     this.mainAxisAlignment = MainAxisAlignment.start,
@@ -21,7 +22,6 @@ class ScrollableColumn extends StatelessWidget {
     this.textDirection,
     this.physics,
     this.controller,
-    required this.children,
   });
 
   @override

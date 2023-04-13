@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 class CustomRefreshIndicator extends StatelessWidget {
   final Widget child;
   final RefreshCallback onRefresh;
-  final double displacement, edgeOffset;
-  final Color color, backgroundColor;
+  final double displacement;
+  final double edgeOffset;
+  final Color color;
+  final Color backgroundColor;
 
   const CustomRefreshIndicator({
-    super.key,
     required this.child,
     required this.onRefresh,
+    super.key,
     this.displacement = 25.0,
     this.edgeOffset = 0.0,
     this.color = Colors.white,

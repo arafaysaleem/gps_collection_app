@@ -17,13 +17,17 @@ import 'custom_text_button.dart';
 enum _CustomDialogType { ALERT, CONFIRM, ABOUT, SIMPLE }
 
 class CustomDialog extends StatelessWidget {
-  final String title, body;
+  final String title;
+  final String body;
   final Widget? child;
   final bool isDanger;
   final bool flipButtons;
-  final String? buttonText, falseButtonText, trueButtonText;
+  final String? buttonText;
+  final String? falseButtonText;
+  final String? trueButtonText;
   final _CustomDialogType _type;
-  final VoidCallback? falseButtonPressed, trueButtonPressed;
+  final VoidCallback? falseButtonPressed;
+  final VoidCallback? trueButtonPressed;
 
   static Future<void> showAlertDialog({
     required BuildContext context,
@@ -76,6 +80,9 @@ class CustomDialog extends StatelessWidget {
   }
 
   const CustomDialog._({
+    required this.title,
+    required this.body,
+    required _CustomDialogType type,
     this.buttonText,
     this.falseButtonText,
     this.trueButtonText,
@@ -84,9 +91,6 @@ class CustomDialog extends StatelessWidget {
     this.child,
     bool? isDanger,
     bool? flipButtons,
-    required this.title,
-    required this.body,
-    required _CustomDialogType type,
   })  : _type = type,
         flipButtons = flipButtons ?? false,
         isDanger = isDanger ?? false;

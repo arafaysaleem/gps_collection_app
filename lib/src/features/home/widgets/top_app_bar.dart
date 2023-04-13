@@ -84,8 +84,8 @@ class TopAppBar extends HookConsumerWidget {
 
                 // Paddock Dropdowm
                 Consumer(
-                  builder: (_, _ref, __) {
-                    final paddocks = _ref.watch(_propertyPaddocksProvider);
+                  builder: (_, ref, __) {
+                    final paddocks = ref.watch(_propertyPaddocksProvider);
                     return LabeledWidget(
                       label: 'Paddock',
                       child: CustomDropdownField<PaddockModel>.animated(
@@ -95,7 +95,7 @@ class TopAppBar extends HookConsumerWidget {
                         ),
                         hintText: 'Choose paddock',
                         items: {for (var e in paddocks) e.paddock: e},
-                        onSelected: _ref
+                        onSelected: ref
                             .read(paddocksController.notifier)
                             .setCurrentPaddock,
                       ),
@@ -118,8 +118,8 @@ class TopAppBar extends HookConsumerWidget {
 
                 // Coordinate Counter
                 Consumer(
-                  builder: (_, _ref, __) {
-                    final count = _ref.watch(coordinateCountProvider);
+                  builder: (_, ref, __) {
+                    final count = ref.watch(coordinateCountProvider);
                     return Container(
                       height: 55,
                       width: 55,
@@ -180,24 +180,26 @@ class TopAppBar extends HookConsumerWidget {
 
                     // Farmer property picker
                     Consumer(
-                      builder: (_, _ref, __) {
+                      builder: (_, ref, __) {
                         final currentProperty =
-                            _ref.watch(currentPropertyProvider);
+                            ref.watch(currentPropertyProvider);
                         final properties =
-                            _ref.watch(propertiesController).getAllProperties();
+                            ref.watch(propertiesController).getAllProperties();
                         return properties.length == 1
                             ? Insets.shrink
                             : CustomPopupMenu<String>(
                                 initialValue: currentProperty,
                                 items: {for (var e in properties) e: e},
-                                onSelected: (property) => _ref
+                                onSelected: (property) => ref
                                     .read(propertiesController)
                                     .setCurrentProperty(property),
                                 child: SvgPicture.asset(
                                   AppAssets.gpsMultiFarmIcon,
                                   width: 24,
                                   height: 24,
-                                  color: Colors.yellow,
+                                  theme: const SvgTheme(
+                                    currentColor: Colors.yellow,
+                                  ),
                                 ),
                               );
                       },

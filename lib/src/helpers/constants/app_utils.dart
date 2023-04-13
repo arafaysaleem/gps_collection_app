@@ -22,8 +22,8 @@ class AppUtils {
   /// Useful for color coding class erps
   static Color getRandomColor([int? seed, List<Color>? colors]) {
     final rInt = seed != null ? (seed + DateTime.now().minute) : null;
-    final _colors = colors ?? AppColors.primaries;
-    return _colors[randomizer(rInt).nextInt(_colors.length)];
+    final thisColors = colors ?? AppColors.primaries;
+    return thisColors[randomizer(rInt).nextInt(thisColors.length)];
   }
 
   /// A utility method to convert 0/1 to false/true

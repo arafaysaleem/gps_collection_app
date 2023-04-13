@@ -28,8 +28,8 @@ final coordinatesListProvider =
 final coordinatesController =
     StateNotifierProvider<CoordinatesController, FutureState<bool>>(
   (ref) {
-    final _keyValueService = ref.watch(keyValueStorageServiceProvider);
-    return CoordinatesController(ref, _keyValueService);
+    final keyValueService = ref.watch(keyValueStorageServiceProvider);
+    return CoordinatesController(ref, keyValueService);
   },
 );
 

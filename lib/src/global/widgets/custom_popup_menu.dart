@@ -11,11 +11,11 @@ class CustomPopupMenu<T> extends StatelessWidget {
   final void Function(T) onSelected;
 
   const CustomPopupMenu({
-    super.key,
-    this.initialValue,
     required this.child,
     required this.items,
     required this.onSelected,
+    super.key,
+    this.initialValue,
   });
 
   @override

@@ -16,9 +16,10 @@ import 'note_icon.dart';
 
 class CoordinateListItem extends HookConsumerWidget {
   final int i;
+
   const CoordinateListItem({
-    super.key,
     required this.i,
+    super.key,
   });
 
   @override
@@ -73,7 +74,9 @@ class CoordinateListItem extends HookConsumerWidget {
               AppAssets.deleteIcon,
               width: 26,
               height: 26,
-              color: Colors.grey,
+              theme: const SvgTheme(
+                currentColor: Colors.grey,
+              ),
             ),
           ),
 

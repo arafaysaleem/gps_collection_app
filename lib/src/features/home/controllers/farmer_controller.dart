@@ -21,8 +21,8 @@ final currentToolProvider = StateProvider<String?>((ref) => null);
 final farmersController =
     StateNotifierProvider<FarmersController, FutureState<bool>>(
   (ref) {
-    final _keyValueService = ref.watch(keyValueStorageServiceProvider);
-    return FarmersController(ref, _keyValueService);
+    final keyValueService = ref.watch(keyValueStorageServiceProvider);
+    return FarmersController(ref, keyValueService);
   },
 );
 

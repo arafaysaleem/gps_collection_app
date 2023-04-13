@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Routers
 import 'src/config/routes/app_router.dart';

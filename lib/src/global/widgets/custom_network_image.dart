@@ -16,6 +16,7 @@ class CustomNetworkImage extends StatelessWidget {
   final VoidCallback? onTap;
 
   const CustomNetworkImage({
+    required this.imageUrl,
     double? width,
     double? radius,
     super.key,
@@ -28,7 +29,6 @@ class CustomNetworkImage extends StatelessWidget {
     this.borderRadius,
     this.placeholder,
     this.errorWidget,
-    required this.imageUrl,
   })  : width = width ?? double.infinity,
         radius = radius ?? 20;
 

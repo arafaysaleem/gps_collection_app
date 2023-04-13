@@ -15,10 +15,10 @@ abstract class CustomDropdownField<T> extends StatelessWidget {
   const CustomDropdownField({super.key});
 
   factory CustomDropdownField.sheet({
-    Key? key,
-    ValueNotifier<T?>? controller,
     required CustomDropdownSheet<T> itemsSheet,
     required String Function(T) selectedItemText,
+    Key? key,
+    ValueNotifier<T?>? controller,
     Widget suffixIcon,
     TextStyle selectedStyle,
     Color displayFieldColor,
@@ -27,6 +27,9 @@ abstract class CustomDropdownField<T> extends StatelessWidget {
   }) = _CustomDropdownFieldSheet;
 
   const factory CustomDropdownField.animated({
+    required void Function(T?) onSelected,
+    required TextEditingController controller,
+    required Map<String, T> items,
     Key? key,
     String? hintText,
     TextStyle? hintStyle,
@@ -35,9 +38,6 @@ abstract class CustomDropdownField<T> extends StatelessWidget {
     Color fillColor,
     BorderRadius borderRadius,
     bool enableSearch,
-    required void Function(T?) onSelected,
-    required TextEditingController controller,
-    required Map<String, T> items,
   }) = _CustomDropdownFieldAnimated;
 
   @override
@@ -71,10 +71,10 @@ class _CustomDropdownFieldSheet<T> extends CustomDropdownField<T> {
   final T? initialValue;
 
   _CustomDropdownFieldSheet({
-    super.key,
-    ValueNotifier<T?>? controller,
     required this.itemsSheet,
     required this.selectedItemText,
+    super.key,
+    ValueNotifier<T?>? controller,
     this.suffixIcon = const Icon(
       Icons.arrow_drop_down_rounded,
       color: AppColors.textGreyColor,
@@ -150,6 +150,9 @@ class _CustomDropdownFieldAnimated<T> extends CustomDropdownField<T> {
   final Widget fieldSuffixIcon;
 
   const _CustomDropdownFieldAnimated({
+    required this.onSelected,
+    required this.controller,
+    required this.items,
     super.key,
     this.hintText,
     this.listItemStyle,
@@ -168,9 +171,6 @@ class _CustomDropdownFieldAnimated<T> extends CustomDropdownField<T> {
     this.fillColor = AppColors.fieldFillColor,
     this.borderRadius = Corners.rounded7,
     this.enableSearch = false,
-    required this.onSelected,
-    required this.controller,
-    required this.items,
   });
 
   void onChanged(String label) {
@@ -179,11 +179,11 @@ class _CustomDropdownFieldAnimated<T> extends CustomDropdownField<T> {
 
   @override
   Widget build(BuildContext context) {
-    final _items = [hintText ?? 'Select value', ...items.keys];
+    final itemsLocal = [hintText ?? 'Select value', ...items.keys];
     return enableSearch
         ? CustomDropdown.search(
             controller: controller,
-            items: _items,
+            items: itemsLocal,
             onChanged: onChanged,
             hintText: hintText,
             hintStyle: hintStyle,
@@ -195,7 +195,7 @@ class _CustomDropdownFieldAnimated<T> extends CustomDropdownField<T> {
           )
         : CustomDropdown(
             controller: controller,
-            items: _items,
+            items: itemsLocal,
             onChanged: onChanged,
             hintText: hintText,
             hintStyle: hintStyle,

@@ -55,11 +55,11 @@ class BottomNavBar extends ConsumerWidget {
         children: [
           // GPS add
           Consumer(
-            builder: (_, _ref, __) {
-              return _ref.watch(coordinatesController).maybeWhen(
+            builder: (_, ref, __) {
+              return ref.watch(coordinatesController).maybeWhen(
                     loading: () => const CustomCircularLoader(),
                     orElse: () => InkWell(
-                      onTap: () => _ref
+                      onTap: () => ref
                           .read(coordinatesController.notifier)
                           .fetchAndSaveCoordinate(),
                       child: const Padding(
@@ -103,7 +103,9 @@ class BottomNavBar extends ConsumerWidget {
                   AppAssets.toolsIcon,
                   width: 34,
                   height: 34,
-                  color: Colors.white,
+                  theme: const SvgTheme(
+                    currentColor: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -115,7 +117,7 @@ class BottomNavBar extends ConsumerWidget {
 
           // Email send
           Consumer(
-            builder: (_, _ref, __) {
+            builder: (_, ref, __) {
               final state = ref.watch(dataExportController);
               return state.maybeWhen(
                 loading: () => const CustomCircularLoader(),
@@ -130,7 +132,7 @@ class BottomNavBar extends ConsumerWidget {
                     );
                     await Future.delayed(
                       2.seconds,
-                      () => _ref
+                      () => ref
                           .read(dataExportController.notifier)
                           .exportCoordinatesToExcel(),
                     );
@@ -145,7 +147,9 @@ class BottomNavBar extends ConsumerWidget {
                         AppAssets.emailIcon,
                         width: 34,
                         height: 34,
-                        color: Colors.white,
+                        theme: const SvgTheme(
+                          currentColor: Colors.white,
+                        ),
                       ),
                     ),
                   ),

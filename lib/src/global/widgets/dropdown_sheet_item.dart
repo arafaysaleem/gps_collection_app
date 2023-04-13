@@ -9,8 +9,8 @@ class DropdownSheetItem extends StatelessWidget {
   final EdgeInsets padding;
 
   const DropdownSheetItem({
-    super.key,
     required this.label,
+    super.key,
     this.padding = const EdgeInsets.symmetric(
       vertical: 5,
     ),

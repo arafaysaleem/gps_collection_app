@@ -18,11 +18,11 @@ class NoteIcon extends ConsumerWidget {
   final double? size;
 
   const NoteIcon({
+    required this.noteTextController,
     super.key,
     this.onCancel,
     this.size,
     this.onSave,
-    required this.noteTextController,
   });
 
   @override
@@ -55,9 +55,11 @@ class NoteIcon extends ConsumerWidget {
         AppAssets.noteIcon,
         width: size ?? 28,
         height: size ?? 28,
-        color: noteTextController.text.isEmpty
-            ? Colors.grey
-            : AppColors.primaryColor,
+        theme: SvgTheme(
+          currentColor: noteTextController.text.isEmpty
+              ? Colors.grey
+              : AppColors.primaryColor,
+        ),
       ),
     );
   }

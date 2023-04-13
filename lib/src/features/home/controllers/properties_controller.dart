@@ -16,8 +16,8 @@ import 'paddocks_controller.dart';
 final currentPropertyProvider = StateProvider<String?>((ref) => null);
 
 final propertiesController = Provider<PropertiesController>((ref) {
-  final _keyValueService = ref.watch(keyValueStorageServiceProvider);
-  return PropertiesController(ref, _keyValueService);
+  final keyValueService = ref.watch(keyValueStorageServiceProvider);
+  return PropertiesController(ref, keyValueService);
 });
 
 class PropertiesController {

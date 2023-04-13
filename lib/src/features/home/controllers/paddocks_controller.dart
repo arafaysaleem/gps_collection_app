@@ -25,8 +25,8 @@ final currentPaddockProvider = StateProvider<PaddockModel?>((ref) => null);
 
 final paddocksController =
     StateNotifierProvider<PaddocksController, FutureState<bool>>((ref) {
-  final _keyValueService = ref.watch(keyValueStorageServiceProvider);
-  return PaddocksController(ref, _keyValueService);
+  final keyValueService = ref.watch(keyValueStorageServiceProvider);
+  return PaddocksController(ref, keyValueService);
 });
 
 class PaddocksController extends StateNotifier<FutureState<bool>> {

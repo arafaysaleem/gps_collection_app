@@ -17,15 +17,15 @@ class CustomRadioButton<T> extends StatelessWidget {
   final T value;
 
   const CustomRadioButton({
-    super.key,
-    this.width = 106,
-    this.height = 46,
-    this.borderRadius = Corners.rounded7,
     required this.value,
     required this.isSelected,
     required this.onTap,
     required this.icon,
     required this.label,
+    super.key,
+    this.width = 106,
+    this.height = 46,
+    this.borderRadius = Corners.rounded7,
   });
 
   @override

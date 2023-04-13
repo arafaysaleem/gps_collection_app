@@ -21,10 +21,10 @@ import '../states/data_import_state.codegen.dart';
 final dataImportController =
     StateNotifierProvider<DataImportController, DataImportState>(
   (ref) {
-    final _keyValueStorageService = ref.watch(keyValueStorageServiceProvider);
+    final keyValueStorageService = ref.watch(keyValueStorageServiceProvider);
     return DataImportController(
       ref,
-      keyValueStorageService: _keyValueStorageService,
+      keyValueStorageService: keyValueStorageService,
     );
   },
 );

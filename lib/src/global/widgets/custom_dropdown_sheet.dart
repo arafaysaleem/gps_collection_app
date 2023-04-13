@@ -59,9 +59,9 @@ class CustomDropdownSheet<T> extends StatefulWidget {
   final EdgeInsets contentPadding;
 
   const CustomDropdownSheet({
-    super.key,
     required this.items,
     required this.itemBuilder,
+    super.key,
     this.searchFilterCondition,
     this.bottomSheetTitle,
     this.searchHintText,
@@ -82,9 +82,9 @@ class CustomDropdownSheet<T> extends StatefulWidget {
         this.enableMultipleSelection = enableMultipleSelection ?? false;
 
   const factory CustomDropdownSheet.multiple({
-    Key? key,
     required List<T> items,
     required Widget Function(BuildContext, T) itemBuilder,
+    Key? key,
     bool Function(String, T)? searchFilterCondition,
     String? bottomSheetTitle,
     String? submitButtonText,
@@ -245,9 +245,9 @@ class _CustomDropdownSheetState<T> extends State<CustomDropdownSheet<T>> {
 
 class _CustomDropdownSheetWithMultiSelect<T> extends CustomDropdownSheet<T> {
   const _CustomDropdownSheetWithMultiSelect({
-    super.key,
     required super.items,
     required super.itemBuilder,
+    super.key,
     super.searchFilterCondition,
     super.bottomSheetTitle,
     super.submitButtonText,

@@ -29,8 +29,8 @@ class CustomScrollableBottomSheet extends StatelessWidget {
   final List<double> snapSizes;
 
   const CustomScrollableBottomSheet({
-    super.key,
     required this.builder,
+    super.key,
     this.titleText,
     this.leading,
     this.title,

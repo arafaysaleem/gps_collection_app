@@ -17,6 +17,8 @@ class CustomTextButton extends StatelessWidget {
   final Widget child;
 
   const CustomTextButton({
+    required this.child,
+    required this.onPressed,
     super.key,
     double? height,
     double? borderRadius,
@@ -26,34 +28,32 @@ class CustomTextButton extends StatelessWidget {
     this.border,
     this.color,
     this.padding,
-    required this.child,
-    required this.onPressed,
   })  : borderRadius = borderRadius ?? 7,
         height = height ?? 55,
         disabled = disabled ?? false;
 
   const factory CustomTextButton.gradient({
-    Key? key,
-    double? height,
-    double? width,
-    double? borderRadius,
-    bool? disabled,
-    EdgeInsetsGeometry? padding,
     required Widget child,
     required VoidCallback onPressed,
     required Gradient gradient,
+    Key? key,
+    double? height,
+    double? width,
+    double? borderRadius,
+    bool? disabled,
+    EdgeInsetsGeometry? padding,
   }) = _CustomTextButtonWithGradient;
 
   const factory CustomTextButton.outlined({
+    required Border border,
+    required Widget child,
+    required VoidCallback onPressed,
     Key? key,
     double? height,
     double? width,
     bool? disabled,
     double? borderRadius,
     EdgeInsetsGeometry? padding,
-    required Border border,
-    required Widget child,
-    required VoidCallback onPressed,
   }) = _CustomTextButtonOutlined;
 
   @override
@@ -86,15 +86,15 @@ class CustomTextButton extends StatelessWidget {
 
 class _CustomTextButtonWithGradient extends CustomTextButton {
   const _CustomTextButtonWithGradient({
+    required super.child,
+    required super.onPressed,
+    required Gradient super.gradient,
     super.key,
     super.height,
     super.width,
     bool? disabled,
     super.borderRadius,
     super.padding,
-    required super.child,
-    required super.onPressed,
-    required Gradient super.gradient,
   }) : super(
           disabled: disabled ?? false,
         );
@@ -102,15 +102,15 @@ class _CustomTextButtonWithGradient extends CustomTextButton {
 
 class _CustomTextButtonOutlined extends CustomTextButton {
   const _CustomTextButtonOutlined({
+    required Border super.border,
+    required super.child,
+    required super.onPressed,
     super.key,
     super.height,
     super.width,
     bool? disabled,
     super.borderRadius,
     super.padding,
-    required Border super.border,
-    required super.child,
-    required super.onPressed,
   }) : super(
           disabled: disabled ?? false,
         );

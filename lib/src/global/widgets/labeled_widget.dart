@@ -28,9 +28,9 @@ class LabeledWidget extends StatelessWidget {
   final bool expand;
 
   const LabeledWidget({
-    super.key,
     required this.child,
     required this.label,
+    super.key,
     this.labelGap = Insets.gapH5,
     this.labelPosition = LabelPosition.start,
     this.expand = false,

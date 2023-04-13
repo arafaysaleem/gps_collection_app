@@ -8,14 +8,20 @@ import '../../helpers/constants/app_styles.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
-  final double? width, height;
+  final double? width;
+  final double? height;
   final int? maxLength;
-  final String? floatingText, hintText;
-  final TextStyle hintStyle, errorStyle, inputStyle;
+  final String? floatingText;
+  final String? hintText;
+  final TextStyle errorStyle;
+  final TextStyle hintStyle;
+  final TextStyle inputStyle;
   final TextStyle? floatingStyle;
   final EdgeInsets? contentPadding;
-  final void Function(String? value)? onSaved, onChanged;
-  final Widget? prefix, suffix;
+  final void Function(String? value)? onSaved;
+  final void Function(String? value)? onChanged;
+  final Widget? prefix;
+  final Widget? suffix;
   final bool showCursor;
   final bool? enabled;
   final bool multiline;
@@ -27,7 +33,8 @@ class CustomTextField extends StatefulWidget {
   final BorderSide border;
   final TextAlign textAlign;
   final TextAlignVertical textAlignVertical;
-  final Alignment errorAlign, floatingAlign;
+  final Alignment errorAlign;
+  final Alignment floatingAlign;
   final Color fillColor;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
