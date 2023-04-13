@@ -14,8 +14,8 @@ import '../states/data_import_state.codegen.dart';
 import '../widgets/farmer_data_import_widget.dart';
 import '../widgets/paddock_data_import_widget.dart';
 
-class DataImportScreen extends HookConsumerWidget {
-  const DataImportScreen({super.key});
+class PlannedSamplingScreen extends HookConsumerWidget {
+  const PlannedSamplingScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,35 +40,38 @@ class DataImportScreen extends HookConsumerWidget {
       ),
     );
 
+    final importState = ref.watch(dataImportController);
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(25),
-          child: Column(
-            children: [
-              Insets.gapH10,
+        child: importState.maybeWhen(
+          orElse: () => Padding(
+            padding: const EdgeInsets.all(25),
+            child: Column(
+              children: [
+                Insets.gapH10,
 
-              // Screen Title
-              Text(
-                'Welcome to GPS Collection App',
-                style: AppTypography.primary.heading34.copyWith(
-                  color: AppColors.lightPrimaryColor,
-                  fontSize: 45,
+                // Screen Title
+                Text(
+                  'Planned Sampling',
+                  style: AppTypography.primary.heading34.copyWith(
+                    color: AppColors.lightPrimaryColor,
+                    fontSize: 45,
+                  ),
                 ),
-              ),
-      
-              Insets.gapH(100),
-      
-              // Farmer data importer
-              const FarmerDataImportWidget(),
-      
-              Insets.gapH(45),
-      
-              // Paddock data import button
-              const PaddocksDataImportWidget(),
-      
-              Insets.expand,
-            ],
+
+                Insets.gapH(100),
+
+                // Farmer data importer
+                const FarmerDataImportWidget(),
+
+                Insets.gapH(45),
+
+                // Paddock data import button
+                const PaddocksDataImportWidget(),
+
+                Insets.expand,
+              ],
+            ),
           ),
         ),
       ),

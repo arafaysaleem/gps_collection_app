@@ -2,27 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Controllers
-import '../data_import/controllers/data_import_controller.dart';
-
-// Widgets
-import '../../global/widgets/custom_circular_loader.dart';
+import '../planned_sampling/controllers/data_import_controller.dart';
 
 // Screens
-import '../data_import/screens/data_import_screen.dart';
+import '../planned_sampling/screens/sampling_modes_screen.dart';
 import '../home/screens/home_screen.dart';
+
+final farmerExistsProvider = Provider.autoDispose<bool>((ref) {
+  final isDataImported = ref.watch(
+    dataImportController.select(
+      (value) => value.maybeWhen(
+        done: () => true,
+        orElse: () => false,
+      ),
+    ),
+  );
+  // TODO(arafaysaleem): Check if new farmer initiated
+  const isNewFarmerInitiated = false;
+  return isDataImported || isNewFarmerInitiated;
+});
 
 class StartupWidgetBuilder extends HookConsumerWidget {
   const StartupWidgetBuilder({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final importState = ref.watch(dataImportController);
-    return importState.maybeWhen(
-      done: () => const HomeScreen(),
-      loading: () => const Scaffold(
-        body: CustomCircularLoader(),
-      ),
-      orElse: () => const DataImportScreen(),
-    );
+    final farmerExists = ref.watch(farmerExistsProvider);
+    return farmerExists ? const HomeScreen() : const SamplingModesScreen();
   }
 }

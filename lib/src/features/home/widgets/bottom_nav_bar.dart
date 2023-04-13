@@ -17,7 +17,7 @@ import '../../../global/widgets/labeled_widget.dart';
 
 // Controllers
 import '../../../helpers/constants/app_utils.dart';
-import '../../data_import/controllers/data_import_controller.dart';
+import '../../planned_sampling/controllers/data_import_controller.dart';
 import '../controllers/coordinates_controller.dart';
 import '../controllers/data_export_controller.dart';
 import '../controllers/farmer_controller.dart';

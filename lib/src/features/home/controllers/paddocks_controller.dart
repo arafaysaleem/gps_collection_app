@@ -13,7 +13,7 @@ import '../../../global/all_providers.dart';
 import '../../../global/states/future_state.codegen.dart';
 import '../../../helpers/extensions/string_extension.dart';
 import '../../../helpers/typedefs.dart';
-import '../../data_import/controllers/data_import_controller.dart';
+import '../../planned_sampling/controllers/data_import_controller.dart';
 import '../models/paddock_model.codegen.dart';
 import 'coordinates_controller.dart';
 import 'farmer_controller.dart';
