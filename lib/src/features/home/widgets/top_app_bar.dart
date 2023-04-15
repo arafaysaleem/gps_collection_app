@@ -14,6 +14,8 @@ import '../../../global/widgets/custom_dropdown_field.dart';
 import '../../../global/widgets/custom_popup_menu.dart';
 import '../../../global/widgets/custom_text_field.dart';
 import '../../../global/widgets/labeled_widget.dart';
+import '../../sampling_modes/controller/sampling_controller.dart';
+import '../../sampling_modes/enums/sampling_mode.dart';
 import 'note_icon.dart';
 
 // Controllers
@@ -150,14 +152,27 @@ class TopAppBar extends HookConsumerWidget {
                 Insets.expand,
 
                 // Paddock Code
-                if (currentPaddock != null)
-                  Text(
-                    currentPaddock.code,
-                    style: AppTypography.primary.body16.copyWith(
-                      color: AppColors.textWhite80Color,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                Consumer(
+                  builder: (_, ref, __) {
+                    final isPlanned = ref.watch(
+                      samplingController.select(
+                        (state) => state.maybeWhen(
+                          done: (current) => current == SamplingMode.planned,
+                          orElse: () => false,
+                        ),
+                      ),
+                    );
+                    return isPlanned && currentPaddock != null
+                        ? Text(
+                            currentPaddock.code,
+                            style: AppTypography.primary.body16.copyWith(
+                              color: AppColors.textWhite80Color,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : Insets.shrink;
+                  },
+                ),
 
                 Insets.gapH5,
 
@@ -185,7 +200,17 @@ class TopAppBar extends HookConsumerWidget {
                             ref.watch(currentPropertyProvider);
                         final properties =
                             ref.watch(propertiesController).getAllProperties();
-                        return properties.length == 1
+                        final isPlanned = ref.watch(
+                          samplingController.select(
+                            (state) => state.maybeWhen(
+                              done: (current) {
+                                return current == SamplingMode.planned;
+                              },
+                              orElse: () => false,
+                            ),
+                          ),
+                        );
+                        return !isPlanned || properties.length == 1
                             ? Insets.shrink
                             : CustomPopupMenu<String>(
                                 initialValue: currentProperty,
