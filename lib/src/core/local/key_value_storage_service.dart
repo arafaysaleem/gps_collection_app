@@ -3,10 +3,16 @@
 
 import 'dart:convert';
 
+// Features
+import '../../features/sampling_modes/enums/sampling_mode.dart';
 import '../../features/home/models/coordinate_model.codegen.dart';
 import '../../features/home/models/farmer_model.codegen.dart';
 import '../../features/home/models/paddock_model.codegen.dart';
+
+// Helpers
 import '../../helpers/typedefs.dart';
+
+// Services
 import 'key_value_storage_base.dart';
 
 /// A service class for providing methods to store and retrieve key-value data
@@ -30,8 +36,8 @@ class KeyValueStorageService {
   /// The name of current tool key
   static const _toolKey = 'toolKey';
 
-  /// The name of data imported key
-  static const _isDataImportedKey = 'isDataImportedKey';
+  /// The name of is current sampling key
+  static const _currentSamplingKey = 'currentSamplingKey';
 
   /// The name of the key for paddock's coordinates
   String _getPaddockCoordinateKey(String paddockCode) => '$paddockCode-COORDS';
@@ -135,18 +141,25 @@ class KeyValueStorageService {
     return _keyValueStorage.setCommon<String>(_paddockCodeKey, paddockCode);
   }
 
-  /// Returns the is data imported boolean
-  bool? getIsDataImported() {
-    final imported = _keyValueStorage.getCommon<bool>(_isDataImportedKey);
-    if (imported == null) return null;
-    return imported;
+  /// Returns the sampling state
+  SamplingMode? getCurrentSamplingState() {
+    final sampling = _keyValueStorage.getCommon<String>(_currentSamplingKey);
+    if (sampling == null) return null;
+    return SamplingMode.values.firstWhere(
+      (element) => element.toString() == sampling,
+    );
   }
 
-  /// Sets the data imported boolean to this value. Even though this method is
+  /// Sets current sampling state to this value. Even though this method is
   /// asynchronous, we don't care about it's completion which is why we don't
   /// use `await` and let it execute in the background.
-  Future<bool> setIsDataImported(bool isDataImported) async {
-    return _keyValueStorage.setCommon<bool>(_isDataImportedKey, isDataImported);
+  Future<bool> setCurrentSamplingState(
+    SamplingMode currentSamplingState,
+  ) async {
+    return _keyValueStorage.setCommon<String>(
+      _currentSamplingKey,
+      currentSamplingState.name,
+    );
   }
 
   /// Returns the current tool name

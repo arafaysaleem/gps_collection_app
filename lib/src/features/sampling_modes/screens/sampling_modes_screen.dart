@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Router
 import '../../../config/routes/app_router.dart';
@@ -10,14 +12,37 @@ import '../../../helpers/constants/app_styles.dart';
 import '../../../helpers/constants/app_typography.dart';
 
 // Widgets
+import '../../../global/widgets/custom_dialog.dart';
 import '../../../global/widgets/custom_text_button.dart';
 import '../../../global/widgets/labeled_widget.dart';
+import '../controller/sampling_controller.dart';
 
-class SamplingModesScreen extends StatelessWidget {
+class SamplingModesScreen extends HookConsumerWidget {
   const SamplingModesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    useEffect(
+      () {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ref.read(samplingController.notifier).init();
+        });
+        return null;
+      },
+      [],
+    );
+
+    ref.listen(
+      samplingController,
+      (_, state) => state.whenOrNull(
+        failed: (reason) => CustomDialog.showAlertDialog(
+          context: context,
+          reason: reason,
+          dialogTitle: 'Init Operation Failed',
+        ),
+      ),
+    );
+
     return Scaffold(
       body: SafeArea(
         child: Padding(

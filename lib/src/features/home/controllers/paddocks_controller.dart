@@ -7,14 +7,23 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-// Models
+// Services
 import '../../../core/local/key_value_storage_service.dart';
-import '../../../global/all_providers.dart';
-import '../../../global/states/future_state.codegen.dart';
+
+// Models
+import '../models/paddock_model.codegen.dart';
+
+// Helpers
 import '../../../helpers/extensions/string_extension.dart';
 import '../../../helpers/typedefs.dart';
-import '../../planned_sampling/controllers/data_import_controller.dart';
-import '../models/paddock_model.codegen.dart';
+import '../../sampling_modes/enums/sampling_mode.dart';
+
+// States
+import '../../../global/states/future_state.codegen.dart';
+
+// Controllers
+import '../../../global/all_providers.dart';
+import '../../sampling_modes/controller/sampling_controller.dart';
 import 'coordinates_controller.dart';
 import 'farmer_controller.dart';
 import 'properties_controller.dart';
@@ -82,8 +91,8 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
         await _savePaddocksInCache(paddocks);
 
         await _ref
-            .read(dataImportController.notifier)
-            .saveIsImportedFlagToCache(true);
+            .read(samplingController.notifier)
+            .saveSamplingInCache(SamplingMode.planned);
         return true;
       },
       errorMessage:

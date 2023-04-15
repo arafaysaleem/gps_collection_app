@@ -5,76 +5,79 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 // Services
 import '../../../core/local/key_value_storage_service.dart';
 
-// Models
+// Enums
+import '../enums/sampling_mode.dart';
+
+// Controllers
+import '../../ad_hoc_sampling/controllers/ad_hoc_controller.dart';
 import '../../home/controllers/coordinates_controller.dart';
 import '../../home/controllers/data_export_controller.dart';
 import '../../home/controllers/farmer_controller.dart';
 import '../../home/controllers/paddocks_controller.dart';
 import '../../home/controllers/properties_controller.dart';
-
-// Controllers
 import '../../../global/all_providers.dart';
 
 // States
-import '../states/data_import_state.codegen.dart';
+import '../states/sampling_state.codegen.dart';
 
-final dataImportController =
-    StateNotifierProvider<DataImportController, DataImportState>(
+final samplingController =
+    StateNotifierProvider<SamplingController, SamplingState>(
   (ref) {
     final keyValueStorageService = ref.watch(keyValueStorageServiceProvider);
-    return DataImportController(
+    return SamplingController(
       ref,
       keyValueStorageService: keyValueStorageService,
     );
   },
 );
 
-class DataImportController extends StateNotifier<DataImportState> {
+class SamplingController extends StateNotifier<SamplingState> {
   final KeyValueStorageService _keyValueStorageService;
   final Ref _ref;
 
-  DataImportController(
+  SamplingController(
     this._ref, {
     required KeyValueStorageService keyValueStorageService,
   })  : _keyValueStorageService = keyValueStorageService,
-        super(const DataImportState.idle());
+        super(const SamplingState.idle());
 
-  void initImportedData() {
+  void init() {
     try {
-      final isDataImported = _keyValueStorageService.getIsDataImported();
-      if (isDataImported != null && isDataImported) {
+      final currentSampling = _keyValueStorageService.getCurrentSamplingState();
+      if (currentSampling != null) {
         _ref.read(farmersController.notifier).loadCurrentFarmerFromCache();
         _ref.read(paddocksController.notifier).loadPaddocksFromCache();
         _ref.read(propertiesController).loadPropertiesFromCache();
         _ref.read(coordinatesController.notifier).loadCoordinatesFromCache();
-        state = const DataImportState.done();
+        state = SamplingState.done(currentSampling);
       } else {
-        state = const DataImportState.idle();
+        state = const SamplingState.idle();
       }
     } on Exception catch (ex) {
-      state = DataImportState.failed(reason: ex.toString());
+      state = SamplingState.failed(reason: ex.toString());
     }
   }
 
-  Future<void> saveIsImportedFlagToCache(bool isImported) async {
-    state = const DataImportState.loading();
+  Future<void> saveSamplingInCache(SamplingMode currentSampling) async {
+    state = const SamplingState.loading();
 
-    final isSaved = await _keyValueStorageService.setIsDataImported(isImported);
+    final isSaved = await _keyValueStorageService.setCurrentSamplingState(currentSampling);
 
     if (isSaved) {
-      state = const DataImportState.done();
+      state = SamplingState.done(currentSampling);
     } else {
-      state = const DataImportState.failed(
-        reason: 'Data import failed. Try again',
+      state = const SamplingState.failed(
+        reason: 'Saving sampling status failed. Try again',
       );
     }
   }
 
   void erase() {
     _keyValueStorageService.resetKeys();
-    state = const DataImportState.idle();
+    state = const SamplingState.idle();
     _ref
-      ..invalidate(dataImportController)
+      ..invalidateSelf()
+      ..invalidate(adHocController)
       ..invalidate(currentFarmerProvider)
       ..invalidate(farmersController)
       ..invalidate(paddocksController)

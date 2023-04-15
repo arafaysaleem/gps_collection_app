@@ -64,7 +64,7 @@ class FarmersController extends StateNotifier<FutureState<bool>> {
         final farmer = FarmerModel.fromJson(farmerJson);
 
         _ref.read(currentFarmerProvider.notifier).state = farmer;
-        await saveFarmersInCache(farmer);
+        await saveFarmerInCache(farmer);
 
         return true;
       },
@@ -82,7 +82,7 @@ class FarmersController extends StateNotifier<FutureState<bool>> {
     _ref.read(currentFarmerProvider.notifier).state = farmer;
   }
 
-  Future<bool> saveFarmersInCache(FarmerModel farmer) async {
+  Future<bool> saveFarmerInCache(FarmerModel farmer) async {
     return _keyValueStorageService.setFarmer(farmer);
   }
 }

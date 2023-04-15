@@ -8,6 +8,7 @@ import '../../../global/states/future_state.codegen.dart';
 
 // Helpers
 import '../../../helpers/constants/app_assets.dart';
+import '../../../helpers/constants/app_utils.dart';
 
 // Widgets
 import '../../../global/widgets/custom_circular_loader.dart';
@@ -16,8 +17,7 @@ import '../../../global/widgets/custom_popup_menu.dart';
 import '../../../global/widgets/labeled_widget.dart';
 
 // Controllers
-import '../../../helpers/constants/app_utils.dart';
-import '../../planned_sampling/controllers/data_import_controller.dart';
+import '../../sampling_modes/controller/sampling_controller.dart';
 import '../controllers/coordinates_controller.dart';
 import '../controllers/data_export_controller.dart';
 import '../controllers/farmer_controller.dart';
@@ -175,7 +175,7 @@ class BottomNavBar extends ConsumerWidget {
                 isDanger: true,
                 flipButtons: true,
                 onTrueButtonPressed: () {
-                  ref.read(dataImportController.notifier).erase();
+                  ref.read(samplingController.notifier).erase();
                 },
               );
             },

@@ -1,0 +1,4 @@
+enum SamplingMode {
+  planned,
+  adHoc,
+}
