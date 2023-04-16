@@ -11,11 +11,13 @@ import '../../../helpers/constants/app_colors.dart';
 import '../../../helpers/constants/app_styles.dart';
 import '../../../helpers/constants/app_typography.dart';
 
+// Controllers
+import '../controllers/sampling_controller.dart';
+
 // Widgets
 import '../../../global/widgets/custom_dialog.dart';
 import '../../../global/widgets/custom_text_button.dart';
 import '../../../global/widgets/labeled_widget.dart';
-import '../controller/sampling_controller.dart';
 
 class SamplingModesScreen extends HookConsumerWidget {
   const SamplingModesScreen({super.key});

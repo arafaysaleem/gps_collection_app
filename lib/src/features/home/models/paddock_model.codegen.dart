@@ -12,10 +12,10 @@ part 'paddock_model.codegen.g.dart';
 class PaddockModel with _$PaddockModel {
   const factory PaddockModel({
     @JsonKey(name: 'fkCID') required String farmerId,
-    @JsonKey(name: 'CRIS_ID') required String propertyId,
     @JsonKey(name: 'Code') required String code,
-    @JsonKey(name: 'fkSID') required String fkSID,
     @JsonKey(name: 'Paddock') required String paddock,
+    @JsonKey(name: 'CRIS_ID') String? propertyId,
+    @JsonKey(name: 'fkSID') String? fkSID,
   }) = _PaddockModel;
 
   factory PaddockModel.fromJson(JSON json) => _$PaddockModelFromJson(json);

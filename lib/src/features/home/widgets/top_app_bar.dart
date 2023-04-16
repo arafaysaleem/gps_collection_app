@@ -8,17 +8,17 @@ import '../../../helpers/constants/app_assets.dart';
 import '../../../helpers/constants/app_colors.dart';
 import '../../../helpers/constants/app_styles.dart';
 import '../../../helpers/constants/app_typography.dart';
+import '../../sampling_modes/enums/sampling_mode.dart';
 
 // Widgets
 import '../../../global/widgets/custom_dropdown_field.dart';
 import '../../../global/widgets/custom_popup_menu.dart';
 import '../../../global/widgets/custom_text_field.dart';
 import '../../../global/widgets/labeled_widget.dart';
-import '../../sampling_modes/controller/sampling_controller.dart';
-import '../../sampling_modes/enums/sampling_mode.dart';
 import 'note_icon.dart';
 
 // Controllers
+import '../../sampling_modes/controllers/sampling_controller.dart';
 import '../controllers/coordinates_controller.dart';
 import '../controllers/properties_controller.dart';
 import '../controllers/farmer_controller.dart';
@@ -214,7 +214,7 @@ class TopAppBar extends HookConsumerWidget {
                             ? Insets.shrink
                             : CustomPopupMenu<String>(
                                 initialValue: currentProperty,
-                                items: {for (var e in properties) e: e},
+                                items: {for (var e in properties) e!: e},
                                 onSelected: (property) => ref
                                     .read(propertiesController)
                                     .setCurrentProperty(property),

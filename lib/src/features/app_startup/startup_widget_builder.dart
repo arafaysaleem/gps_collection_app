@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Controllers
-import '../sampling_modes/controller/sampling_controller.dart';
+import '../sampling_modes/controllers/sampling_controller.dart';
 
 // Enums
 import '../sampling_modes/enums/sampling_mode.dart';

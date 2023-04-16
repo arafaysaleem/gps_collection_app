@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:time/time.dart';
@@ -7,8 +8,12 @@ import 'package:time/time.dart';
 import '../../../global/states/future_state.codegen.dart';
 
 // Helpers
+import '../../../global/widgets/custom_text_field.dart';
 import '../../../helpers/constants/app_assets.dart';
+import '../../../helpers/constants/app_styles.dart';
 import '../../../helpers/constants/app_utils.dart';
+import '../../../helpers/extensions/context_extensions.dart';
+import '../../sampling_modes/enums/sampling_mode.dart';
 
 // Widgets
 import '../../../global/widgets/custom_circular_loader.dart';
@@ -17,10 +22,11 @@ import '../../../global/widgets/custom_popup_menu.dart';
 import '../../../global/widgets/labeled_widget.dart';
 
 // Controllers
-import '../../sampling_modes/controller/sampling_controller.dart';
+import '../../sampling_modes/controllers/sampling_controller.dart';
 import '../controllers/coordinates_controller.dart';
 import '../controllers/data_export_controller.dart';
 import '../controllers/farmer_controller.dart';
+import '../controllers/paddocks_controller.dart';
 
 class BottomNavBar extends ConsumerWidget {
   const BottomNavBar({super.key});
@@ -77,6 +83,27 @@ class BottomNavBar extends ConsumerWidget {
                       ),
                     ),
                   );
+            },
+          ),
+
+          const VerticalDivider(
+            color: Colors.white,
+          ),
+
+          // Add paddock
+          Consumer(
+            builder: (_, ref, __) {
+              final isAdhoc = ref.watch(
+                samplingController.select(
+                  (state) => state.maybeWhen(
+                    done: (current) {
+                      return current == SamplingMode.adHoc;
+                    },
+                    orElse: () => false,
+                  ),
+                ),
+              );
+              return isAdhoc ? const AddPaddockIcon() : Insets.shrink;
             },
           ),
 
@@ -194,6 +221,56 @@ class BottomNavBar extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AddPaddockIcon extends HookConsumerWidget {
+  const AddPaddockIcon({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final paddockNameController = useTextEditingController();
+    return InkWell(
+      onTap: () {
+        CustomDialog.showConfirmDialog(
+          context: context,
+          dialogTitle: 'Add Paddock',
+          trueButtonText: 'Save',
+          falseButtonText: 'Cancel',
+          onTrueButtonPressed: () => ref
+              .read(paddocksController.notifier)
+              .createNewPaddock(paddockNameController.text),
+          child: SizedBox(
+            height: context.screenHeight * 0.31,
+            child: CustomTextField(
+              controller: paddockNameController,
+              showFocusedBorder: false,
+              textAlignVertical: TextAlignVertical.top,
+              autofocus: true,
+              multiline: true,
+              expands: true,
+              height: context.screenHeight * 0.30,
+              hintText: 'Enter name...',
+            ),
+          ),
+        );
+      },
+      child: const Padding(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        child: LabeledWidget(
+          label: 'Paddock',
+          labelPosition: LabelPosition.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          child: Icon(
+            Icons.add,
+            size: 38,
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }

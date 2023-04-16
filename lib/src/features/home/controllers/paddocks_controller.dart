@@ -23,7 +23,7 @@ import '../../../global/states/future_state.codegen.dart';
 
 // Controllers
 import '../../../global/all_providers.dart';
-import '../../sampling_modes/controller/sampling_controller.dart';
+import '../../sampling_modes/controllers/sampling_controller.dart';
 import 'coordinates_controller.dart';
 import 'farmer_controller.dart';
 import 'properties_controller.dart';
@@ -137,5 +137,30 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
 
     final currentPaddock = _ref.read(currentPaddockProvider);
     _keyValueStorageService.setPaddockNote(note, currentPaddock!.code);
+  }
+
+  Future<void> createNewPaddock(String paddockName) async {
+    state = const FutureState.loading();
+
+    final currentFarmer = _ref.read(currentFarmerProvider)!;
+    final paddock = PaddockModel(
+      code: paddockName,
+      farmerId: currentFarmer.pkCID,
+      paddock: paddockName,
+    );
+
+    state = await FutureState.makeGuardedRequest(
+      () async {
+        final saved = await _savePaddocksInCache(
+          [paddock, ..._paddocksMap.values],
+        );
+        if (saved) {
+          _paddocksMap[paddock.code] = paddock;
+          return true;
+        }
+        return false;
+      },
+      errorMessage: 'Failed to create new paddock',
+    );
   }
 }

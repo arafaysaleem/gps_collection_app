@@ -8,10 +8,10 @@ import '../../../core/local/key_value_storage_service.dart';
 
 // Providers
 import '../../../global/all_providers.dart';
+import 'paddocks_controller.dart';
 
 // Models
 import '../models/paddock_model.codegen.dart';
-import 'paddocks_controller.dart';
 
 final currentPropertyProvider = StateProvider<String?>((ref) => null);
 
@@ -24,7 +24,7 @@ class PropertiesController {
   final KeyValueStorageService _keyValueStorageService;
   final Ref _ref;
 
-  late final Set<String> _properties;
+  late final Set<String?> _properties;
 
   PropertiesController(this._ref, this._keyValueStorageService);
 
@@ -47,7 +47,7 @@ class PropertiesController {
         property ?? _properties.first;
   }
 
-  UnmodifiableListView<String> getAllProperties() {
+  UnmodifiableListView<String?> getAllProperties() {
     return UnmodifiableListView(_properties);
   }
 
@@ -55,7 +55,7 @@ class PropertiesController {
     return _keyValueStorageService.setCurrentProperty(property);
   }
 
-  Future<bool> savePropertiesInCache(Set<String> properties) async {
+  Future<bool> savePropertiesInCache(Set<String?> properties) async {
     return _keyValueStorageService.setProperties(properties);
   }
 
