@@ -8,24 +8,22 @@ import '../../../helpers/constants/app_assets.dart';
 import '../../../helpers/constants/app_colors.dart';
 import '../../../helpers/constants/app_styles.dart';
 import '../../../helpers/constants/app_typography.dart';
-import '../../sampling_modes/enums/sampling_mode.dart';
 
 // Widgets
 import '../../../global/widgets/custom_dropdown_field.dart';
 import '../../../global/widgets/custom_popup_menu.dart';
 import '../../../global/widgets/custom_text_field.dart';
 import '../../../global/widgets/labeled_widget.dart';
-import 'note_icon.dart';
+import '../../home/widgets/note_icon.dart';
 
 // Controllers
-import '../../sampling_modes/controllers/sampling_controller.dart';
-import '../controllers/coordinates_controller.dart';
-import '../controllers/properties_controller.dart';
-import '../controllers/farmer_controller.dart';
-import '../controllers/paddocks_controller.dart';
+import '../../home/controllers/coordinates_controller.dart';
+import '../../home/controllers/properties_controller.dart';
+import '../../home/controllers/farmer_controller.dart';
+import '../../home/controllers/paddocks_controller.dart';
 
 // Models
-import '../models/paddock_model.codegen.dart';
+import '../../home/models/paddock_model.codegen.dart';
 
 final _propertyPaddocksProvider = Provider<List<PaddockModel>>((ref) {
   final currentPropertyId = ref.watch(currentPropertyProvider);
@@ -36,8 +34,8 @@ final _propertyPaddocksProvider = Provider<List<PaddockModel>>((ref) {
       .toList();
 });
 
-class TopAppBar extends HookConsumerWidget {
-  const TopAppBar({super.key});
+class PlannedAppBar extends HookConsumerWidget {
+  const PlannedAppBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -152,27 +150,14 @@ class TopAppBar extends HookConsumerWidget {
                 Insets.expand,
 
                 // Paddock Code
-                Consumer(
-                  builder: (_, ref, __) {
-                    final isPlanned = ref.watch(
-                      samplingController.select(
-                        (state) => state.maybeWhen(
-                          done: (current) => current == SamplingMode.planned,
-                          orElse: () => false,
-                        ),
-                      ),
-                    );
-                    return isPlanned && currentPaddock != null
-                        ? Text(
-                            currentPaddock.code,
-                            style: AppTypography.primary.body16.copyWith(
-                              color: AppColors.textWhite80Color,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : Insets.shrink;
-                  },
-                ),
+                if (currentPaddock != null)
+                  Text(
+                    currentPaddock.code,
+                    style: AppTypography.primary.body16.copyWith(
+                      color: AppColors.textWhite80Color,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
 
                 Insets.gapH5,
 
@@ -200,17 +185,7 @@ class TopAppBar extends HookConsumerWidget {
                             ref.watch(currentPropertyProvider);
                         final properties =
                             ref.watch(propertiesController).getAllProperties();
-                        final isPlanned = ref.watch(
-                          samplingController.select(
-                            (state) => state.maybeWhen(
-                              done: (current) {
-                                return current == SamplingMode.planned;
-                              },
-                              orElse: () => false,
-                            ),
-                          ),
-                        );
-                        return !isPlanned || properties.length == 1
+                        return properties.length == 1
                             ? Insets.shrink
                             : CustomPopupMenu<String>(
                                 initialValue: currentProperty,
