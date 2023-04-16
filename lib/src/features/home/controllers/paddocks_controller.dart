@@ -6,6 +6,7 @@ import 'package:charset/charset.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 // Services
 import '../../../core/local/key_value_storage_service.dart';
@@ -144,7 +145,7 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
 
     final currentFarmer = _ref.read(currentFarmerProvider)!;
     final paddock = PaddockModel(
-      code: paddockName,
+      code: const Uuid().v4(),
       farmerId: currentFarmer.pkCID,
       paddock: paddockName,
     );
