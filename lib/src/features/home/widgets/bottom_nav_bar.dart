@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:time/time.dart';
 
 // States
 import '../../../global/states/future_state.codegen.dart';
@@ -27,6 +26,7 @@ import '../controllers/coordinates_controller.dart';
 import '../controllers/data_export_controller.dart';
 import '../controllers/farmer_controller.dart';
 import '../controllers/paddocks_controller.dart';
+import 'share_popup_menu.dart';
 
 class BottomNavBar extends ConsumerWidget {
   const BottomNavBar({super.key});
@@ -142,45 +142,13 @@ class BottomNavBar extends ConsumerWidget {
             color: Colors.white,
           ),
 
-          // Email send
+          // Share excel file
           Consumer(
             builder: (_, ref, __) {
               final state = ref.watch(dataExportController);
               return state.maybeWhen(
                 loading: () => const CustomCircularLoader(),
-                orElse: () => InkWell(
-                  onTap: () async {
-                    AppUtils.showFlushBar(
-                      context: context,
-                      message:
-                          'Converting to excel. This might take a few minutes',
-                      icon: Icons.restore_page_outlined,
-                      iconColor: Colors.green.shade600,
-                    );
-                    await Future.delayed(
-                      2.seconds,
-                      () => ref
-                          .read(dataExportController.notifier)
-                          .exportCoordinatesToExcel(),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: LabeledWidget(
-                      label: 'Send',
-                      labelPosition: LabelPosition.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      child: SvgPicture.asset(
-                        AppAssets.emailIcon,
-                        width: 34,
-                        height: 34,
-                        theme: const SvgTheme(
-                          currentColor: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                orElse: () => const SharePopupMenu(),
               );
             },
           ),

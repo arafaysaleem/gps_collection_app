@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
@@ -24,49 +25,65 @@ class DataExportController extends StateNotifier<FutureState<void>> {
 
   DataExportController(this._ref) : super(const FutureState.idle());
 
-  Future<void> exportCoordinatesToExcel() async {
+  Future<File> _exportCoordinatesToExcel(String farmerName) async {
+    // Convert data to excel rows asynchronously
+    final excelDataRows = await _ref
+        .read(
+          excelComputeController,
+        )
+        .computeDataToExcelConversion();
+
+    // Create an excel sheet using the previous rows
+    final file = await _saveRowsToWorkbook(excelDataRows, farmerName);
+
+    return file;
+  }
+
+  Future<void> sendEmail() async {
+    if (defaultTargetPlatform != TargetPlatform.android) {
+      return;
+    }
+
     state = const FutureState.loading();
 
     // Load current farmer
-    final currentFarmer = _ref.read(currentFarmerProvider)!;
+    final farmerName = _ref.read(currentFarmerProvider)!.fullName;
 
     state = await FutureState.makeGuardedRequest(
       () async {
-        // Convert data to excel rows asynchronously
-        final excelDataRows = await _ref
-            .read(excelComputeController)
-            .computeDataToExcelConversion();
+        final file = await _exportCoordinatesToExcel(farmerName);
 
-        // Create an excel sheet using the previous rows
-        final file = await _saveRowsToWorkbook(
-          excelDataRows,
-          currentFarmer.fullName,
+        // Fetch emails from remote server
+        final remoteConfig = _ref.read(remoteConfigServiceProvider);
+        await remoteConfig.fetchAndActivate();
+
+        final email = Email(
+          subject: 'HEWA Coordinates from $farmerName',
+          recipients: [remoteConfig.primaryEmail],
+          cc: [remoteConfig.ccEmail],
+          attachmentPaths: [file.path],
         );
 
-        // Email the sheet
-        if (defaultTargetPlatform == TargetPlatform.android) {
-          await _sendEmail(file.path, currentFarmer.fullName);
-        }
-
-        return;
+        return FlutterEmailSender.send(email);
       },
       errorMessage: 'Failed to export and email data',
     );
   }
 
-  Future<void> _sendEmail(String filePath, String farmerName) async {
-    // Fetch emails from remote server
-    final remoteConfig = _ref.read(remoteConfigServiceProvider);
-    await remoteConfig.fetchAndActivate();
+  Future<void> downloadFile() async {
+    state = const FutureState.loading();
 
-    final email = Email(
-      subject: 'HEWA Coordinates from $farmerName',
-      recipients: [remoteConfig.primaryEmail],
-      cc: [remoteConfig.ccEmail],
-      attachmentPaths: [filePath],
+    // Load current farmer
+    final farmerName = _ref.read(currentFarmerProvider)!.fullName;
+
+    state = await FutureState.makeGuardedRequest(
+      () async {
+        final file = await _exportCoordinatesToExcel(farmerName);
+
+        await file.writeAsBytes(await file.readAsBytes());
+      },
+      errorMessage: 'Failed to export and download data',
     );
-
-    await FlutterEmailSender.send(email);
   }
 
   Future<io.File> _saveRowsToWorkbook(
