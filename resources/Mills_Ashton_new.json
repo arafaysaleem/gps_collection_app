@@ -1,0 +1,296 @@
+{
+    "farmer": {
+        "First": "Ashton",
+        "Last": "Mills",
+        "pkCID": "55161680-A939-4138-9C1A-811386E0D505"
+    },
+    "paddocks": [
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5166",
+            "Paddock": "Top_33",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5167",
+            "Paddock": "Ram",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5168",
+            "Paddock": "G_7",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5169",
+            "Paddock": "G_2",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5170",
+            "Paddock": "G_3",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5171",
+            "Paddock": "Kemp_Flat",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5172",
+            "Paddock": "G_1",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5173",
+            "Paddock": "Tank",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5174",
+            "Paddock": "F_Flats",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5175",
+            "Paddock": "Hawley",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5176",
+            "Paddock": "H_Flats",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5177",
+            "Paddock": "G_6",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5178",
+            "Paddock": "G_5",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5179",
+            "Paddock": "Wet_Flats",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5180",
+            "Paddock": "Shed_Flats",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5181",
+            "Paddock": "House",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5182",
+            "Paddock": "Coopers",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5183",
+            "Paddock": "Sandy",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5184",
+            "Paddock": "Shed",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5185",
+            "Paddock": "G_4",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5186",
+            "Paddock": "Tank",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5187",
+            "Paddock": "Middle",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5188",
+            "Paddock": "F_House",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5189",
+            "Paddock": "Kike",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5190",
+            "Paddock": "Hill",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5191",
+            "Paddock": "Bottom_33",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5192",
+            "Paddock": "Hazz_1",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5193",
+            "Paddock": "Pine_Flats",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5194",
+            "Paddock": "Pine_Tree",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5195",
+            "Paddock": "Hazz_2",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5196",
+            "Paddock": "Kemp",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5197",
+            "Paddock": "Shed_2",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1520490",
+            "Code": "HEWA5198",
+            "Paddock": "Shed_1",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "31B64176-AE03-45DE-890E-131D3EFBF2E6"
+        },
+        {
+            "CRIS_ID": "1535360",
+            "Code": "HEWA5199",
+            "Paddock": "Flats",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "CFC44823-8D87-4282-9E4C-AA3BD29BD86C"
+        },
+        {
+            "CRIS_ID": "1535360",
+            "Code": "HEWA5200",
+            "Paddock": "Big_Soak",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "CFC44823-8D87-4282-9E4C-AA3BD29BD86C"
+        },
+        {
+            "CRIS_ID": "1535360",
+            "Code": "HEWA5201",
+            "Paddock": "Yard",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "CFC44823-8D87-4282-9E4C-AA3BD29BD86C"
+        },
+        {
+            "CRIS_ID": "1535360",
+            "Code": "HEWA5202",
+            "Paddock": "Driveway",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "CFC44823-8D87-4282-9E4C-AA3BD29BD86C"
+        },
+        {
+            "CRIS_ID": "1535360",
+            "Code": "HEWA5203",
+            "Paddock": "Red Dam",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "CFC44823-8D87-4282-9E4C-AA3BD29BD86C"
+        },
+        {
+            "CRIS_ID": "1535360",
+            "Code": "HEWA5204",
+            "Paddock": "Solar",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "CFC44823-8D87-4282-9E4C-AA3BD29BD86C"
+        },
+        {
+            "CRIS_ID": "1535360",
+            "Code": "HEWA5205",
+            "Paddock": "House",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "CFC44823-8D87-4282-9E4C-AA3BD29BD86C"
+        },
+        {
+            "CRIS_ID": "1535360",
+            "Code": "HEWA5206",
+            "Paddock": "Blue_Gum",
+            "fkCID": "55161680-A939-4138-9C1A-811386E0D505",
+            "fkSID": "CFC44823-8D87-4282-9E4C-AA3BD29BD86C"
+        }
+    ]
+}

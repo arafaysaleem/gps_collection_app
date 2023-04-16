@@ -1,0 +1,65 @@
+{
+    "farmer": {
+        "First": "Rebecca",
+        "Last": "Blyth",
+        "pkCID": "7381AFE8-DFDC-452B-B614-E3AB230DEBB6"
+    },
+    "paddocks": [
+        {
+            "CRIS_ID": "1519820",
+            "Code": "HEWA2259",
+            "Paddock": "Dry_Dam",
+            "fkCID": "7381AFE8-DFDC-452B-B614-E3AB230DEBB6",
+            "fkSID": "AEFDFDC5-7840-4EC6-AEB1-E9A1DF600A97"
+        },
+        {
+            "CRIS_ID": "1519820",
+            "Code": "HEWA2260",
+            "Paddock": "4",
+            "fkCID": "7381AFE8-DFDC-452B-B614-E3AB230DEBB6",
+            "fkSID": "AEFDFDC5-7840-4EC6-AEB1-E9A1DF600A97"
+        },
+        {
+            "CRIS_ID": "1519820",
+            "Code": "HEWA2261",
+            "Paddock": "2",
+            "fkCID": "7381AFE8-DFDC-452B-B614-E3AB230DEBB6",
+            "fkSID": "AEFDFDC5-7840-4EC6-AEB1-E9A1DF600A97"
+        },
+        {
+            "CRIS_ID": "1519820",
+            "Code": "HEWA2262",
+            "Paddock": "3",
+            "fkCID": "7381AFE8-DFDC-452B-B614-E3AB230DEBB6",
+            "fkSID": "AEFDFDC5-7840-4EC6-AEB1-E9A1DF600A97"
+        },
+        {
+            "CRIS_ID": "1519820",
+            "Code": "HEWA2263",
+            "Paddock": "Cattle_Yards",
+            "fkCID": "7381AFE8-DFDC-452B-B614-E3AB230DEBB6",
+            "fkSID": "AEFDFDC5-7840-4EC6-AEB1-E9A1DF600A97"
+        },
+        {
+            "CRIS_ID": "1519820",
+            "Code": "HEWA2264",
+            "Paddock": "1",
+            "fkCID": "7381AFE8-DFDC-452B-B614-E3AB230DEBB6",
+            "fkSID": "AEFDFDC5-7840-4EC6-AEB1-E9A1DF600A97"
+        },
+        {
+            "CRIS_ID": "1519820",
+            "Code": "HEWA2265",
+            "Paddock": "Corner",
+            "fkCID": "7381AFE8-DFDC-452B-B614-E3AB230DEBB6",
+            "fkSID": "AEFDFDC5-7840-4EC6-AEB1-E9A1DF600A97"
+        },
+        {
+            "CRIS_ID": "1519820",
+            "Code": "HEWA2266",
+            "Paddock": "House",
+            "fkCID": "7381AFE8-DFDC-452B-B614-E3AB230DEBB6",
+            "fkSID": "AEFDFDC5-7840-4EC6-AEB1-E9A1DF600A97"
+        }
+    ]
+}
