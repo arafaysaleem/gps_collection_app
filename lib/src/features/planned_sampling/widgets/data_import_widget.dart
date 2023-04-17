@@ -16,15 +16,15 @@ import '../../../helpers/constants/app_styles.dart';
 import '../../../helpers/constants/app_typography.dart';
 
 // Controllers
-import '../../home/controllers/farmer_controller.dart';
+import '../controllers/data_import_controller.dart';
 
-class FarmerDataImportWidget extends ConsumerWidget {
-  const FarmerDataImportWidget({super.key});
+class DataImportWidget extends ConsumerWidget {
+  const DataImportWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<FutureState<bool?>>(
-      farmersController,
+      dataImportController,
       (_, state) => state.whenOrNull(
         failed: (reason) => CustomDialog.showAlertDialog(
           context: context,
@@ -33,13 +33,13 @@ class FarmerDataImportWidget extends ConsumerWidget {
         ),
       ),
     );
-    final farmerImportState = ref.watch(farmersController);
-    final importComplete = farmerImportState.maybeWhen(
+    final dataImportState = ref.watch(dataImportController);
+    final importComplete = dataImportState.maybeWhen(
       data: (isImported) => isImported,
       orElse: () => false,
     );
     return LabeledWidget(
-      label: 'Import farmer data before proceeding.',
+      label: 'Import data before proceeding.',
       labelGap: Insets.gapH15,
       labelStyle: AppTypography.primary.body16.copyWith(
         color: importComplete
@@ -51,10 +51,8 @@ class FarmerDataImportWidget extends ConsumerWidget {
         color: AppColors.primaryColor,
         width: double.infinity,
         disabled: importComplete,
-        onPressed: () {
-          ref.read(farmersController.notifier).importFarmerData();
-        },
-        child: farmerImportState.maybeWhen(
+        onPressed: ref.read(dataImportController.notifier).importData,
+        child: dataImportState.maybeWhen(
           loading: () => const CustomCircularLoader(
             color: Colors.white,
           ),

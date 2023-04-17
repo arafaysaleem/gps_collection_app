@@ -7,8 +7,7 @@ import '../../../helpers/constants/app_typography.dart';
 import '../../../helpers/constants/app_styles.dart';
 
 // Widgets
-import '../widgets/farmer_data_import_widget.dart';
-import '../widgets/paddock_data_import_widget.dart';
+import '../widgets/data_import_widget.dart';
 
 class PlannedSamplingScreen extends ConsumerWidget {
   const PlannedSamplingScreen({super.key});
@@ -34,13 +33,9 @@ class PlannedSamplingScreen extends ConsumerWidget {
 
               Insets.gapH(100),
 
-              // Farmer data importer
-              const FarmerDataImportWidget(),
+              // Data importer
+              const DataImportWidget(),
 
-              Insets.gapH(45),
-
-              // Paddock data import button
-              const PaddocksDataImportWidget(),
 
               Insets.expand,
             ],
