@@ -35,7 +35,7 @@ class AdHocController extends StateNotifier<FutureState<void>> {
     );
 
     state = await FutureState.makeGuardedRequest(
-      () => _ref.read(farmersController.notifier).saveFarmerInCache(farmer),
+      () => _ref.read(farmersController).saveFarmerInCache(farmer),
     );
   }
 }
