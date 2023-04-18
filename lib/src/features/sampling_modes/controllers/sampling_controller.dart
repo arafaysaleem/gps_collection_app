@@ -45,7 +45,7 @@ class SamplingController extends StateNotifier<SamplingState> {
     try {
       final currentSampling = _keyValueStorageService.getCurrentSamplingState();
       if (currentSampling != null) {
-        _ref.read(farmersController.notifier).loadCurrentFarmerFromCache();
+        _ref.read(farmersController).loadCurrentFarmerFromCache();
         _ref.read(paddocksController.notifier).loadPaddocksFromCache();
         _ref.read(propertiesController).loadPropertiesFromCache();
         _ref.read(coordinatesController.notifier).loadCoordinatesFromCache();
