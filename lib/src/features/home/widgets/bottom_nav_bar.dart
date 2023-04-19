@@ -7,11 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../global/states/future_state.codegen.dart';
 
 // Helpers
-import '../../../global/widgets/custom_text_field.dart';
 import '../../../helpers/constants/app_assets.dart';
-import '../../../helpers/constants/app_styles.dart';
 import '../../../helpers/constants/app_utils.dart';
-import '../../../helpers/extensions/context_extensions.dart';
 import '../../sampling_modes/enums/sampling_mode.dart';
 
 // Widgets
@@ -19,6 +16,7 @@ import '../../../global/widgets/custom_circular_loader.dart';
 import '../../../global/widgets/custom_dialog.dart';
 import '../../../global/widgets/custom_popup_menu.dart';
 import '../../../global/widgets/labeled_widget.dart';
+import '../../../global/widgets/custom_text_field.dart';
 
 // Controllers
 import '../../sampling_modes/controllers/sampling_controller.dart';
@@ -56,139 +54,138 @@ class BottomNavBar extends ConsumerWidget {
     return Container(
       height: 74,
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // GPS add
-          Consumer(
-            builder: (_, ref, __) {
-              return ref.watch(coordinatesController).maybeWhen(
-                    loading: () => const CustomCircularLoader(),
-                    orElse: () => InkWell(
-                      onTap: () => ref
-                          .read(coordinatesController.notifier)
-                          .fetchAndSaveCoordinate(),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: LabeledWidget(
-                          label: 'Point',
-                          labelPosition: LabelPosition.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          child: Icon(
-                            Icons.place,
-                            size: 38,
-                            color: Colors.white,
+      child: Consumer(
+        builder: (_, ref, __) {
+          final isAdhoc = ref.watch(
+            samplingController.select(
+              (state) => state.maybeWhen(
+                done: (current) {
+                  return current == SamplingMode.adHoc;
+                },
+                orElse: () => false,
+              ),
+            ),
+          );
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // GPS add
+              Consumer(
+                builder: (_, ref, __) {
+                  return ref.watch(coordinatesController).maybeWhen(
+                        loading: () => const CustomCircularLoader(),
+                        orElse: () => InkWell(
+                          onTap: () => ref
+                              .read(coordinatesController.notifier)
+                              .fetchAndSaveCoordinate(),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 5),
+                            child: LabeledWidget(
+                              label: 'Point',
+                              labelPosition: LabelPosition.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              child: Icon(
+                                Icons.place,
+                                size: 38,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-            },
-          ),
-
-          const VerticalDivider(
-            color: Colors.white,
-          ),
-
-          // Add paddock
-          Consumer(
-            builder: (_, ref, __) {
-              final isAdhoc = ref.watch(
-                samplingController.select(
-                  (state) => state.maybeWhen(
-                    done: (current) {
-                      return current == SamplingMode.adHoc;
-                    },
-                    orElse: () => false,
-                  ),
-                ),
-              );
-              return isAdhoc ? const AddPaddockIcon() : Insets.shrink;
-            },
-          ),
-
-          const VerticalDivider(
-            color: Colors.white,
-          ),
-
-          // Tool chooser
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: CustomPopupMenu<String>(
-              initialValue: ref.watch(currentToolProvider),
-              items: const {
-                'Pogo': 'Pogo',
-                'Auger': 'Auger',
-              },
-              onSelected: (tool) =>
-                  ref.read(currentToolProvider.notifier).state = tool,
-              child: LabeledWidget(
-                label: 'Tool',
-                labelPosition: LabelPosition.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                child: SvgPicture.asset(
-                  AppAssets.toolsIcon,
-                  width: 34,
-                  height: 34,
-                  theme: const SvgTheme(
-                    currentColor: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          const VerticalDivider(
-            color: Colors.white,
-          ),
-
-          // Share excel file
-          Consumer(
-            builder: (_, ref, __) {
-              final state = ref.watch(dataExportController);
-              return state.maybeWhen(
-                loading: () => const CustomCircularLoader(),
-                orElse: () => const SharePopupMenu(),
-              );
-            },
-          ),
-
-          const VerticalDivider(
-            color: Colors.white,
-          ),
-
-          // Reset icon
-          InkWell(
-            onTap: () {
-              CustomDialog.showConfirmDialog(
-                context: context,
-                dialogTitle: 'Reset All Data',
-                reason:
-                    "This will erase all data you have collected and prepare the app for a fresh soil sampling program.\n\nAre you sure you want to delete all data? You can't undo this.",
-                trueButtonText: 'Reset',
-                falseButtonText: 'Cancel',
-                isDanger: true,
-                flipButtons: true,
-                onTrueButtonPressed: () {
-                  ref.read(samplingController.notifier).erase();
+                      );
                 },
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: LabeledWidget(
-                label: 'Reset',
-                labelPosition: LabelPosition.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                child: Icon(
-                  Icons.restart_alt,
-                  size: 38,
+              ),
+
+              const VerticalDivider(
+                color: Colors.white,
+              ),
+
+              // Add paddock
+              if (isAdhoc) ...[
+                const AddPaddockIcon(),
+                const VerticalDivider(
                   color: Colors.white,
                 ),
+              ],
+
+              // Tool chooser
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: CustomPopupMenu<String>(
+                  initialValue: ref.watch(currentToolProvider),
+                  items: const {
+                    'Pogo': 'Pogo',
+                    'Auger': 'Auger',
+                  },
+                  onSelected: (tool) =>
+                      ref.read(currentToolProvider.notifier).state = tool,
+                  child: LabeledWidget(
+                    label: 'Tool',
+                    labelPosition: LabelPosition.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    child: SvgPicture.asset(
+                      AppAssets.toolsIcon,
+                      width: 34,
+                      height: 34,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ],
+
+              const VerticalDivider(
+                color: Colors.white,
+              ),
+
+              // Share excel file
+              Consumer(
+                builder: (_, ref, __) {
+                  final state = ref.watch(dataExportController);
+                  return state.maybeWhen(
+                    loading: () => const CustomCircularLoader(),
+                    orElse: () => const SharePopupMenu(),
+                  );
+                },
+              ),
+
+              const VerticalDivider(
+                color: Colors.white,
+              ),
+
+              // Reset icon
+              InkWell(
+                onTap: () {
+                  CustomDialog.showConfirmDialog(
+                    context: context,
+                    dialogTitle: 'Reset All Data',
+                    reason:
+                        "This will erase all data you have collected and prepare the app for a fresh soil sampling program.\n\nAre you sure you want to delete all data? You can't undo this.",
+                    trueButtonText: 'Reset',
+                    falseButtonText: 'Cancel',
+                    isDanger: true,
+                    flipButtons: true,
+                    onTrueButtonPressed: () {
+                      ref.read(samplingController.notifier).erase();
+                    },
+                  );
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child: LabeledWidget(
+                    label: 'Reset',
+                    labelPosition: LabelPosition.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    child: Icon(
+                      Icons.restart_alt,
+                      size: 38,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -202,41 +199,47 @@ class AddPaddockIcon extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final paddockNameController = useTextEditingController();
-    return InkWell(
-      onTap: () {
-        CustomDialog.showConfirmDialog(
-          context: context,
-          dialogTitle: 'Add Paddock',
-          trueButtonText: 'Save',
-          falseButtonText: 'Cancel',
-          onTrueButtonPressed: () => ref
-              .read(paddocksController.notifier)
-              .createNewPaddock(paddockNameController.text),
-          child: SizedBox(
-            height: context.screenHeight * 0.31,
-            child: CustomTextField(
-              controller: paddockNameController,
-              showFocusedBorder: false,
-              textAlignVertical: TextAlignVertical.top,
-              autofocus: true,
-              multiline: true,
-              expands: true,
-              height: context.screenHeight * 0.30,
-              hintText: 'Enter name...',
+    final state = ref.watch(paddocksController);
+    return state.maybeWhen(
+      loading: () => const CustomCircularLoader(
+        color: Colors.white,
+      ),
+      orElse: () => InkWell(
+        onTap: () {
+          CustomDialog.showConfirmDialog(
+            context: context,
+            dialogTitle: 'Add Paddock',
+            trueButtonText: 'Save',
+            falseButtonText: 'Cancel',
+            onTrueButtonPressed: () {
+              ref
+                  .read(paddocksController.notifier)
+                  .createNewPaddock(paddockNameController.text);
+              paddockNameController.clear();
+            },
+            child: SizedBox(
+              height: 60,
+              child: CustomTextField(
+                controller: paddockNameController,
+                showFocusedBorder: false,
+                textAlignVertical: TextAlignVertical.top,
+                autofocus: true,
+                hintText: 'Enter name...',
+              ),
             ),
-          ),
-        );
-      },
-      child: const Padding(
-        padding: EdgeInsets.symmetric(vertical: 5),
-        child: LabeledWidget(
-          label: 'Paddock',
-          labelPosition: LabelPosition.end,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          child: Icon(
-            Icons.add,
-            size: 38,
-            color: Colors.white,
+          );
+        },
+        child: const Padding(
+          padding: EdgeInsets.symmetric(vertical: 5),
+          child: LabeledWidget(
+            label: 'Paddock',
+            labelPosition: LabelPosition.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            child: Icon(
+              Icons.add,
+              size: 38,
+              color: Colors.white,
+            ),
           ),
         ),
       ),

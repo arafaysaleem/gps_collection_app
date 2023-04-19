@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Helpers
+import '../../features/ad_hoc_sampling/screens/ad_hoc_screen.dart';
 import '../../helpers/typedefs.dart';
 
 // Features
@@ -40,7 +41,7 @@ class Routes {
     StartupWidgetBuilderRoute: (_) => const StartupWidgetBuilder(),
     HomeScreenRoute: (_) => const HomeScreen(),
     PlannedSamplingRoute: (_) => const PlannedSamplingScreen(),
-    AddNewFarmerRoute: (_) => const SizedBox.shrink(),
+    AddNewFarmerRoute: (_) => const AdHocScreen(),
     NotFoundScreenRoute: (_) => const SizedBox.shrink(),
   };
 

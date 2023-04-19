@@ -189,7 +189,7 @@ class PlannedAppBar extends HookConsumerWidget {
                             ? Insets.shrink
                             : CustomPopupMenu<String>(
                                 initialValue: currentProperty,
-                                items: {for (var e in properties) e!: e},
+                                items: {for (var e in properties) e: e},
                                 onSelected: (property) => ref
                                     .read(propertiesController)
                                     .setCurrentProperty(property),
@@ -197,9 +197,7 @@ class PlannedAppBar extends HookConsumerWidget {
                                   AppAssets.gpsMultiFarmIcon,
                                   width: 24,
                                   height: 24,
-                                  theme: const SvgTheme(
-                                    currentColor: Colors.yellow,
-                                  ),
+                                  color: Colors.yellow,
                                 ),
                               );
                       },

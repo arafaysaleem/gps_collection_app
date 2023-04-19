@@ -95,8 +95,8 @@ class KeyValueStorageService {
   }
 
   /// Sets the paddocks data to this value.
-  Future<bool> setProperties(Set<String?> properties) async {
-    return _keyValueStorage.setCommon<List<String?>>(
+  Future<bool> setProperties(Set<String> properties) async {
+    return _keyValueStorage.setCommon<List<String>>(
       _propertiesKey,
       properties.toList(),
     );
@@ -146,7 +146,7 @@ class KeyValueStorageService {
     final sampling = _keyValueStorage.getCommon<String>(_currentSamplingKey);
     if (sampling == null) return null;
     return SamplingMode.values.firstWhere(
-      (element) => element.toString() == sampling,
+      (element) => element.name == sampling,
     );
   }
 

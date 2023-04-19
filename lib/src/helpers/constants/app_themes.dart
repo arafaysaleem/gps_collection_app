@@ -34,7 +34,7 @@ class AppThemes {
       tertiary: AppColors.tertiaryColor,
       onTertiary: AppColors.textGreyColor,
       background: AppColors.backgroundColor,
-      onBackground: AppColors.textBlackColor,
+      onBackground: AppColors.textWhite80Color,
       surface: AppColors.surfaceColor,
       onSurface: AppColors.textBlackColor,
       error: AppColors.redColor,

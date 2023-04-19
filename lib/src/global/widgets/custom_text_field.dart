@@ -82,7 +82,7 @@ class CustomTextField extends StatefulWidget {
     this.textAlignVertical = TextAlignVertical.center,
     this.errorAlign = Alignment.centerRight,
     this.floatingAlign = Alignment.centerLeft,
-    this.fillColor,
+    this.fillColor = AppColors.fieldFillColor,
     this.hintStyle = const TextStyle(
       fontSize: 16,
       color: AppColors.textGreyColor,

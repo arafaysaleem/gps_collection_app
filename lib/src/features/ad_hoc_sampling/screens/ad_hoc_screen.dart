@@ -4,11 +4,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Helpers
+import '../../../config/routes/app_router.dart';
 import '../../../helpers/constants/app_colors.dart';
 import '../../../helpers/constants/app_styles.dart';
 import '../../../helpers/constants/app_typography.dart';
 
 // Controllers
+import '../../sampling_modes/controllers/sampling_controller.dart';
 import '../controllers/ad_hoc_controller.dart';
 
 // Widgets
@@ -25,95 +27,136 @@ class AdHocScreen extends HookConsumerWidget {
     final firstNameController = useTextEditingController();
     final lastNameController = useTextEditingController();
 
-    ref.listen(
-      adHocController,
-      (_, state) => state.whenOrNull(
-        failed: (reason) => CustomDialog.showAlertDialog(
-          context: context,
-          reason: reason,
-          dialogTitle: 'Operation Failed',
+    ref
+      ..listen(
+        adHocController,
+        (_, state) => state.whenOrNull(
+          failed: (reason) => CustomDialog.showAlertDialog(
+            context: context,
+            reason: reason,
+            dialogTitle: 'Operation Failed',
+          ),
         ),
-      ),
-    );
+      )
+      ..listen(
+        samplingController,
+        (_, next) => next.whenOrNull(
+          done: (_) => AppRouter.pop(),
+        ),
+      );
 
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(25),
-          child: Column(
-            children: [
-              Insets.gapH10,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(25),
+            child: Column(
+              children: [
+                Insets.gapH10,
 
-              // Screen Title
-              Text(
-                'Ad Hoc Sampling',
-                style: AppTypography.primary.heading34.copyWith(
-                  color: AppColors.lightPrimaryColor,
-                  fontSize: 45,
+                // Back arrow
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios),
+                      color: Colors.white,
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        AppRouter.pop();
+                      },
+                    ),
+
+                    Insets.gapW10,
+
+                    // Screen Title
+                    Text(
+                      'Ad Hoc Sampling',
+                      style: AppTypography.primary.heading34.copyWith(
+                        color: AppColors.lightPrimaryColor,
+                        fontSize: 30,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
 
-              Insets.gapH(100),
+                Insets.gapH(100),
 
-              // Farmer first name input
-              CustomTextField(
-                controller: firstNameController,
-                floatingText: 'First name',
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-                ],
-                keyboardType: TextInputType.name,
-                textInputAction: TextInputAction.next,
-              ),
+                // Farmer first name input
+                CustomTextField(
+                  controller: firstNameController,
+                  floatingText: 'First name',
+                  floatingStyle: AppTypography.secondary.body16.copyWith(
+                    color: Colors.white,
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                  ],
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                ),
 
-              Insets.gapH(45),
+                Insets.gapH(45),
 
-              // Farmer last name input
-              CustomTextField(
-                controller: lastNameController,
-                floatingText: 'Last name',
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
-                ],
-                keyboardType: TextInputType.name,
-                textInputAction: TextInputAction.next,
-              ),
+                // Farmer last name input
+                CustomTextField(
+                  controller: lastNameController,
+                  floatingText: 'Last name',
+                  floatingStyle: AppTypography.secondary.body16.copyWith(
+                    color: Colors.white,
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z]')),
+                  ],
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                ),
 
-              Insets.expand,
+                Insets.expand,
 
-              // Save Button
-              Consumer(
-                builder: (_, ref, child) {
-                  final state = ref.watch(adHocController);
-                  return CustomTextButton.gradient(
-                    width: double.infinity,
-                    onPressed: () {
-                      ref.read(adHocController.notifier).saveNewFarmer(
-                            firstName: firstNameController.text,
-                            lastName: lastNameController.text,
+                // Save Button
+                Consumer(
+                  builder: (_, ref, child) {
+                    final state = ref.watch(adHocController);
+                    return CustomTextButton.gradient(
+                      width: double.infinity,
+                      onPressed: () {
+                        if (firstNameController.text.isEmpty ||
+                            lastNameController.text.isEmpty) {
+                          CustomDialog.showAlertDialog(
+                            context: context,
+                            reason: 'Please fill all fields',
+                            dialogTitle: 'Operation Failed',
                           );
-                    },
-                    gradient: AppColors.buttonGradientPrimary,
-                    child: state.maybeWhen(
-                      loading: () => const CustomCircularLoader(
+                        } else {
+                          ref.read(adHocController.notifier).saveNewFarmer(
+                                firstName: firstNameController.text,
+                                lastName: lastNameController.text,
+                              );
+                        }
+                      },
+                      gradient: AppColors.buttonGradientPrimary,
+                      child: state.maybeWhen(
+                        loading: () => const CustomCircularLoader(
+                          color: Colors.white,
+                        ),
+                        orElse: () => child!,
+                      ),
+                    );
+                  },
+                  child: Center(
+                    child: Text(
+                      'Create',
+                      style: AppTypography.secondary.body16.copyWith(
                         color: Colors.white,
                       ),
-                      orElse: () => child!,
-                    ),
-                  );
-                },
-                child: Center(
-                  child: Text(
-                    'Create',
-                    style: AppTypography.secondary.body16.copyWith(
-                      color: Colors.white,
                     ),
                   ),
                 ),
-              ),
 
-              Insets.bottomInsetsLow,
-            ],
+                Insets.bottomInsetsLow,
+              ],
+            ),
           ),
         ),
       ),

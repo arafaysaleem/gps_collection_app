@@ -74,9 +74,7 @@ class CoordinateListItem extends HookConsumerWidget {
               AppAssets.deleteIcon,
               width: 26,
               height: 26,
-              theme: const SvgTheme(
-                currentColor: Colors.grey,
-              ),
+              color: Colors.grey,
             ),
           ),
 

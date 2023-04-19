@@ -4,12 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 // Controllers
 import '../sampling_modes/controllers/sampling_controller.dart';
 
-// Enums
-import '../sampling_modes/enums/sampling_mode.dart';
-
 // Screens
-import '../ad_hoc_sampling/screens/ad_hoc_screen.dart';
-import '../planned_sampling/screens/planned_sampling_screen.dart';
+import '../home/screens/home_screen.dart';
 import '../sampling_modes/screens/sampling_modes_screen.dart';
 
 // Widgets
@@ -29,9 +25,7 @@ class StartupWidgetBuilder extends HookConsumerWidget {
           ),
         ),
       ),
-      done: (current) => current == SamplingMode.planned
-          ? const PlannedSamplingScreen()
-          : const AdHocScreen(),
+      done: (_) => const HomeScreen(),
       orElse: () => const SamplingModesScreen(),
     );
   }

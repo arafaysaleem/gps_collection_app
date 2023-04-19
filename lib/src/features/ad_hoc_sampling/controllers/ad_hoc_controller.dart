@@ -9,6 +9,8 @@ import '../../home/controllers/farmer_controller.dart';
 
 // States
 import '../../../global/states/future_state.codegen.dart';
+import '../../sampling_modes/controllers/sampling_controller.dart';
+import '../../sampling_modes/enums/sampling_mode.dart';
 
 final adHocController =
     StateNotifierProvider<AdHocController, FutureState<void>>(
@@ -35,7 +37,20 @@ class AdHocController extends StateNotifier<FutureState<void>> {
     );
 
     state = await FutureState.makeGuardedRequest(
-      () => _ref.read(farmersController).saveFarmerInCache(farmer),
+      () async {
+        final isSaved =
+            await _ref.read(farmersController).saveFarmerInCache(farmer);
+
+        if (!isSaved) {
+          throw Exception('Farmer could not be saved');
+        }
+        
+        _ref.read(currentFarmerProvider.notifier).state = farmer;
+
+        return _ref
+            .read(samplingController.notifier)
+            .saveSamplingInCache(SamplingMode.adHoc);
+      },
     );
   }
 }

@@ -46,7 +46,7 @@ class AppColors {
 
   /// The light greyish color used for container/card surfaces
   /// of the app.
-  static const Color surfaceColor = Color.fromARGB(255, 253, 253, 253);
+  static const Color surfaceColor = Color.fromARGB(255, 245, 245, 245);
 
   /// The light greyish color used for filling fields of the app.
   static const Color fieldFillColor = Color.fromARGB(255, 235, 235, 235);

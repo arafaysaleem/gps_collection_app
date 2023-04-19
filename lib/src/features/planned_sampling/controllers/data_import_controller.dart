@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:charset/charset.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -54,7 +53,7 @@ class DataImportController extends StateNotifier<FutureState<bool>> {
         }
 
         final file = File(result.files.single.path!);
-        final dataString = utf16.decode(await file.readAsBytes());
+        final dataString = await file.readAsString();
         final dynamic dataJson = jsonDecode(dataString);
 
         if (dataJson is! JSON) {

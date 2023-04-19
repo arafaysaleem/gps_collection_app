@@ -65,6 +65,7 @@ class AppUtils {
     required BuildContext context,
     required String message,
     IconData? icon = Icons.error_rounded,
+    bool blockBackgroundInteraction = false,
     double? iconSize = 26,
     Color? iconColor = Colors.redAccent,
   }) {
@@ -73,6 +74,7 @@ class AppUtils {
       messageSize: 15,
       messageColor: AppColors.textWhite80Color,
       animationDuration: Durations.slow,
+      blockBackgroundInteraction: blockBackgroundInteraction,
       borderRadius: Corners.rounded(9),
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 85),
       padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),

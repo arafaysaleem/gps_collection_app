@@ -33,17 +33,18 @@ class SharePopupMenu extends ConsumerWidget {
         PopupMenuItem(
           height: 38,
           onTap: () async {
-            AppUtils.showFlushBar(
-              context: context,
-              message: 'Converting to excel. This might take a few minutes',
-              icon: Icons.restore_page_outlined,
-              iconColor: Colors.green.shade600,
-            );
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              AppUtils.showFlushBar(
+                context: context,
+                blockBackgroundInteraction: true,
+                message: 'Converting to excel. This might take a few minutes',
+                icon: Icons.restore_page_outlined,
+                iconColor: Colors.green.shade600,
+              );
+            });
             await Future.delayed(
               2.seconds,
-              () => ref
-                  .read(dataExportController.notifier)
-                  .sendEmail(),
+              () => ref.read(dataExportController.notifier).sendEmail(),
             );
           },
           child: Text(
@@ -57,17 +58,18 @@ class SharePopupMenu extends ConsumerWidget {
         PopupMenuItem(
           height: 38,
           onTap: () async {
-            AppUtils.showFlushBar(
-              context: context,
-              message: 'Converting to excel. This might take a few minutes',
-              icon: Icons.restore_page_outlined,
-              iconColor: Colors.green.shade600,
-            );
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              AppUtils.showFlushBar(
+                context: context,
+                blockBackgroundInteraction: true,
+                message: 'Converting to excel. This might take a few minutes',
+                icon: Icons.restore_page_outlined,
+                iconColor: Colors.green.shade600,
+              );
+            });
             await Future.delayed(
               2.seconds,
-              () => ref
-                  .read(dataExportController.notifier)
-                  .downloadFile(),
+              () => ref.read(dataExportController.notifier).downloadFile(),
             );
           },
           child: Text(
@@ -87,9 +89,7 @@ class SharePopupMenu extends ConsumerWidget {
             AppAssets.emailIcon,
             width: 34,
             height: 34,
-            theme: const SvgTheme(
-              currentColor: Colors.white,
-            ),
+            color: Colors.white,
           ),
         ),
       ),
