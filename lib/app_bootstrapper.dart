@@ -49,12 +49,7 @@ class AppBootstrapper {
 
     // For prettyifying console debug messages
     debugPrint = _prettifyDebugPrint;
-
-    // // Initialize firebase SDK
-    // await Firebase.initializeApp(
-    //   options: DefaultFirebaseOptions.currentPlatform,
-    // );
-
+    
     // For preparing the error monitoring SDK and loading
     // up the `runApp` method in a guarded zone
     await _setupSentrySDK(runApp, mainAppWidget);

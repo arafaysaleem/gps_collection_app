@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 // Providers
@@ -17,11 +16,11 @@ import 'farmer_controller.dart';
 import '../../../global/states/future_state.codegen.dart';
 
 final dataExportController =
-    StateNotifierProvider<DataExportController, FutureState<void>>((ref) {
+    StateNotifierProvider<DataExportController, FutureState<bool>>((ref) {
   return DataExportController(ref);
 });
 
-class DataExportController extends StateNotifier<FutureState<void>> {
+class DataExportController extends StateNotifier<FutureState<bool>> {
   final Ref _ref;
 
   DataExportController(this._ref) : super(const FutureState.idle());
@@ -64,8 +63,8 @@ class DataExportController extends StateNotifier<FutureState<void>> {
           cc: [remoteConfig.ccEmail],
           attachmentPaths: [file.path],
         );
-
-        return FlutterEmailSender.send(email);
+        await FlutterEmailSender.send(email);
+        return false;
       },
       errorMessage: 'Failed to export and email data',
     );
@@ -79,9 +78,9 @@ class DataExportController extends StateNotifier<FutureState<void>> {
 
     state = await FutureState.makeGuardedRequest(
       () async {
-        final file = await _exportCoordinatesToExcel(farmerName);
-
-        await file.writeAsBytes(await file.readAsBytes());
+        // await _requestStoragePermissions();
+        await _exportCoordinatesToExcel(farmerName);
+        return true;
       },
       errorMessage: 'Failed to export and download data',
     );
@@ -91,8 +90,6 @@ class DataExportController extends StateNotifier<FutureState<void>> {
     List<ExcelDataRow> rows,
     String farmerName,
   ) async {
-    await _requestStoragePermissions();
-
     // Create empty sheet
     final workbook = Workbook();
 
@@ -108,7 +105,7 @@ class DataExportController extends StateNotifier<FutureState<void>> {
     workbook.dispose();
 
     // Create file path
-    final path = PathProviderService.path;
+    const path = PathProviderService.downloads;
     final fileName = defaultTargetPlatform == TargetPlatform.windows
         ? '$path\\$farmerName.xlsx'
         : '$path/$farmerName.xlsx';
@@ -118,33 +115,5 @@ class DataExportController extends StateNotifier<FutureState<void>> {
     await file.writeAsBytes(bytes, flush: true);
 
     return file;
-  }
-
-  Future<void> _requestStoragePermissions() async {
-    var permission = await Permission.storage.status;
-    if (permission.isGranted) return;
-
-    permission = await Permission.storage.request();
-    if (permission.isGranted) {
-      return;
-    } else if (permission.isDenied) {
-      permission = await Permission.storage.request();
-      if (permission.isDenied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        throw Exception('Storage permissions are denied');
-      }
-    } else if (permission.isPermanentlyDenied) {
-      // Permission is permanently denied, take user to app settings
-      final openPermSettings = await openAppSettings();
-      if (!openPermSettings) {
-        throw Exception(
-          'Storage permissions are permanently denied, we cannot request permissions.',
-        );
-      }
-    }
   }
 }

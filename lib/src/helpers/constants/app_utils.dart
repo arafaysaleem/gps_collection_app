@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:another_flushbar/flushbar.dart';
@@ -24,6 +25,14 @@ class AppUtils {
     final rInt = seed != null ? (seed + DateTime.now().minute) : null;
     final thisColors = colors ?? AppColors.primaries;
     return thisColors[randomizer(rInt).nextInt(thisColors.length)];
+  }
+
+  /// A utility method to generate a random UUID.
+  static String getRandomUuid([String? seed, int length = 5]) {
+    final prefix = seed != null ? '$seed-' : '';
+    final rInt = seed != null ? utf8.encode(seed).hashCode : null;
+    final random = randomizer(rInt);
+    return '$prefix${random.nextInt(pow(10, length).toInt())}';
   }
 
   /// A utility method to convert 0/1 to false/true

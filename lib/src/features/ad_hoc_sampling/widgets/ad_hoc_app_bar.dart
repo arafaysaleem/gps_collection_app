@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Helpers
+import '../../../global/widgets/custom_dialog.dart';
 import '../../../helpers/constants/app_colors.dart';
 import '../../../helpers/constants/app_styles.dart';
 import '../../../helpers/constants/app_typography.dart';
@@ -44,6 +45,17 @@ class AdHocAppBar extends HookConsumerWidget {
       [currentPaddock],
     );
 
+    ref.listen(
+      paddocksController,
+      (_, state) => state.whenOrNull(
+        failed: (reason) => CustomDialog.showAlertDialog(
+          context: context,
+          reason: reason,
+          dialogTitle: 'Operation Failed',
+        ),
+      ),
+    );
+
     return Container(
       height: 190,
       padding: const EdgeInsets.all(15),
@@ -72,8 +84,7 @@ class AdHocAppBar extends HookConsumerWidget {
                 // Paddock Dropdowm
                 Consumer(
                   builder: (_, ref, __) {
-                    final paddocks =
-                        ref.watch(paddocksController.notifier).getAllPaddocks();
+                    final paddocks = ref.watch(paddocksMapProvider).values;
                     return LabeledWidget(
                       label: 'Paddock',
                       child: CustomDropdownField<PaddockModel>.animated(
@@ -135,7 +146,7 @@ class AdHocAppBar extends HookConsumerWidget {
                   },
                 ),
 
-                Insets.gapH5,
+                Insets.expand,
 
                 // Paddock Note
                 if (currentPaddock != null)

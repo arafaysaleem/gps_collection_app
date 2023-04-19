@@ -61,7 +61,8 @@ class SamplingController extends StateNotifier<SamplingState> {
   Future<void> saveSamplingInCache(SamplingMode currentSampling) async {
     state = const SamplingState.loading();
 
-    final isSaved = await _keyValueStorageService.setCurrentSamplingState(currentSampling);
+    final isSaved =
+        await _keyValueStorageService.setCurrentSamplingState(currentSampling);
 
     if (isSaved) {
       state = SamplingState.done(currentSampling);
@@ -72,12 +73,13 @@ class SamplingController extends StateNotifier<SamplingState> {
     }
   }
 
-  void erase() {
-    _keyValueStorageService.resetKeys();
-    state = const SamplingState.idle();
+  Future<void> erase() async {
+    state = const SamplingState.loading();
+
+    await _keyValueStorageService.resetKeys();
     _ref
-      ..invalidateSelf()
       ..invalidate(adHocController)
+      ..invalidate(paddocksMapProvider)
       ..invalidate(currentFarmerProvider)
       ..invalidate(farmersController)
       ..invalidate(paddocksController)
@@ -90,6 +92,7 @@ class SamplingController extends StateNotifier<SamplingState> {
       ..invalidate(coordinatesListProvider)
       ..invalidate(coordinateCountProvider)
       ..invalidate(coordinatesController)
-      ..invalidate(dataExportController);
+      ..invalidate(dataExportController)
+      ..invalidateSelf();
   }
 }

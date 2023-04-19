@@ -49,12 +49,12 @@ class KeyValueStorageService {
   final _keyValueStorage = KeyValueStorageBase();
 
   /// Returns the list of paddocks
-  List<PaddockModel>? getPaddocks() {
+  List<PaddockModel> getPaddocks() {
     final paddocks = _keyValueStorage.getCommon<List<String>>(_paddocksKey);
-    if (paddocks == null) return null;
     return paddocks
-        .map((e) => PaddockModel.fromJson(jsonDecode(e) as JSON))
-        .toList();
+            ?.map((e) => PaddockModel.fromJson(jsonDecode(e) as JSON))
+            .toList() ??
+        [];
   }
 
   /// Sets the coordinates data for this paddock code to this value.
@@ -88,10 +88,9 @@ class KeyValueStorageService {
   }
 
   /// Returns the list of properties
-  Set<String>? getProperties() {
+  Set<String> getProperties() {
     final properties = _keyValueStorage.getCommon<List<String>>(_propertiesKey);
-    if (properties == null) return null;
-    return properties.toSet();
+    return properties?.toSet() ?? {};
   }
 
   /// Sets the paddocks data to this value.
@@ -192,11 +191,6 @@ class KeyValueStorageService {
       note,
     );
   }
-
-  /// Resets the keys. Even though these methods are asynchronous, we
-  /// don't care about their completion which is why we don't use `await` and
-  /// let them execute in the background.
-  void resetKeys() {
-    _keyValueStorage.clearCommon();
-  }
+  
+  Future<bool> resetKeys() async => _keyValueStorage.clearCommon();
 }

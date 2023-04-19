@@ -3,9 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-// States
-import '../../../global/states/future_state.codegen.dart';
-
 // Helpers
 import '../../../helpers/constants/app_assets.dart';
 import '../../../helpers/constants/app_utils.dart';
@@ -32,7 +29,7 @@ class BottomNavBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref
-      ..listen<FutureState<bool>>(
+      ..listen(
         coordinatesController,
         (_, state) => state.whenOrNull(
           failed: (reason) => AppUtils.showFlushBar(
@@ -41,9 +38,17 @@ class BottomNavBar extends ConsumerWidget {
           ),
         ),
       )
-      ..listen<FutureState<void>>(
+      ..listen(
         dataExportController,
         (_, state) => state.whenOrNull(
+          data: (isDownloaded) => AppUtils.showFlushBar(
+            context: context,
+            message: isDownloaded
+                ? 'File saved to Downloads'
+                : 'File emailed successfully',
+            icon: Icons.restore_page_outlined,
+            iconColor: Colors.green.shade600,
+          ),
           failed: (reason) => CustomDialog.showAlertDialog(
             context: context,
             reason: reason,
@@ -153,35 +158,45 @@ class BottomNavBar extends ConsumerWidget {
               ),
 
               // Reset icon
-              InkWell(
-                onTap: () {
-                  CustomDialog.showConfirmDialog(
-                    context: context,
-                    dialogTitle: 'Reset All Data',
-                    reason:
-                        "This will erase all data you have collected and prepare the app for a fresh soil sampling program.\n\nAre you sure you want to delete all data? You can't undo this.",
-                    trueButtonText: 'Reset',
-                    falseButtonText: 'Cancel',
-                    isDanger: true,
-                    flipButtons: true,
-                    onTrueButtonPressed: () {
-                      ref.read(samplingController.notifier).erase();
-                    },
-                  );
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: LabeledWidget(
-                    label: 'Reset',
-                    labelPosition: LabelPosition.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    child: Icon(
-                      Icons.restart_alt,
-                      size: 38,
+              Consumer(
+                builder: (_, ref, __) {
+                  final state = ref.watch(samplingController);
+                  return state.maybeWhen(
+                    loading: () => const CustomCircularLoader(
                       color: Colors.white,
                     ),
-                  ),
-                ),
+                    orElse: () => InkWell(
+                      onTap: () {
+                        CustomDialog.showConfirmDialog(
+                          context: context,
+                          dialogTitle: 'Reset All Data',
+                          reason:
+                              "This will erase all data you have collected and prepare the app for a fresh soil sampling program.\n\nAre you sure you want to delete all data? You can't undo this.",
+                          trueButtonText: 'Reset',
+                          falseButtonText: 'Cancel',
+                          isDanger: true,
+                          flipButtons: true,
+                          onTrueButtonPressed: () {
+                            ref.read(samplingController.notifier).erase();
+                          },
+                        );
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: LabeledWidget(
+                          label: 'Reset',
+                          labelPosition: LabelPosition.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          child: Icon(
+                            Icons.restart_alt,
+                            size: 38,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           );

@@ -4,6 +4,7 @@ class PathProviderService {
   PathProviderService._();
 
   static String? _path;
+  static const String downloads = '/storage/emulated/0/Download/';
 
   static String get path {
     if (_path != null) {

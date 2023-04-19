@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Services
@@ -36,15 +35,11 @@ class PropertiesController {
 
   void loadPropertiesFromCache() {
     final properties = _keyValueStorageService.getProperties();
-    if (properties == null) {
-      debugPrint('Properties not loaded from cache');
-      throw Exception('Properties not loaded from cache');
-    }
     _properties = properties;
 
     final property = _keyValueStorageService.getCurrentProperty();
     _ref.read(currentPropertyProvider.notifier).state =
-        property ?? _properties.first;
+        property ?? (_properties.isNotEmpty ? _properties.first : null);
   }
 
   UnmodifiableListView<String> getAllProperties() {

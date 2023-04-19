@@ -28,8 +28,8 @@ import '../../home/models/paddock_model.codegen.dart';
 final _propertyPaddocksProvider = Provider<List<PaddockModel>>((ref) {
   final currentPropertyId = ref.watch(currentPropertyProvider);
   return ref
-      .watch(paddocksController.notifier)
-      .getAllPaddocks()
+      .watch(paddocksMapProvider)
+      .values
       .where((e) => e.propertyId == currentPropertyId)
       .toList();
 });

@@ -45,7 +45,8 @@ class ExcelComputeController {
     );
 
     // Loop each paddock
-    final paddocks = _ref.read(paddocksController.notifier).getAllPaddocks();
+    final paddocks = _ref.read(paddocksMapProvider).values;
+
     for (final paddock in paddocks) {
       // Fetch all coordinates of the paddock
       final coords = kvStorage.getPaddockCoordinates(paddock.code);

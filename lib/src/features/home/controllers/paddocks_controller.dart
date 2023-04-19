@@ -1,8 +1,4 @@
-import 'dart:collection';
-
-import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:uuid/uuid.dart';
 
 // Services
 import '../../../core/local/key_value_storage_service.dart';
@@ -23,7 +19,7 @@ final currentPaddockNoteProvider = StateProvider((ref) => '');
 
 final currentPaddockProvider = StateProvider<PaddockModel?>((ref) => null);
 
-final _paddocksMapProvider = StateProvider<Map<String, PaddockModel>>((ref) {
+final paddocksMapProvider = StateProvider<Map<String, PaddockModel>>((ref) {
   return {};
 });
 
@@ -47,7 +43,7 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
         "Paddocks data does not belong to farmer '${farmer.fullName}'",
       );
     }
-    _ref.read(_paddocksMapProvider.notifier).state = {
+    _ref.read(paddocksMapProvider.notifier).state = {
       for (var e in paddocks) e.code: e
     };
     await _ref.read(propertiesController).importPropertiesData(paddocks);
@@ -56,12 +52,8 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
 
   void loadPaddocksFromCache() {
     final paddocks = _keyValueStorageService.getPaddocks();
-    if (paddocks == null) {
-      debugPrint('Paddocks not loaded from cache');
-      throw Exception('Paddocks not loaded from cache');
-    }
 
-    _ref.read(_paddocksMapProvider.notifier).state = {
+    _ref.read(paddocksMapProvider.notifier).state = {
       for (var e in paddocks) e.code: e
     };
 
@@ -70,12 +62,8 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
         currentPaddock == null ? null : _getPaddockByCode(currentPaddock);
   }
 
-  UnmodifiableListView<PaddockModel> getAllPaddocks({String? property}) {
-    return UnmodifiableListView(_ref.read(_paddocksMapProvider).values);
-  }
-
   PaddockModel _getPaddockByCode(String code) {
-    return _ref.read(_paddocksMapProvider)[code]!;
+    return _ref.read(paddocksMapProvider)[code]!;
   }
 
   Future<bool> _savePaddocksInCache(List<PaddockModel> paddocks) async {
@@ -101,7 +89,7 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
 
     final currentFarmer = _ref.read(currentFarmerProvider)!;
     final paddock = PaddockModel(
-      code: const Uuid().v4(),
+      code: paddockName,
       farmerId: currentFarmer.pkCID,
       paddock: paddockName,
       propertyId: '',
@@ -109,7 +97,7 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
 
     state = await FutureState.makeGuardedRequest(
       () async {
-        final paddocksMap = _ref.read(_paddocksMapProvider);
+        final paddocksMap = _ref.read(paddocksMapProvider);
         if (paddocksMap.containsKey(paddock.code)) {
           throw Exception('Paddock already exists');
         }
@@ -117,15 +105,13 @@ class PaddocksController extends StateNotifier<FutureState<bool>> {
           [paddock, ...paddocksMap.values],
         );
         if (saved) {
-          _ref.read(_paddocksMapProvider.notifier).state = {
+          _ref.read(paddocksMapProvider.notifier).state = {
             ...paddocksMap,
             paddock.code: paddock
           };
-          setCurrentPaddock(paddock);
         }
         return saved;
       },
-      errorMessage: 'Failed to create new paddock',
     );
   }
 }
