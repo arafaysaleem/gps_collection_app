@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/local/key_value_storage_service.dart';
 
 // Enums
+import '../../planned_sampling/controllers/data_import_controller.dart';
 import '../enums/sampling_mode.dart';
 
 // Controllers
@@ -92,6 +93,7 @@ class SamplingController extends StateNotifier<SamplingState> {
       ..invalidate(coordinatesListProvider)
       ..invalidate(coordinateCountProvider)
       ..invalidate(coordinatesController)
+      ..invalidate(dataImportController)
       ..invalidate(dataExportController)
       ..invalidateSelf();
   }
