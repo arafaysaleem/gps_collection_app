@@ -166,20 +166,6 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
     final prevIsLow = (await Geolocator.getLocationAccuracy()) ==
         LocationAccuracyStatus.reduced;
     var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse) {
-      final accuracy = await Geolocator.getLocationAccuracy();
-      final isLowAccuracy = accuracy == LocationAccuracyStatus.reduced;
-      final isApproximateFirstTry = isLowAccuracy && !prevIsLow;
-      if (isApproximateFirstTry) {
-        throw Exception(
-          'We need precise location to capture coordinates. Please enable precise (high-accuracy) mode in your location settings.',
-        );
-      } else if (isLowAccuracy && prevIsLow) {
-        permission = await Geolocator.requestPermission();
-      }
-    }
-
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
@@ -198,6 +184,25 @@ class CoordinatesController extends StateNotifier<FutureState<bool>> {
       if (!openPermSettings) {
         throw Exception(
           'Location permissions are permanently denied, we cannot request permissions.',
+        );
+      }
+    }
+
+    if (permission == LocationPermission.unableToDetermine) {
+      throw Exception('Unable to determine location permissions. Retry a few seconds later.');
+    }
+
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      final accuracy = await Geolocator.getLocationAccuracy();
+      final isLowAccuracy = accuracy == LocationAccuracyStatus.reduced;
+      final isPreciseReRequest = isLowAccuracy && prevIsLow;
+      if (isPreciseReRequest) {
+        await Geolocator.requestPermission();
+        return _checkGpsEnabled();
+      } else if (isLowAccuracy && !prevIsLow) {
+        throw Exception(
+          'We need precise location to capture coordinates. Please enable precise (high-accuracy) mode in your location settings.',
         );
       }
     }
